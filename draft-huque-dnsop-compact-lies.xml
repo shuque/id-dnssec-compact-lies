@@ -1,0 +1,312 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
+
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<!-- used by XSLT processors -->
+<!-- For a complete list and description of processing instructions (PIs),
+     please see http://xml.resource.org/authoring/README.html. -->
+<!-- Below are generally applicable Processing Instructions (PIs) that most I-Ds might want to use.
+     (Here they are set differently than their defaults in xml2rfc v1.32) -->
+<?rfc strict="yes" ?>
+<!-- give errors regarding ID-nits and DTD validation -->
+<!-- control the table of contents (ToC) -->
+<?rfc toc="yes"?>
+<!-- generate a ToC -->
+<?rfc tocdepth="4"?>
+<!-- the number of levels of subsections in ToC. default: 3 -->
+<!-- control references -->
+<?rfc symrefs="yes"?>
+<!-- use symbolic references tags, i.e, [RFC2119] instead of [1] -->
+<?rfc sortrefs="yes" ?>
+<!-- sort the reference entries alphabetically -->
+<!-- control vertical white space
+     (using these PIs as follows is recommended by the RFC Editor) -->
+<?rfc compact="yes" ?>
+<!-- do not start each main section on a new page -->
+<?rfc subcompact="no" ?>
+<!-- keep one blank line between list items -->
+<!-- end of list of popular I-D processing instructions -->
+
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+        category="info" consensus="true"
+        docName="draft-huque-dnsop-compact-lies-00"
+        ipr="trust200902" updates="" obsoletes=""
+        submissionType="IETF" xml:lang="en"
+        tocInclude="true" tocDepth="4"
+        symRefs="true" sortRefs="true" version="3">
+
+  <!-- ***** FRONT MATTER ***** -->
+
+  <front>
+
+    <title abbrev="Compact Denial of Existence in DNSSEC">
+       Compact Denial of Existence in DNSSEC
+    </title>
+    <seriesInfo name="Internet-Draft" value="draft-huque-dnsop-compact-lies"/>
+
+    <author fullname="Shumon Huque" initials="S." surname="Huque">
+      <organization>Salesforce</organization>
+      <address>
+        <postal>
+          <street>415 Mission Street, 3rd Floor</street>
+          <city>San Francisco</city>
+          <region>CA</region>
+          <code>94105</code>
+          <country>United States of America</country>
+        </postal>
+        <email>shuque@gmail.com</email>
+      </address>
+    </author>
+
+    <author fullname="Christian Elmerot" initials="C." surname="Elmerot">
+      <organization>Cloudflare Inc.</organization>
+      <address>
+        <postal>
+          <street>101 Townsend St.</street>
+          <city>San Francisco</city>
+          <region>CA</region>
+          <code>94107</code>
+          <country>United States of America</country>
+        </postal>
+        <email>elmerot@cloudflare.com</email>
+      </address>
+    </author>
+
+    <date day="3" month="2" year="2023"/>
+    <!-- Meta-data Declarations -->
+
+    <area>General</area>
+    <workgroup>Internet Engineering Task Force</workgroup>
+    <keyword>Internet-Draft</keyword>
+    <keyword>DNS</keyword>
+    <keyword>DNSSEC</keyword>
+    <keyword>Denial of Existence</keyword>
+    <keyword>Compact Lies</keyword>
+    <keyword>Minimal Lies</keyword>
+    <keyword>Black Lies</keyword>
+    <keyword>NXDOMAIN</keyword>
+    <keyword>NODATA</keyword>
+    <keyword>Empty Non-Terminal</keyword>
+
+    <abstract>
+     <t>
+       This document describes a technique to generate a signed DNS response
+       on demand for a non-existent name by claiming that the name exists
+       but doesn't have data for the queried record type, and returning a
+       NODATA answer with an accompanying NSEC proof. Such answers require
+       only one NSEC record and allow online signing servers to minimize
+       signing operations and packet size.
+     </t>
+    </abstract>
+
+  </front>
+
+  <middle>
+
+    <section numbered="true" toc="default">
+      <name>Introduction and Motivation</name>
+      <t>
+        One of the functions of the Domain Name System Security Extensions
+        (DNSSEC) <xref target="RFC4033" /> <xref target="RFC4034" />
+        <xref target="RFC4035" /> <xref target="RFC5155" /> is
+        "Authenticated Denial of Existence",
+        i.e. proving that a DNS name or record type does not exist.
+        Normally, this is done by means of NSEC or NSEC3 records. In the
+        precomputed signature model, these records chain together existing
+        names, or cryptographic hashes of them in the zone. In the online
+        signing model, described in NSEC and NSEC3 "White Lies"
+        <xref target="RFC4470" /> <xref target="RFC7129" />,
+        they are used to dynamically compute an epsilon
+        function around the queried name. A 'type bitmap' in the data field
+        of the NSEC or NSEC3 record asserts which resource record types are
+        present at the associated name.
+      </t>
+      <t>
+        This document describes an alternative technique, "Compact Lies",
+        to generate a signed DNS response on demand for a non-existent
+        name by claiming that the name exists but has no resource records
+        associated with the queried type, i.e. it returns a NODATA response
+        rather than an NXDOMAIN response. A NODATA response (which has a
+        response code of NOERROR, and an empty ANSWER section) requires
+        only one NSEC record matching the queried name. This has two
+        advantages: the DNS response size is smaller, and it reduces the
+        online cryptographic work involved in generating the response. By
+        contrast, an NXDOMAIN response requires multiple records (up to 2
+        when using NSEC, and up to 3 when using NSEC3, and the associated
+        computation) to prove that (1) the name did not explicitly exist in
+        the zone, and (2) that it could not have been synthesized by a
+        wildcard.
+      </t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>Distinguishing NXDOMAIN from Empty Non-Terminal Names</name>
+      <t>
+        Since NODATA responses are generated for non-existent names, and
+        there are no defined record types for the name, the NSEC type
+        bitmap in the response will only contain "NSEC" and "RRSIG".
+        Tools that need to accurately identify non-existent names in
+        responses cannot rely on this specific type bitmap because Empty
+        Non-Terminal (ENT) names (which positively exist) also have no
+        record types at the name and will return exactly the same type
+        bitmap.
+      </t>
+      <t>
+        Today, one specific implementation of Compact Lies avoids the
+        NXDOMAIN identification problem by synthesizing the NSEC type
+        bitmap for ENTs to include all record types supported except for
+        the queried type. This has the undesirable effect though of no
+        longer being able to reliably determine the existence of ENTs.
+      </t>
+      <t>
+        This document thus proposes the use of a synthetic Resource Record
+        type to signal the presence of an Empty Non-Terminal name.
+        This RR type is added to the NSEC type bitmap for responses
+        to ENTs. Currently, the deployed examples of this scheme
+        are using the private RR type code 65281. So the resulting
+        type bitmap would have "NSEC RRSIG TYPE65281". This document
+        requests a formal allocation of an RR type code. Note that no
+        special handling of this RR type is needed on the part of DNS
+        resolvers.
+      </t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>Generating Compact Lies for Non-Existent Names</name>
+      <t>
+        When an authoritative server implementing compact lists receives
+        a query for a non-existent name in a zone that it serves, a
+        NODATA response (response code NOERROR, empty Answer section) is
+        generated with a dynamically constructed NSEC record with the
+        owner name matching the queried name (QNAME).
+      </t>
+      <t>
+       The next name SHOULD be set to the immediate lexicographic successor
+       of the QNAME. The generated NSEC record's type bitmap MUST have only
+       the RRSIG and NSEC bits set.
+      </t>
+      <t>
+       For example, a request for the non-existing name a.example.com would
+       cause the following NSEC record to be generated (in DNS presentation
+       format):
+      </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+          a.example.com. 3600 IN NSEC \000.a.example.com. RRSIG NSEC
+        ]]></artwork>
+
+      <t>
+       The NSEC record MUST have corresponding RRSIGs generated.
+      </t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>Generating Compact Lies for Empty Non-Terminals</name>
+      <t>
+        When an authoritative server implementing compact lists receives
+        a query for an Empty Non-Terminal name, it generates the
+        corresponding NODATA response in the usual way, except that it
+        adds the additional Empty Non-Terminal distinguisher RR type
+        code in the NSEC type bitmap field. A corresponding RRSIG
+        signature records MUST also be generated.
+      </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+          ent1.example.net.  3600 IN NSEC \000.ent.example.net. RRSIG NSEC ENT
+        ]]></artwork>
+      <t>
+        The RR type code for "ENT" is TBD.
+      </t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>Operational Implications</name>
+      <t>
+        TODO: Describe that the NXDOMAIN response code is completely
+        absent from these implementations. Tools that rely on accurately
+        determining non-existent responses will need to infer it from the
+        NSEC type bitmap pattern of "NSEC RRSIG".
+      </t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>Implementation Status</name>
+      <t>
+        Cloudflare, NS1, and Amazon Route53 currently implement the base
+        Compact Lies scheme. NS1 additonally implements the Empty
+        Non-Terminal distinguisher in the NSEC type bitmap.
+      </t>
+    </section>
+
+    <section anchor="Acknowledgements" numbered="true" toc="default">
+      <name>Acknowledgements</name>
+      <t>
+        The Compact Lies technique (then called "Black Lies") was
+        originally proposed in
+        <xref target="COMPACT-LIES" format="default"/> by F. Valsorda
+        and O. Gudmunsson. The Empty Non-Terminal sentinel RR type
+        was originally proposed in
+        <xref target="ENT-SENTINEL" format="default"/> by S. Huque.
+      </t>
+    </section>
+
+    <section anchor="IANA" numbered="true" toc="default">
+      <name>IANA Considerations</name>
+      <t>
+        IANA is requested to allocate a new DNS Resource Record type
+        code for the Empty Non-Terminal distinguisher in the DNS parameters
+        registry:
+      </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+           ENT      [TBD]      Empty Non-Terminal Distinguisher for Compact Lies
+        ]]></artwork>
+    </section>
+
+    <section anchor="Security" numbered="true" toc="default">
+      <name>Security Considerations</name>
+      <t>
+        [TBD]
+      </t>
+    </section>
+
+  </middle>
+
+  <!--  *****BACK MATTER ***** -->
+
+  <back>
+
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4033.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4034.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4470.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5155.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"/>
+      </references>
+      <references>
+        <name>Informative References</name>
+      <reference anchor="COMPACT-LIES"
+                 target="https://tools.ietf.org/html/draft-valsorda-dnsop-black-lies">
+        <front>
+          <title>Compact DNSSEC Denial of Existence or Black Lies</title>
+          <author fullname="Filippo Valsorda" initials="F" surname="Valsorda" />
+          <author fullname="Olafur Gudmundsson" initials="O" surname="Gudmundsson" />
+          <date />
+        </front>
+      </reference>
+      <reference anchor="ENT-SENTINEL"
+                 target="https://www.ietf.org/archive/id/draft-huque-dnsop-blacklies-ent-01.html">
+        <front>
+          <title>Empty Non-Terminal Sentinel for Black Lies</title>
+          <author fullname="Shumon Huque" initials="S" surname="Huque" />
+          <date />
+        </front>
+      </reference>
+      </references>
+    </references>
+
+  </back>
+
+</rfc>
