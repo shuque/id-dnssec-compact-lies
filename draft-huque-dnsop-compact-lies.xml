@@ -29,7 +29,7 @@
 <!-- end of list of popular I-D processing instructions -->
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-        category="info" consensus="true"
+        category="std" consensus="true"
         docName="draft-huque-dnsop-compact-lies-00"
         ipr="trust200902" updates="" obsoletes=""
         submissionType="IETF" xml:lang="en"
@@ -60,7 +60,7 @@
     </author>
 
     <author fullname="Christian Elmerot" initials="C." surname="Elmerot">
-      <organization>Cloudflare Inc.</organization>
+      <organization>Cloudflare</organization>
       <address>
         <postal>
           <street>101 Townsend St.</street>
@@ -73,7 +73,7 @@
       </address>
     </author>
 
-    <date day="3" month="2" year="2023"/>
+    <date day="7" month="2" year="2023"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -93,10 +93,9 @@
      <t>
        This document describes a technique to generate a signed DNS response
        on demand for a non-existent name by claiming that the name exists
-       but doesn't have data for the queried record type, and returning a
-       NODATA answer with an accompanying NSEC proof. Such answers require
-       only one NSEC record and allow online signing servers to minimize
-       signing operations and packet size.
+       but doesn't have any data for the queried record type. Such answers
+       require only one NSEC record and allow online signing servers to
+       minimize signing operations and packet size.
      </t>
     </abstract>
 
@@ -204,27 +203,34 @@
       <name>Generating Compact Lies for Empty Non-Terminals</name>
       <t>
         When an authoritative server implementing compact lists receives
-        a query for an Empty Non-Terminal name, it generates the
-        corresponding NODATA response in the usual way, except that it
-        adds the additional Empty Non-Terminal distinguisher RR type
-        code in the NSEC type bitmap field. A corresponding RRSIG
-        signature records MUST also be generated.
+        a query for an Empty Non-Terminal name, it generates a NODATA
+        response in the usual way, except that it adds the additional
+        Empty Non-Terminal distinguisher RR type code in the NSEC type
+        bitmap field. Corresponding RRSIG signature record(s) MUST also
+        be generated.
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
           ent1.example.net.  3600 IN NSEC \000.ent.example.net. RRSIG NSEC ENT
         ]]></artwork>
       <t>
-        The RR type code for "ENT" is TBD.
+        The RR type code for "ENT" is [TBD]. Note that this RR type only
+        appears in the type bitmap of an NSEC record in responses to
+        an Empty Non-Terminal name as described in this document. It
+        causes no special processing on the part of validating resolvers.
+        Queries for the ENT RR type itself at an actual Empty Non-Terminal
+        name at an authoritative server implementing Compact Lies MUST
+        elicit the response described in this section.
       </t>
     </section>
 
     <section numbered="true" toc="default">
       <name>Operational Implications</name>
       <t>
-        TODO: Describe that the NXDOMAIN response code is completely
-        absent from these implementations. Tools that rely on accurately
-        determining non-existent responses will need to infer it from the
-        NSEC type bitmap pattern of "NSEC RRSIG".
+        A signed zone at an authoritative server implementing Compact
+        Lies will never return a response with a response code of
+        NXDOMAIN. Tools that rely on accurately determining non-existent
+        responses will need to infer them from the NSEC type bitmap pattern
+        of "NSEC RRSIG".
       </t>
     </section>
 

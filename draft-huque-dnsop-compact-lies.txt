@@ -4,9 +4,9 @@
 
 Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
-Intended status: Informational                                C. Elmerot
-Expires: 7 August 2023                                   Cloudflare Inc.
-                                                         3 February 2023
+Intended status: Standards Track                              C. Elmerot
+Expires: 11 August 2023                                       Cloudflare
+                                                         7 February 2023
 
 
                  Compact Denial of Existence in DNSSEC
@@ -16,10 +16,9 @@ Abstract
 
    This document describes a technique to generate a signed DNS response
    on demand for a non-existent name by claiming that the name exists
-   but doesn't have data for the queried record type, and returning a
-   NODATA answer with an accompanying NSEC proof.  Such answers require
-   only one NSEC record and allow online signing servers to minimize
-   signing operations and packet size.
+   but doesn't have any data for the queried record type.  Such answers
+   require only one NSEC record and allow online signing servers to
+   minimize signing operations and packet size.
 
 Status of This Memo
 
@@ -36,27 +35,12 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 August 2023.
+   This Internet-Draft will expire on 11 August 2023.
 
 Copyright Notice
 
    Copyright (c) 2023 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
-
-
-
-
-
-
-
-
-
-
-
-Huque & Elmerot           Expires 7 August 2023                 [Page 1]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
@@ -66,6 +50,13 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
    extracted from this document must include Simplified BSD License text
    as described in Section 4.e of the Trust Legal Provisions and are
    provided without warranty as described in the Simplified BSD License.
+
+
+
+Huque & Elmerot          Expires 11 August 2023                 [Page 1]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+
 
 Table of Contents
 
@@ -77,11 +68,11 @@ Table of Contents
    6.  Implementation Status . . . . . . . . . . . . . . . . . . . .   4
    7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   4
    8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   4
-   9.  Security Considerations . . . . . . . . . . . . . . . . . . .   4
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   9.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
      10.1.  Normative References . . . . . . . . . . . . . . . . . .   5
      10.2.  Informative References . . . . . . . . . . . . . . . . .   5
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   5
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   6
 
 1.  Introduction and Motivation
 
@@ -106,18 +97,22 @@ Table of Contents
    record matching the queried name.  This has two advantages: the DNS
    response size is smaller, and it reduces the online cryptographic
    work involved in generating the response.  By contrast, an NXDOMAIN
-
-
-
-Huque & Elmerot           Expires 7 August 2023                 [Page 2]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
-
    response requires multiple records (up to 2 when using NSEC, and up
    to 3 when using NSEC3, and the associated computation) to prove that
    (1) the name did not explicitly exist in the zone, and (2) that it
    could not have been synthesized by a wildcard.
+
+
+
+
+
+
+
+
+Huque & Elmerot          Expires 11 August 2023                 [Page 2]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+
 
 2.  Distinguishing NXDOMAIN from Empty Non-Terminal Names
 
@@ -162,35 +157,43 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
              a.example.com. 3600 IN NSEC \000.a.example.com. RRSIG NSEC
 
+   The NSEC record MUST have corresponding RRSIGs generated.
 
 
 
-Huque & Elmerot           Expires 7 August 2023                 [Page 3]
+
+
+
+
+Huque & Elmerot          Expires 11 August 2023                 [Page 3]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
 
-   The NSEC record MUST have corresponding RRSIGs generated.
-
 4.  Generating Compact Lies for Empty Non-Terminals
 
    When an authoritative server implementing compact lists receives a
-   query for an Empty Non-Terminal name, it generates the corresponding
-   NODATA response in the usual way, except that it adds the additional
-   Empty Non-Terminal distinguisher RR type code in the NSEC type bitmap
-   field.  A corresponding RRSIG signature records MUST also be
-   generated.
+   query for an Empty Non-Terminal name, it generates a NODATA response
+   in the usual way, except that it adds the additional Empty Non-
+   Terminal distinguisher RR type code in the NSEC type bitmap field.
+   Corresponding RRSIG signature record(s) MUST also be generated.
 
           ent1.example.net.  3600 IN NSEC \000.ent.example.net. RRSIG NSEC ENT
 
-   The RR type code for "ENT" is TBD.
+   The RR type code for "ENT" is [TBD].  Note that this RR type only
+   appears in the type bitmap of an NSEC record in responses to an Empty
+   Non-Terminal name as described in this document.  It causes no
+   special processing on the part of validating resolvers.  Queries for
+   the ENT RR type itself at an actual Empty Non-Terminal name at an
+   authoritative server implementing Compact Lies MUST elicit the
+   response described in this section.
 
 5.  Operational Implications
 
-   TODO: Describe that the NXDOMAIN response code is completely absent
-   from these implementations.  Tools that rely on accurately
-   determining non-existent responses will need to infer it from the
-   NSEC type bitmap pattern of "NSEC RRSIG".
+   A signed zone at an authoritative server implementing Compact Lies
+   will never return a response with a response code of NXDOMAIN.  Tools
+   that rely on accurately determining non-existent responses will need
+   to infer them from the NSEC type bitmap pattern of "NSEC RRSIG".
 
 6.  Implementation Status
 
@@ -212,19 +215,22 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
            ENT      [TBD]      Empty Non-Terminal Distinguisher for Compact Lies
 
+
+
+
+
+
+
+Huque & Elmerot          Expires 11 August 2023                 [Page 4]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+
+
 9.  Security Considerations
 
    [TBD]
 
 10.  References
-
-
-
-
-Huque & Elmerot           Expires 7 August 2023                 [Page 4]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
 
 10.1.  Normative References
 
@@ -269,19 +275,18 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
               <https://www.ietf.org/archive/id/draft-huque-dnsop-
               blacklies-ent-01.html>.
 
+
+
+Huque & Elmerot          Expires 11 August 2023                 [Page 5]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+
+
 Authors' Addresses
 
    Shumon Huque
    Salesforce
    415 Mission Street, 3rd Floor
-
-
-
-Huque & Elmerot           Expires 7 August 2023                 [Page 5]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
-
    San Francisco, CA 94105
    United States of America
 
@@ -289,7 +294,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
 
    Christian Elmerot
-   Cloudflare Inc.
+   Cloudflare
    101 Townsend St.
    San Francisco, CA 94107
    United States of America
@@ -328,9 +333,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
 
 
-
-
-
-
-
-Huque & Elmerot           Expires 7 August 2023                 [Page 6]
+Huque & Elmerot          Expires 11 August 2023                 [Page 6]
