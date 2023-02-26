@@ -73,7 +73,7 @@
       </address>
     </author>
 
-    <date day="7" month="2" year="2023"/>
+    <date day="25" month="2" year="2023"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -172,7 +172,7 @@
     </section>
 
     <section numbered="true" toc="default">
-      <name>Generating Compact Lies for Non-Existent Names</name>
+      <name>Responses for Non-Existent Names</name>
       <t>
         When an authoritative server implementing compact lists receives
         a query for a non-existent name in a zone that it serves, a
@@ -200,7 +200,27 @@
     </section>
 
     <section numbered="true" toc="default">
-      <name>Generating Compact Lies for Empty Non-Terminals</name>
+      <name>Responses for Wildcard Matches</name>
+      <t>
+        For wildcard matches, a Compact Lies implementation will
+        typically provide a dynamically signed response that claims
+        that the queried name exists explicitly. This obviates the
+        need to include an NSEC record in the Additional section of
+        the response that shows that no closer match than the wildcard
+        was possible.
+      </t>
+      <t>
+        Similarly, Wildcard NODATA responses (where the queried name
+        matches a wildcard but no data for the queried type exists),
+        a response akin to a regular NODATA is returned. The Answer
+        section is empty, and the Additional section contains a single
+        NSEC response that matches the query name with a type bitmap
+        representing the list of types available at the wildcard.
+      </t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>Responses for Empty Non-Terminals</name>
       <t>
         When an authoritative server implementing compact lists receives
         a query for an Empty Non-Terminal name, it generates a NODATA
