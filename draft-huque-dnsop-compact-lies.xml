@@ -263,6 +263,27 @@
       </t>
     </section>
 
+    <section numbered="true" toc="default">
+      <name>Security Considerations</name>
+      <t>
+        Online signing of DNS records requires authoritative servers
+        for the DNS zone to have access to the private signing keys.
+        Exposing signing keys on Internet reachable servers makes them
+        more vulnerable to attack.
+      </t>
+      <t>
+        Additionally, generating signatures on-demand is more
+        computationally intensive than returning pre-computed
+        signatures. Although the Compact Lies scheme reduces the
+        number of online signing operations compared to previous
+        techniques like White Lies, it still may make authoritative
+        servers more vulnerable to computational denial of service
+        attacks than pre-computed signature models. The use of
+        signature algorithms (like those based on Elliptic Curves)
+        that have a comparatively low cost for signing is prudent.
+      </t>
+    </section>
+
     <section anchor="Acknowledgements" numbered="true" toc="default">
       <name>Acknowledgements</name>
       <t>
@@ -285,13 +306,6 @@
       <artwork name="" type="" align="left" alt=""><![CDATA[
            ENT      [TBD]      Empty Non-Terminal Distinguisher for Compact Lies
         ]]></artwork>
-    </section>
-
-    <section anchor="Security" numbered="true" toc="default">
-      <name>Security Considerations</name>
-      <t>
-        [TBD]
-      </t>
     </section>
 
   </middle>

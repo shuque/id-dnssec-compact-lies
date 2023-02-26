@@ -67,9 +67,9 @@ Table of Contents
    5.  Responses for Empty Non-Terminals . . . . . . . . . . . . . .   4
    6.  Operational Implications  . . . . . . . . . . . . . . . . . .   4
    7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   4
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   5
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-   10. Security Considerations . . . . . . . . . . . . . . . . . . .   5
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   5
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
      11.1.  Normative References . . . . . . . . . . . . . . . . . .   5
      11.2.  Informative References . . . . . . . . . . . . . . . . .   6
@@ -226,23 +226,35 @@ Huque & Elmerot          Expires 29 August 2023                 [Page 4]
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
 
-8.  Acknowledgements
+8.  Security Considerations
+
+   Online signing of DNS records requires authoritative servers for the
+   DNS zone to have access to the private signing keys.  Exposing
+   signing keys on Internet reachable servers makes them more vulnerable
+   to attack.
+
+   Additionally, generating signatures on-demand is more computationally
+   intensive than returning pre-computed signatures.  Although the
+   Compact Lies scheme reduces the number of online signing operations
+   compared to previous techniques like White Lies, it still may make
+   authoritative servers more vulnerable to computational denial of
+   service attacks than pre-computed signature models.  The use of
+   signature algorithms (like those based on Elliptic Curves) that have
+   a comparatively low cost for signing is prudent.
+
+9.  Acknowledgements
 
    The Compact Lies technique (then called "Black Lies") was originally
    proposed in [COMPACT-LIES] by F.  Valsorda and O.  Gudmunsson.  The
    Empty Non-Terminal sentinel RR type was originally proposed in
    [ENT-SENTINEL] by S.  Huque.
 
-9.  IANA Considerations
+10.  IANA Considerations
 
    IANA is requested to allocate a new DNS Resource Record type code for
    the Empty Non-Terminal distinguisher in the DNS parameters registry:
 
            ENT      [TBD]      Empty Non-Terminal Distinguisher for Compact Lies
-
-10.  Security Considerations
-
-   [TBD]
 
 11.  References
 
@@ -263,6 +275,13 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
               Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
               <https://www.rfc-editor.org/info/rfc4035>.
 
+
+
+Huque & Elmerot          Expires 29 August 2023                 [Page 5]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+
+
    [RFC4470]  Weiler, S. and J. Ihren, "Minimally Covering NSEC Records
               and DNSSEC On-line Signing", RFC 4470,
               DOI 10.17487/RFC4470, April 2006,
@@ -272,15 +291,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
               Security (DNSSEC) Hashed Authenticated Denial of
               Existence", RFC 5155, DOI 10.17487/RFC5155, March 2008,
               <https://www.rfc-editor.org/info/rfc5155>.
-
-
-
-
-
-Huque & Elmerot          Expires 29 August 2023                 [Page 5]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
 
    [RFC7129]  Gieben, R. and W. Mekking, "Authenticated Denial of
               Existence in the DNS", RFC 7129, DOI 10.17487/RFC7129,
@@ -316,16 +326,6 @@ Authors' Addresses
    United States of America
 
    Email: elmerot@cloudflare.com
-
-
-
-
-
-
-
-
-
-
 
 
 
