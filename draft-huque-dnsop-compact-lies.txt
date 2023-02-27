@@ -66,7 +66,7 @@ Table of Contents
    4.  Responses for Wildcard Matches  . . . . . . . . . . . . . . .   4
    5.  Responses for Empty Non-Terminals . . . . . . . . . . . . . .   4
    6.  Operational Implications  . . . . . . . . . . . . . . . . . .   4
-   7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   4
+   7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   5
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
    9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   5
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
@@ -207,15 +207,15 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
    A signed zone at an authoritative server implementing Compact Lies
    will never return a response with a response code of NXDOMAIN.  Tools
-   that rely on accurately determining non-existent responses will need
-   to infer them from the NSEC type bitmap pattern of "NSEC RRSIG".
+   that rely on accurately determining non-existent names will need to
+   infer them from the NSEC type bitmap pattern of "NSEC RRSIG".
 
-7.  Implementation Status
-
-   Cloudflare, NS1, and Amazon Route53 currently implement the base
-   Compact Lies scheme.  NS1 additonally implements the Empty Non-
-   Terminal distinguisher in the NSEC type bitmap.
-
+   Address lookup functions typically invoked by applications won't see
+   a practical impact from this indistinguishability.  For a non-
+   existent name, the getaddrinfo() function for example will return an
+   exit code of EAI_NODATA rather than EAI_NONAME.  But either way the
+   effect on the caller is the same: it will obtain a response with a
+   non-zero exit code and no available addresses.
 
 
 
@@ -225,6 +225,12 @@ Huque & Elmerot          Expires 29 August 2023                 [Page 4]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
+
+7.  Implementation Status
+
+   Cloudflare, NS1, and Amazon Route53 currently implement the base
+   Compact Lies scheme.  NS1 additonally implements the Empty Non-
+   Terminal distinguisher in the NSEC type bitmap.
 
 8.  Security Considerations
 
@@ -265,6 +271,17 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
               RFC 4033, DOI 10.17487/RFC4033, March 2005,
               <https://www.rfc-editor.org/info/rfc4033>.
 
+
+
+
+
+
+
+Huque & Elmerot          Expires 29 August 2023                 [Page 5]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+
+
    [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Resource Records for the DNS Security Extensions",
               RFC 4034, DOI 10.17487/RFC4034, March 2005,
@@ -274,13 +291,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
               Rose, "Protocol Modifications for the DNS Security
               Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
               <https://www.rfc-editor.org/info/rfc4035>.
-
-
-
-Huque & Elmerot          Expires 29 August 2023                 [Page 5]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
 
    [RFC4470]  Weiler, S. and J. Ihren, "Minimally Covering NSEC Records
               and DNSSEC On-line Signing", RFC 4470,
@@ -319,6 +329,15 @@ Authors' Addresses
    Email: shuque@gmail.com
 
 
+
+
+
+
+Huque & Elmerot          Expires 29 August 2023                 [Page 6]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+
+
    Christian Elmerot
    Cloudflare
    101 Townsend St.
@@ -333,4 +352,41 @@ Authors' Addresses
 
 
 
-Huque & Elmerot          Expires 29 August 2023                 [Page 6]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Huque & Elmerot          Expires 29 August 2023                 [Page 7]

@@ -249,8 +249,17 @@
         A signed zone at an authoritative server implementing Compact
         Lies will never return a response with a response code of
         NXDOMAIN. Tools that rely on accurately determining non-existent
-        responses will need to infer them from the NSEC type bitmap pattern
+        names will need to infer them from the NSEC type bitmap pattern
         of "NSEC RRSIG".
+      </t>
+      <t>
+        Address lookup functions typically invoked by applications won't
+        see a practical impact from this indistinguishability.
+        For a non-existent name, the getaddrinfo() function for example
+        will return an exit code of EAI_NODATA rather than EAI_NONAME.
+        But either way the effect on the caller is the same: it will
+        obtain a response with a non-zero exit code and no available
+        addresses.
       </t>
     </section>
 
