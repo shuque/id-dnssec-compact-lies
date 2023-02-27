@@ -73,7 +73,7 @@
       </address>
     </author>
 
-    <date day="25" month="2" year="2023"/>
+    <date day="27" month="2" year="2023"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -95,7 +95,7 @@
        on demand for a non-existent name by claiming that the name exists
        but doesn't have any data for the queried record type. Such answers
        require only one NSEC record and allow online signing servers to
-       minimize signing operations and packet size.
+       minimize signing operations and response sizes.
      </t>
     </abstract>
 
@@ -111,15 +111,22 @@
         <xref target="RFC4035" /> <xref target="RFC5155" /> is
         "Authenticated Denial of Existence",
         i.e. proving that a DNS name or record type does not exist.
-        Normally, this is done by means of NSEC or NSEC3 records. In the
-        precomputed signature model, these records chain together existing
-        names, or cryptographic hashes of them in the zone. In the online
-        signing model, described in NSEC and NSEC3 "White Lies"
+        Normally, this is done by means of signed NSEC or NSEC3 records.
+        In the precomputed signature model, these records chain together
+        existing names, or cryptographic hashes of them in the zone. In
+        the online signing model, described in NSEC and NSEC3 "White Lies"
         <xref target="RFC4470" /> <xref target="RFC7129" />,
         they are used to dynamically compute an epsilon
         function around the queried name. A 'type bitmap' in the data field
         of the NSEC or NSEC3 record asserts which resource record types are
-        present at the associated name.
+        present at the name.
+      </t>
+      <t>
+        The response for a non-existent name requires upto 2 signed NSEC
+        records or up to 3 signed NSEC3 records (and for online signers,
+        the associated cryptographic computation), to prove that (1) the
+        name did not explicitly exist in the zone, and (2) that it could
+        not have been synthesized by a wildcard.
       </t>
       <t>
         This document describes an alternative technique, "Compact Lies",
@@ -130,12 +137,7 @@
         response code of NOERROR, and an empty ANSWER section) requires
         only one NSEC record matching the queried name. This has two
         advantages: the DNS response size is smaller, and it reduces the
-        online cryptographic work involved in generating the response. By
-        contrast, an NXDOMAIN response requires multiple records (up to 2
-        when using NSEC, and up to 3 when using NSEC3, and the associated
-        computation) to prove that (1) the name did not explicitly exist in
-        the zone, and (2) that it could not have been synthesized by a
-        wildcard.
+        online cryptographic work involved in generating the response.
       </t>
     </section>
 
@@ -152,29 +154,26 @@
         bitmap.
       </t>
       <t>
-        Today, one specific implementation of Compact Lies avoids the
+        Today, some specific implementations of Compact Lies avoid the
         NXDOMAIN identification problem by synthesizing the NSEC type
         bitmap for ENTs to include all record types supported except for
-        the queried type. This has the undesirable effect though of no
-        longer being able to reliably determine the existence of ENTs.
+        the queried type. This has the undesirable effect of no longer
+        being able to reliably determine the existence of ENTs.
       </t>
       <t>
-        This document thus proposes the use of a synthetic Resource Record
-        type to signal the presence of an Empty Non-Terminal name.
+        This document defines the use of a synthetic Resource Record
+        type to signal the presence of an Empty Non-Terminal name. The
+        mnemonic for this RR type is "ENT" and its type code is [TBD].
         This RR type is added to the NSEC type bitmap for responses
-        to ENTs. Currently, the deployed examples of this scheme
-        are using the private RR type code 65281. So the resulting
-        type bitmap would have "NSEC RRSIG TYPE65281". This document
-        requests a formal allocation of an RR type code. Note that no
-        special handling of this RR type is needed on the part of DNS
-        resolvers.
+        to ENTs. No special handling of this RR type is needed on the
+        part of DNS resolvers.
       </t>
     </section>
 
     <section numbered="true" toc="default">
       <name>Responses for Non-Existent Names</name>
       <t>
-        When an authoritative server implementing compact lists receives
+        When an authoritative server implementing Compact Lies receives
         a query for a non-existent name in a zone that it serves, a
         NODATA response (response code NOERROR, empty Answer section) is
         generated with a dynamically constructed NSEC record with the
@@ -214,7 +213,7 @@
         matches a wildcard but no data for the queried type exists),
         a response akin to a regular NODATA is returned. The Answer
         section is empty, and the Additional section contains a single
-        NSEC response that matches the query name with a type bitmap
+        NSEC record that matches the query name with a type bitmap
         representing the list of types available at the wildcard.
       </t>
     </section>
@@ -222,7 +221,7 @@
     <section numbered="true" toc="default">
       <name>Responses for Empty Non-Terminals</name>
       <t>
-        When an authoritative server implementing compact lists receives
+        When an authoritative server implementing Compact Lies receives
         a query for an Empty Non-Terminal name, it generates a NODATA
         response in the usual way, except that it adds the additional
         Empty Non-Terminal distinguisher RR type code in the NSEC type
@@ -233,13 +232,11 @@
           ent1.example.net.  3600 IN NSEC \000.ent.example.net. RRSIG NSEC ENT
         ]]></artwork>
       <t>
-        The RR type code for "ENT" is [TBD]. Note that this RR type only
-        appears in the type bitmap of an NSEC record in responses to
-        an Empty Non-Terminal name as described in this document. It
-        causes no special processing on the part of validating resolvers.
+        Note that this RR type only appears in the type bitmap of an
+        NSEC record in response to a query for an Empty Non-Terminal name.
+        It causes no special processing on the part of validating resolvers.
         Queries for the ENT RR type itself at an actual Empty Non-Terminal
-        name at an authoritative server implementing Compact Lies MUST
-        elicit the response described in this section.
+        MUST also elicit the response described in this section.
       </t>
     </section>
 
@@ -268,7 +265,8 @@
       <t>
         Cloudflare, NS1, and Amazon Route53 currently implement the base
         Compact Lies scheme. NS1 additonally implements the Empty
-        Non-Terminal distinguisher in the NSEC type bitmap.
+        Non-Terminal distinguisher in the NSEC type bitmap, using the
+        private RR type code 65281.
       </t>
     </section>
 
@@ -287,9 +285,9 @@
         number of online signing operations compared to previous
         techniques like White Lies, it still may make authoritative
         servers more vulnerable to computational denial of service
-        attacks than pre-computed signature models. The use of
-        signature algorithms (like those based on Elliptic Curves)
-        that have a comparatively low cost for signing is prudent.
+        attacks than pre-computed signatures. The use of signature
+        algorithms (like those based on Elliptic Curves) that have
+        a comparatively low cost for signing is recommended.
       </t>
     </section>
 
@@ -299,8 +297,8 @@
         The Compact Lies technique (then called "Black Lies") was
         originally proposed in
         <xref target="COMPACT-LIES" format="default"/> by F. Valsorda
-        and O. Gudmunsson. The Empty Non-Terminal sentinel RR type
-        was originally proposed in
+        and O. Gudmunsson, and implemented by Cloudflare. The Empty
+        Non-Terminal distinguisher RR type was originally proposed in
         <xref target="ENT-SENTINEL" format="default"/> by S. Huque.
       </t>
     </section>
@@ -313,7 +311,7 @@
         registry:
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
-           ENT      [TBD]      Empty Non-Terminal Distinguisher for Compact Lies
+         ENT  [TBD]  Empty Non-Terminal Distinguisher for Compact Lies
         ]]></artwork>
     </section>
 
