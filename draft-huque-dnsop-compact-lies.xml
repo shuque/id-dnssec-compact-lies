@@ -229,7 +229,7 @@
         be generated.
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
-          ent1.example.net.  3600 IN NSEC \000.ent.example.net. RRSIG NSEC ENT
+          ent1.example.net.  3600 IN NSEC \000.ent1.example.net. RRSIG NSEC ENT
         ]]></artwork>
       <t>
         Note that this RR type only appears in the type bitmap of an
