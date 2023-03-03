@@ -5,20 +5,21 @@
 Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Intended status: Standards Track                              C. Elmerot
-Expires: 31 August 2023                                       Cloudflare
-                                                        27 February 2023
+Expires: 4 September 2023                                     Cloudflare
+                                                            3 March 2023
 
 
                  Compact Denial of Existence in DNSSEC
-                   draft-huque-dnsop-compact-lies-00
+                   draft-huque-dnsop-compact-lies-01
 
 Abstract
 
    This document describes a technique to generate a signed DNS response
    on demand for a non-existent name by claiming that the name exists
    but doesn't have any data for the queried record type.  Such answers
-   require only one NSEC record and allow online signing servers to
-   minimize signing operations and response sizes.
+   require only one minimal NSEC record, allow online signing servers to
+   minimize signing operations and response sizes, and prevent zone
+   content disclosure.
 
 Status of This Memo
 
@@ -35,12 +36,27 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2023.
+   This Internet-Draft will expire on 4 September 2023.
 
 Copyright Notice
 
    Copyright (c) 2023 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
+
+
+
+
+
+
+
+
+
+
+
+Huque & Elmerot         Expires 4 September 2023                [Page 1]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
@@ -51,31 +67,29 @@ Copyright Notice
    as described in Section 4.e of the Trust Legal Provisions and are
    provided without warranty as described in the Simplified BSD License.
 
-
-
-Huque & Elmerot          Expires 31 August 2023                 [Page 1]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
-
 Table of Contents
 
    1.  Introduction and Motivation . . . . . . . . . . . . . . . . .   2
    2.  Distinguishing NXDOMAIN from Empty Non-Terminal Names . . . .   3
-   3.  Responses for Non-Existent Names  . . . . . . . . . . . . . .   3
-   4.  Responses for Wildcard Matches  . . . . . . . . . . . . . . .   4
-   5.  Responses for Empty Non-Terminals . . . . . . . . . . . . . .   4
-   6.  Operational Implications  . . . . . . . . . . . . . . . . . .   4
-   7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   5
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   5
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   5
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .   5
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .   5
-     11.1.  Normative References . . . . . . . . . . . . . . . . . .   5
-     11.2.  Informative References . . . . . . . . . . . . . . . . .   6
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   6
+   3.  Generating Responses  . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  Responses for Non-Existent Names  . . . . . . . . . . . .   4
+     3.2.  Responses for Non-Existent Types  . . . . . . . . . . . .   5
+     3.3.  Responses for Wildcard Matches  . . . . . . . . . . . . .   5
+   4.  Operational Implications  . . . . . . . . . . . . . . . . . .   5
+   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .   6
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
+   7.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   6
+   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
+   9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
+     9.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
+     9.2.  Informative References  . . . . . . . . . . . . . . . . .   7
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction and Motivation
+
+   RFC EDITOR: PLEASE REMOVE THIS PARAGRAPH BEFORE PUBLISHING: The
+   source for this draft is maintained in GitHub at:
+   https://github.com/shuque/id-dnssec-compact-lies
 
    One of the functions of the Domain Name System Security Extensions
    (DNSSEC) [RFC4033] [RFC4034] [RFC4035] [RFC5155] is "Authenticated
@@ -89,30 +103,37 @@ Table of Contents
    in the data field of the NSEC or NSEC3 record asserts which resource
    record types are present at the name.
 
-   The response for a non-existent name requires upto 2 signed NSEC
+
+
+
+
+
+
+Huque & Elmerot         Expires 4 September 2023                [Page 2]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+
+
+   The response for a non-existent name requires up to 2 signed NSEC
    records or up to 3 signed NSEC3 records (and for online signers, the
    associated cryptographic computation), to prove that (1) the name did
    not explicitly exist in the zone, and (2) that it could not have been
    synthesized by a wildcard.
 
-   This document describes an alternative technique, "Compact Lies", to
-   generate a signed DNS response on demand for a non-existent name by
-   claiming that the name exists but has no resource records associated
-   with the queried type, i.e. it returns a NODATA response rather than
-   an NXDOMAIN response.  A NODATA response (which has a response code
-   of NOERROR, and an empty ANSWER section) requires only one NSEC
-   record matching the queried name.  This has two advantages: the DNS
-   response size is smaller, and it reduces the online cryptographic
-   work involved in generating the response.
+   This document describes an alternative technique, "Compact Denial of
+   Existence" or "Compact Answers", to generate a signed DNS response on
+   demand for a non-existent name by claiming that the name exists but
+   has no resource records associated with the queried type, i.e. it
+   returns a NODATA response rather than an NXDOMAIN response.  A NODATA
+   response (which has a response code of NOERROR, and an empty ANSWER
+   section) requires only one NSEC record matching the queried name.
+   This has two advantages: the DNS response size is smaller, and it
+   reduces the online cryptographic work involved in generating the
+   response.
 
-
-
-
-
-Huque & Elmerot          Expires 31 August 2023                 [Page 2]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
+   The use of minimally covering NSEC records also prevents adversaries
+   from enumerating the entire contents of DNS zones by walking NSEC
+   chains.
 
 2.  Distinguishing NXDOMAIN from Empty Non-Terminal Names
 
@@ -124,35 +145,72 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
    names (which positively exist) also have no record types at the name
    and will return exactly the same type bitmap.
 
-   Today, some specific implementations of Compact Lies avoid the
+   Today, some specific implementations of Compact Answers avoid the
    NXDOMAIN identification problem by synthesizing the NSEC type bitmap
    for ENTs to include all record types supported except for the queried
    type.  This has the undesirable effect of no longer being able to
-   reliably determine the existence of ENTs.
+   reliably determine the existence of ENTs, and of making the Type
+   Bitmaps field potentially larger than it needs to be.  It also has
+   the potential to confuse validators and others tools that infer type
+   existence from the NSEC record.
 
    This document defines the use of a synthetic Resource Record type to
-   signal the presence of an Empty Non-Terminal name.  The mnemonic for
-   this RR type is "ENT" and its type code is [TBD].  This RR type is
-   added to the NSEC type bitmap for responses to ENTs.  No special
-   handling of this RR type is needed on the part of DNS resolvers.
+   signal the presence of a non-existent name.  The mnemonic for this RR
+   type is "NXNAME" and its type code is [TBD].  This RR type is added
+   to the NSEC type bitmap for responses to non-existent names (in
+   addition to the required RRSIG and NSEC types).  The moniker NXNAME
+   is chosen to clearly distinguish it from the response code NXDOMAIN.
 
-3.  Responses for Non-Existent Names
 
-   When an authoritative server implementing Compact Lies receives a
-   query for a non-existent name in a zone that it serves, a NODATA
-   response (response code NOERROR, empty Answer section) is generated
-   with a dynamically constructed NSEC record with the owner name
-   matching the queried name (QNAME).
 
-   The next name SHOULD be set to the immediate lexicographic successor
-   of the QNAME.  The generated NSEC record's type bitmap MUST have only
-   the RRSIG and NSEC bits set.
+
+
+Huque & Elmerot         Expires 4 September 2023                [Page 3]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+
+
+   No special handling of this RR type is required on the part of DNS
+   resolvers.  However, a resolver could optionally use the presence of
+   the RR type to modify the response code in the answer it relays back
+   to downstream non-validating clients from NODATA to NXDOMAIN.
+
+   An alternative way to distinguish NXDOMAIN from ENT is to define the
+   synthetic Resource Record type for ENTs instead, as specified in
+   [ENT-SENTINEL], and this has already been deployed in the field.
+   This typically imposes less work on the server since NXDOMAIN
+   responses are a lot more common than ENTs.  And at the time it was
+   deployed it allowed a common bitmap pattern ("NSEC RRSIG") to
+   identify NXDOMAIN across this and other implementations that returned
+   a broad bitmap pattern for Empty Non-Terminals.  However, the
+   advantage of the NXNAME RR type is that it explicitly identifies
+   NXDOMAIN responses, and allows them to be distinguished conclusively
+   from potential ENT responses in other online signing NSEC
+   implementations.
+
+3.  Generating Responses
+
+   This section describes various types of answers generated by
+   authoritative servers implementing Compact Denial of Existence.
+
+3.1.  Responses for Non-Existent Names
+
+   When the authoritative server receives a query for a non-existent
+   name in a zone that it serves, a NODATA response (response code
+   NOERROR, empty Answer section) is generated with a dynamically
+   constructed NSEC record with the owner name matching the queried name
+   (QNAME).
+
+   The Next Domain Name field SHOULD be set to the immediate
+   lexicographic successor of the QNAME.  The Type Bit Maps field MUST
+   only have the bits set for the following RR Types: RRSIG, NSEC, and
+   NXNAME.
 
    For example, a request for the non-existing name a.example.com would
    cause the following NSEC record to be generated (in DNS presentation
    format):
 
-             a.example.com. 3600 IN NSEC \000.a.example.com. RRSIG NSEC
+          a.example.com. 3600 IN NSEC \000.a.example.com. RRSIG NSEC NXNAME
 
    The NSEC record MUST have corresponding RRSIGs generated.
 
@@ -163,77 +221,89 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
 
 
-
-
-Huque & Elmerot          Expires 31 August 2023                 [Page 3]
+Huque & Elmerot         Expires 4 September 2023                [Page 4]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
 
 
-4.  Responses for Wildcard Matches
+3.2.  Responses for Non-Existent Types
 
-   For wildcard matches, a Compact Lies implementation will typically
-   provide a dynamically signed response that claims that the queried
-   name exists explicitly.  This obviates the need to include an NSEC
+   When the authoritative server receives a query for a name that
+   exists, but has no resource record sets associated with the queried
+   type, it generates a NODATA response, with a dynamically constructed
+   signed NSEC record in the Additional Section.  The owner name of the
+   NSEC record matches the queried name.  The Next Domain Name field is
+   set to the immediate lexicographic successor of the QNAME.  The Type
+   Bitmaps field lists the available Resource Record types at the name.
+
+   An Empty Non-Terminal is a special subset of this category, where the
+   name has no resource record sets of any type (but has descendant
+   names that do).  For a query for an Empty Non-Terminal, the NSEC type
+   bitmap will only contain RRSIG and NSEC.  (Note that this is
+   substantially different than the ENT response in precomputed NSEC,
+   where the NSEC record "covers" the ENT and has the Next Domain Name
+   field set to the next lexicographic descendent of the ENT in the
+   zone.)
+
+3.3.  Responses for Wildcard Matches
+
+   For wildcard matches, the authoritative server will provide a
+   dynamically signed response that claims that the queried name exists
+   explicitly.  Specifically, the answer RR set will have an RRSIG
+   record demonstrating an exact match (i.e. the label count in the
+   RRSIG RDATA will be equal to the number of labels in the query name
+   minus the root label).  This obviates the need to include an NSEC
    record in the Additional section of the response that shows that no
    closer match than the wildcard was possible.
 
-   Similarly, Wildcard NODATA responses (where the queried name matches
-   a wildcard but no data for the queried type exists), a response akin
-   to a regular NODATA is returned.  The Answer section is empty, and
+   For a Wildcard NODATA match (where the queried name matches a
+   wildcard but no data for the queried type exists), a response akin to
+   a non-wildcard NODATA is returned.  The Answer section is empty, and
    the Additional section contains a single NSEC record that matches the
    query name with a type bitmap representing the list of types
    available at the wildcard.
 
-5.  Responses for Empty Non-Terminals
+4.  Operational Implications
 
-   When an authoritative server implementing Compact Lies receives a
-   query for an Empty Non-Terminal name, it generates a NODATA response
-   in the usual way, except that it adds the additional Empty Non-
-   Terminal distinguisher RR type code in the NSEC type bitmap field.
-   Corresponding RRSIG signature record(s) MUST also be generated.
-
-          ent1.example.net.  3600 IN NSEC \000.ent1.example.net. RRSIG NSEC ENT
-
-   Note that this RR type only appears in the type bitmap of an NSEC
-   record in response to a query for an Empty Non-Terminal name.  It
-   causes no special processing on the part of validating resolvers.
-   Queries for the ENT RR type itself at an actual Empty Non-Terminal
-   MUST also elicit the response described in this section.
-
-6.  Operational Implications
-
-   A signed zone at an authoritative server implementing Compact Lies
+   A signed zone at an authoritative server implementing Compact Answers
    will never return a response with a response code of NXDOMAIN.  Tools
    that rely on accurately determining non-existent names will need to
-   infer them from the NSEC type bitmap pattern of "NSEC RRSIG".
-
-   Address lookup functions typically invoked by applications won't see
-   a practical impact from this indistinguishability.  For a non-
-   existent name, the getaddrinfo() function for example will return an
-   exit code of EAI_NODATA rather than EAI_NONAME.  But either way the
-   effect on the caller is the same: it will obtain a response with a
-   non-zero exit code and no available addresses.
+   infer them from the presence of the NXNAME RR type in the type bitmap
+   of the NSEC record in NODATA responses from these servers.  The
+   response code in the DNS header cannot be authenticated, so inferring
+   the status of a response from signed data in the body of the DNS
+   message is more secure.
 
 
 
 
-
-
-
-Huque & Elmerot          Expires 31 August 2023                 [Page 4]
+Huque & Elmerot         Expires 4 September 2023                [Page 5]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
 
 
-7.  Implementation Status
+   Address lookup functions typically invoked by applications will
+   continue to work, although extra invocations of these functions (and
+   corresponding extra DNS queries) may be caused.  For example, a
+   NODATA response to the lookup of an AAAA record for a non-existent
+   name, can cause an application to issue another query at the same
+   name for an A record.  Whereas a NXDOMAIN response to the first query
+   would correctly suppress additional queries for other types at that
+   name.  Address lookup functions could be enhanced to examine the NSEC
+   type bitmaps in responses to accurately determine non-existent names,
+   however they would need to issue DNSSEC enabled queries and
+   potentially deal with middleboxes interfering with the delivery of
+   DNSSEC signed responses.
+
+5.  Implementation Status
 
    Cloudflare, NS1, and Amazon Route53 currently implement the base
-   Compact Lies scheme.  NS1 additonally implements the Empty Non-
+   Compact Answers scheme.  NS1 additionally implements the Empty Non-
    Terminal distinguisher in the NSEC type bitmap, using the private RR
-   type code 65281.
+   type code 65281.  There are no implementations yet that use the
+   NXNAME distinguisher RR type.
 
-8.  Security Considerations
+6.  Security Considerations
 
    Online signing of DNS records requires authoritative servers for the
    DNS zone to have access to the private signing keys.  Exposing
@@ -249,38 +319,40 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
    algorithms (like those based on Elliptic Curves) that have a
    comparatively low cost for signing is recommended.
 
-9.  Acknowledgements
+7.  Acknowledgements
 
    The Compact Lies technique (then called "Black Lies") was originally
-   proposed in [COMPACT-LIES] by F.  Valsorda and O.  Gudmunsson, and
+   proposed in [COMPACT-LIES] by F.  Valsorda and O.  Gudmundsson, and
    implemented by Cloudflare.  The Empty Non-Terminal distinguisher RR
-   type was originally proposed in [ENT-SENTINEL] by S.  Huque.
+   type was originally proposed in [ENT-SENTINEL] by S.  Huque.  The
+   NXNAME type is based on the FDOM type proposed in [NXDOMAIN-TYPE] by
+   O.  Gudmundsson and F.  Valsorda.
 
-10.  IANA Considerations
+
+
+
+
+
+Huque & Elmerot         Expires 4 September 2023                [Page 6]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+
+
+8.  IANA Considerations
 
    IANA is requested to allocate a new DNS Resource Record type code for
-   the Empty Non-Terminal distinguisher in the DNS parameters registry:
+   NXNAME in the DNS parameters registry, from the meta type range.
 
-           ENT  [TBD]  Empty Non-Terminal Distinguisher for Compact Lies
+         NXNAME  [TBD]  NXDOMAIN Distinguisher for Compact Denial of Existence
 
-11.  References
+9.  References
 
-11.1.  Normative References
+9.1.  Normative References
 
    [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "DNS Security Introduction and Requirements",
               RFC 4033, DOI 10.17487/RFC4033, March 2005,
               <https://www.rfc-editor.org/info/rfc4033>.
-
-
-
-
-
-
-Huque & Elmerot          Expires 31 August 2023                 [Page 5]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
-
 
    [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Resource Records for the DNS Security Extensions",
@@ -306,17 +378,31 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
               Existence in the DNS", RFC 7129, DOI 10.17487/RFC7129,
               February 2014, <https://www.rfc-editor.org/info/rfc7129>.
 
-11.2.  Informative References
+9.2.  Informative References
 
    [COMPACT-LIES]
               Valsorda, F. and O. Gudmundsson, "Compact DNSSEC Denial of
               Existence or Black Lies", <https://tools.ietf.org/html/
               draft-valsorda-dnsop-black-lies>.
 
+
+
+
+
+Huque & Elmerot         Expires 4 September 2023                [Page 7]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+
+
    [ENT-SENTINEL]
               Huque, S., "Empty Non-Terminal Sentinel for Black Lies",
               <https://www.ietf.org/archive/id/draft-huque-dnsop-
               blacklies-ent-01.html>.
+
+   [NXDOMAIN-TYPE]
+              Gudmundsson, O. and F. Valsorda, "Signaling NSEC record
+              owner name nonexistence", <https://tools.ietf.org/html/
+              draft-ogud-fake-nxdomain-type/>.
 
 Authors' Addresses
 
@@ -327,15 +413,6 @@ Authors' Addresses
    United States of America
 
    Email: shuque@gmail.com
-
-
-
-
-
-
-Huque & Elmerot          Expires 31 August 2023                 [Page 6]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
 
    Christian Elmerot
@@ -368,25 +445,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2023
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Huque & Elmerot          Expires 31 August 2023                 [Page 7]
+Huque & Elmerot         Expires 4 September 2023                [Page 8]
