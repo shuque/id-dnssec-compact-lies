@@ -345,7 +345,7 @@
       <t>
         Additionally, generating signatures on-demand is more
         computationally intensive than returning pre-computed
-        signatures. Although the Compact Lies scheme reduces the
+        signatures. Although the Compact Answers scheme reduces the
         number of online signing operations compared to previous
         techniques like White Lies, it still may make authoritative
         servers more vulnerable to computational denial of service
@@ -358,9 +358,9 @@
     <section anchor="Acknowledgements" numbered="true" toc="default">
       <name>Acknowledgements</name>
       <t>
-        The Compact Lies technique (then called "Black Lies") was
+        The Compact Answers technique (then called "Black Lies") was
         originally proposed in
-        <xref target="COMPACT-LIES" format="default"/> by F. Valsorda
+        <xref target="BLACK-LIES" format="default"/> by F. Valsorda
         and O. Gudmundsson, and implemented by Cloudflare. The Empty
         Non-Terminal distinguisher RR type was originally proposed in
         <xref target="ENT-SENTINEL" format="default"/> by S. Huque.
@@ -401,7 +401,7 @@
       </references>
       <references>
         <name>Informative References</name>
-      <reference anchor="COMPACT-LIES"
+      <reference anchor="BLACK-LIES"
                  target="https://tools.ietf.org/html/draft-valsorda-dnsop-black-lies">
         <front>
           <title>Compact DNSSEC Denial of Existence or Black Lies</title>
