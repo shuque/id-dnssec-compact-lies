@@ -278,7 +278,7 @@
         have an RRSIG record demonstrating an exact match (i.e. the
         label count in the RRSIG RDATA will be equal to the number of
         labels in the query name minus the root label). This obviates
-        the need to include an NSEC record in the Additional section
+        the need to include an NSEC record in the Authority section
         of the response that shows that no closer match than the wildcard
         was possible.
       </t>

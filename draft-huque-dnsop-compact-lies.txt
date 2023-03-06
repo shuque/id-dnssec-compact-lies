@@ -253,7 +253,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
    record demonstrating an exact match (i.e. the label count in the
    RRSIG RDATA will be equal to the number of labels in the query name
    minus the root label).  This obviates the need to include an NSEC
-   record in the Additional section of the response that shows that no
+   record in the Authority section of the response that shows that no
    closer match than the wildcard was possible.
 
    For a Wildcard NODATA match (where the queried name matches a
