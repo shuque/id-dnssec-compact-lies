@@ -113,8 +113,7 @@
       </t>
       <t>
         One of the functions of the Domain Name System Security Extensions
-        (DNSSEC) <xref target="RFC4033" /> <xref target="RFC4034" />
-        <xref target="RFC4035" /> <xref target="RFC5155" /> is
+        (DNSSEC) <xref target="RFC9364" /> is
         "Authenticated Denial of Existence",
         i.e. proving that a DNS name or record type does not exist.
         Normally, this is done by means of signed NSEC or NSEC3 records.
@@ -392,12 +391,9 @@
       <name>References</name>
       <references>
         <name>Normative References</name>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4033.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4034.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4470.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5155.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9364.xml"/>
       </references>
       <references>
         <name>Informative References</name>
