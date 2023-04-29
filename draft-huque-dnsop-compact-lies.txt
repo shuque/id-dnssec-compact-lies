@@ -83,7 +83,7 @@ Table of Contents
    9.  References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
      9.1.  Normative References  . . . . . . . . . . . . . . . . . .   7
      9.2.  Informative References  . . . . . . . . . . . . . . . . .   7
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   7
 
 1.  Introduction and Motivation
 
@@ -92,16 +92,16 @@ Table of Contents
    https://github.com/shuque/id-dnssec-compact-lies
 
    One of the functions of the Domain Name System Security Extensions
-   (DNSSEC) [RFC4033] [RFC4034] [RFC4035] [RFC5155] is "Authenticated
-   Denial of Existence", i.e. proving that a DNS name or record type
-   does not exist.  Normally, this is done by means of signed NSEC or
-   NSEC3 records.  In the precomputed signature model, these records
-   chain together existing names, or cryptographic hashes of them in the
-   zone.  In the online signing model, described in NSEC and NSEC3
-   "White Lies" [RFC4470] [RFC7129], they are used to dynamically
-   compute an epsilon function around the queried name.  A 'type bitmap'
-   in the data field of the NSEC or NSEC3 record asserts which resource
-   record types are present at the name.
+   (DNSSEC) [RFC9364] is "Authenticated Denial of Existence", i.e.
+   proving that a DNS name or record type does not exist.  Normally,
+   this is done by means of signed NSEC or NSEC3 records.  In the
+   precomputed signature model, these records chain together existing
+   names, or cryptographic hashes of them in the zone.  In the online
+   signing model, described in NSEC and NSEC3 "White Lies" [RFC4470]
+   [RFC7129], they are used to dynamically compute an epsilon function
+   around the queried name.  A 'type bitmap' in the data field of the
+   NSEC or NSEC3 record asserts which resource record types are present
+   at the name.
 
 
 
@@ -349,34 +349,18 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
 
 9.1.  Normative References
 
-   [RFC4033]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "DNS Security Introduction and Requirements",
-              RFC 4033, DOI 10.17487/RFC4033, March 2005,
-              <https://www.rfc-editor.org/info/rfc4033>.
-
-   [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "Resource Records for the DNS Security Extensions",
-              RFC 4034, DOI 10.17487/RFC4034, March 2005,
-              <https://www.rfc-editor.org/info/rfc4034>.
-
-   [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "Protocol Modifications for the DNS Security
-              Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
-              <https://www.rfc-editor.org/info/rfc4035>.
-
    [RFC4470]  Weiler, S. and J. Ihren, "Minimally Covering NSEC Records
               and DNSSEC On-line Signing", RFC 4470,
               DOI 10.17487/RFC4470, April 2006,
               <https://www.rfc-editor.org/info/rfc4470>.
 
-   [RFC5155]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
-              Security (DNSSEC) Hashed Authenticated Denial of
-              Existence", RFC 5155, DOI 10.17487/RFC5155, March 2008,
-              <https://www.rfc-editor.org/info/rfc5155>.
-
    [RFC7129]  Gieben, R. and W. Mekking, "Authenticated Denial of
               Existence in the DNS", RFC 7129, DOI 10.17487/RFC7129,
               February 2014, <https://www.rfc-editor.org/info/rfc7129>.
+
+   [RFC9364]  Hoffman, P., "DNS Security Extensions (DNSSEC)", BCP 237,
+              RFC 9364, DOI 10.17487/RFC9364, February 2023,
+              <https://www.rfc-editor.org/info/rfc9364>.
 
 9.2.  Informative References
 
@@ -384,15 +368,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
               Valsorda, F. and O. Gudmundsson, "Compact DNSSEC Denial of
               Existence or Black Lies", <https://tools.ietf.org/html/
               draft-valsorda-dnsop-black-lies>.
-
-
-
-
-
-Huque, et al.            Expires 31 October 2023                [Page 7]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
-
 
    [ENT-SENTINEL]
               Huque, S., "Empty Non-Terminal Sentinel for Black Lies",
@@ -405,6 +380,19 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
               draft-ogud-fake-nxdomain-type/>.
 
 Authors' Addresses
+
+
+
+
+
+
+
+
+
+Huque, et al.            Expires 31 October 2023                [Page 7]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
+
 
    Shumon Huque
    Salesforce
@@ -431,6 +419,18 @@ Authors' Addresses
    United States of America
 
    Email: olafur@cloudflare.com
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
