@@ -263,9 +263,10 @@
         has descendant names that do). For a query for an Empty
         Non-Terminal, the NSEC type bitmap will only contain RRSIG
         and NSEC. (Note that this is substantially different than the
-        ENT response in precomputed NSEC, where the NSEC record "covers"
-        the ENT and has the Next Domain Name field set to the next
-        lexicographic descendent of the ENT in the zone.)
+        ENT response in precomputed NSEC, where the NSEC record has the
+        same type bitmap, but "covers" rather than matches the ENT, and
+        has the Next Domain Name field set to the next lexicographic
+        descendent of the ENT in the zone.)
       </t>
     </section>
 
