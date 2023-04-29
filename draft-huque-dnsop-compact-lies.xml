@@ -73,7 +73,21 @@
       </address>
     </author>
 
-    <date day="3" month="3" year="2023"/>
+    <author fullname="Olafur Gudmundsson" initials="O." surname="Gudmundsson">
+      <organization>Cloudflare</organization>
+      <address>
+        <postal>
+          <street>101 Townsend St.</street>
+          <city>San Francisco</city>
+          <region>CA</region>
+          <code>94107</code>
+          <country>United States of America</country>
+        </postal>
+        <email>olafur@cloudflare.com</email>
+      </address>
+    </author>
+
+    <date day="29" month="4" year="2023"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>

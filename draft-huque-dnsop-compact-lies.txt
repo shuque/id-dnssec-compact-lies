@@ -5,8 +5,9 @@
 Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Intended status: Standards Track                              C. Elmerot
-Expires: 4 September 2023                                     Cloudflare
-                                                            3 March 2023
+Expires: 31 October 2023                                  O. Gudmundsson
+                                                              Cloudflare
+                                                           29 April 2023
 
 
                  Compact Denial of Existence in DNSSEC
@@ -36,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 4 September 2023.
+   This Internet-Draft will expire on 31 October 2023.
 
 Copyright Notice
 
@@ -52,10 +53,9 @@ Copyright Notice
 
 
 
-
-Huque & Elmerot         Expires 4 September 2023                [Page 1]
+Huque, et al.            Expires 31 October 2023                [Page 1]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Huque & Elmerot         Expires 4 September 2023                [Page 2]
+Huque, et al.            Expires 31 October 2023                [Page 2]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
 
 
    The response for a non-existent name requires up to 2 signed NSEC
@@ -165,9 +165,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
 
 
 
-Huque & Elmerot         Expires 4 September 2023                [Page 3]
+Huque, et al.            Expires 31 October 2023                [Page 3]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
 
 
    No special handling of this RR type is required on the part of DNS
@@ -221,9 +221,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
 
 
 
-Huque & Elmerot         Expires 4 September 2023                [Page 4]
+Huque, et al.            Expires 31 October 2023                [Page 4]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
 
 
 3.2.  Responses for Non-Existent Types
@@ -277,9 +277,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
 
 
 
-Huque & Elmerot         Expires 4 September 2023                [Page 5]
+Huque, et al.            Expires 31 October 2023                [Page 5]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
 
 
    Address lookup functions typically invoked by applications will
@@ -333,9 +333,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
 
 
 
-Huque & Elmerot         Expires 4 September 2023                [Page 6]
+Huque, et al.            Expires 31 October 2023                [Page 6]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
 
 
 8.  IANA Considerations
@@ -389,9 +389,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
 
 
 
-Huque & Elmerot         Expires 4 September 2023                [Page 7]
+Huque, et al.            Expires 31 October 2023                [Page 7]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC       March 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC       April 2023
 
 
    [ENT-SENTINEL]
@@ -424,6 +424,13 @@ Authors' Addresses
    Email: elmerot@cloudflare.com
 
 
+   Olafur Gudmundsson
+   Cloudflare
+   101 Townsend St.
+   San Francisco, CA 94107
+   United States of America
+
+   Email: olafur@cloudflare.com
 
 
 
@@ -438,11 +445,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-Huque & Elmerot         Expires 4 September 2023                [Page 8]
+Huque, et al.            Expires 31 October 2023                [Page 8]
