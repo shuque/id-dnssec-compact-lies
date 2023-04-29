@@ -11,7 +11,7 @@ Expires: 31 October 2023                                  O. Gudmundsson
 
 
                  Compact Denial of Existence in DNSSEC
-                   draft-huque-dnsop-compact-lies-01
+            draft-ietf-dnsop-compact-denial-of-existence-00
 
 Abstract
 

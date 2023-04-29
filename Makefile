@@ -1,4 +1,4 @@
-SOURCE  = draft-huque-dnsop-compact-lies
+SOURCE  = draft-ietf-dnsop-compact-denial-of-existence
 
 all:	$(SOURCE).txt $(SOURCE).html
 
