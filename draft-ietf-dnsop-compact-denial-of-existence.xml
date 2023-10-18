@@ -373,10 +373,10 @@
       <name>Implementation Status</name>
       <t>
         Cloudflare, NS1, and Amazon Route53 currently implement the base
-        Compact Answers scheme. NS1 additionally implements the Empty
-        Non-Terminal distinguisher in the NSEC type bitmap, using the
-        private RR type code 65281. There are no implementations yet
-        that use the NXNAME distinguisher RR type.
+        Compact Answers scheme. NS1 implements the Empty Non-Terminal
+        distinguisher using the private RR type code 65281. Cloudflare
+        implements the NXNAME distinguisher using the private RR type
+        code 65283.
       </t>
     </section>
 
