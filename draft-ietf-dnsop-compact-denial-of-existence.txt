@@ -5,13 +5,13 @@
 Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Intended status: Standards Track                              C. Elmerot
-Expires: 10 November 2023                                 O. Gudmundsson
+Expires: 19 April 2024                                    O. Gudmundsson
                                                               Cloudflare
-                                                              9 May 2023
+                                                         17 October 2023
 
 
                  Compact Denial of Existence in DNSSEC
-            draft-ietf-dnsop-compact-denial-of-existence-00
+            draft-ietf-dnsop-compact-denial-of-existence-01
 
 Abstract
 
@@ -21,6 +21,13 @@ Abstract
    require only one minimal NSEC record, allow online signing servers to
    minimize signing operations and response sizes, and prevent zone
    content disclosure.
+
+Discussion Venues
+
+   This note is to be removed before publishing as an RFC.
+
+   Source for this draft and an issue tracker can be found at
+   https://github.com/shuque/id-dnssec-compact-lies.
 
 Status of This Memo
 
@@ -37,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 10 November 2023.
+   This Internet-Draft will expire on 19 April 2024.
 
 Copyright Notice
 
@@ -46,16 +53,9 @@ Copyright Notice
 
 
 
-
-
-
-
-
-
-
-Huque, et al.           Expires 10 November 2023                [Page 1]
+Huque, et al.             Expires 19 April 2024                 [Page 1]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -63,9 +63,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
    license-info) in effect on the date of publication of this document.
    Please review these documents carefully, as they describe your rights
    and restrictions with respect to this document.  Code Components
-   extracted from this document must include Simplified BSD License text
-   as described in Section 4.e of the Trust Legal Provisions and are
-   provided without warranty as described in the Simplified BSD License.
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
 
 Table of Contents
 
@@ -88,10 +88,6 @@ Table of Contents
 
 1.  Introduction and Motivation
 
-   RFC EDITOR: PLEASE REMOVE THIS PARAGRAPH BEFORE PUBLISHING: The
-   source for this draft is maintained in GitHub at:
-   https://github.com/shuque/id-dnssec-compact-lies
-
    One of the functions of the Domain Name System Security Extensions
    (DNSSEC) [RFC9364] is "Authenticated Denial of Existence", i.e.
    proving that a DNS name or record type does not exist.  Normally,
@@ -104,21 +100,19 @@ Table of Contents
    NSEC or NSEC3 record asserts which resource record types are present
    at the name.
 
-
-
-
-
-
-Huque, et al.           Expires 10 November 2023                [Page 2]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
-
-
    The response for a non-existent name requires up to 2 signed NSEC
    records or up to 3 signed NSEC3 records (and for online signers, the
    associated cryptographic computation), to prove that (1) the name did
    not explicitly exist in the zone, and (2) that it could not have been
    synthesized by a wildcard.
+
+
+
+
+Huque, et al.             Expires 19 April 2024                 [Page 2]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
+
 
    This document describes an alternative technique, "Compact Denial of
    Existence" or "Compact Answers", to generate a signed DNS response on
@@ -161,19 +155,20 @@ Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
    addition to the required RRSIG and NSEC types).  The moniker NXNAME
    is chosen to clearly distinguish it from the response code NXDOMAIN.
 
-
-
-
-
-Huque, et al.           Expires 10 November 2023                [Page 3]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
-
-
    No special handling of this RR type is required on the part of DNS
    resolvers.  However, a resolver could optionally use the presence of
    the RR type to modify the response code in the answer it relays back
    to downstream non-validating clients from NODATA to NXDOMAIN.
+
+
+
+
+
+
+Huque, et al.             Expires 19 April 2024                 [Page 3]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
+
 
    An alternative way to distinguish NXDOMAIN from ENT is to define the
    synthetic Resource Record type for ENTs instead, as specified in
@@ -221,9 +216,14 @@ Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
 
 
 
-Huque, et al.           Expires 10 November 2023                [Page 4]
+
+
+
+
+
+Huque, et al.             Expires 19 April 2024                 [Page 4]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
 
 3.2.  Responses for Non-Existent Types
@@ -277,9 +277,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
 
 
 
-Huque, et al.           Expires 10 November 2023                [Page 5]
+Huque, et al.             Expires 19 April 2024                 [Page 5]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
 
    Address lookup functions typically invoked by applications will
@@ -333,9 +333,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
 
 
 
-Huque, et al.           Expires 10 November 2023                [Page 6]
+Huque, et al.             Expires 19 April 2024                 [Page 6]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
 
    Additionally, generating signatures on-demand is more computationally
@@ -389,9 +389,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
 
 
 
-Huque, et al.           Expires 10 November 2023                [Page 7]
+Huque, et al.             Expires 19 April 2024                 [Page 7]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC         May 2023
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
 
    [ENT-SENTINEL]
@@ -411,7 +411,6 @@ Authors' Addresses
    415 Mission Street, 3rd Floor
    San Francisco, CA 94105
    United States of America
-
    Email: shuque@gmail.com
 
 
@@ -420,7 +419,6 @@ Authors' Addresses
    101 Townsend St.
    San Francisco, CA 94107
    United States of America
-
    Email: elmerot@cloudflare.com
 
 
@@ -429,7 +427,6 @@ Authors' Addresses
    101 Townsend St.
    San Francisco, CA 94107
    United States of America
-
    Email: olafur@cloudflare.com
 
 
@@ -445,4 +442,7 @@ Authors' Addresses
 
 
 
-Huque, et al.           Expires 10 November 2023                [Page 8]
+
+
+
+Huque, et al.             Expires 19 April 2024                 [Page 8]

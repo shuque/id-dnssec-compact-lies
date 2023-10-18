@@ -30,7 +30,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
         category="std" consensus="true"
-        docName="draft-ietf-dnsop-compact-denial-of-existence-00"
+        docName="draft-ietf-dnsop-compact-denial-of-existence-01"
         ipr="trust200902" updates="" obsoletes=""
         submissionType="IETF" xml:lang="en"
         tocInclude="true" tocDepth="4"
@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="9" month="5" year="2023"/>
+    <date day="17" month="10" year="2023"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -114,17 +114,18 @@
      </t>
     </abstract>
 
+    <note removeInRFC="true">
+      <name>Discussion Venues</name>
+      <t>Source for this draft and an issue tracker can be found at
+  <eref target="https://github.com/shuque/id-dnssec-compact-lies"/>.</t>
+    </note>
+
   </front>
 
   <middle>
 
     <section numbered="true" toc="default">
       <name>Introduction and Motivation</name>
-      <t>
-        RFC EDITOR: PLEASE REMOVE THIS PARAGRAPH BEFORE PUBLISHING:
-        The source for this draft is maintained in GitHub at:
-        https://github.com/shuque/id-dnssec-compact-lies
-      </t>
       <t>
         One of the functions of the Domain Name System Security Extensions
         (DNSSEC) <xref target="RFC9364" /> is
