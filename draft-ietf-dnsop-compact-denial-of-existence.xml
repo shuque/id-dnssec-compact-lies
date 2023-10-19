@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="17" month="10" year="2023"/>
+    <date day="18" month="10" year="2023"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -307,6 +307,33 @@
         is empty, and the Additional section contains a single NSEC
         record that matches the query name with a type bitmap
         representing the list of types available at the wildcard.
+      </t>
+    </section>
+
+    <section numbered="true" toc="default">
+      <name>Responses to explicit queries for NXNAME</name>
+      <t>
+        NXNAME is a pseudo RR-type which should not appear anywhere in
+        a DNS message  apart from the NSEC type bitmap of a Compact
+        Answer response as described previously in this document.
+        If however a DNS server implementing this specification
+        receives an explicit query for the NXNAME RR type, this section
+        describes what the response should be.
+      </t>
+      <t>
+        If an explicit query for the NXNAME RR type is received for
+        a domain name that does not exist, the server MUST omit the
+        NXNAME RR type in the NSEC type bitmaps field and return only
+        the types NSEC and RRSIG. The reason for this is that if the
+        NXNAME type were to be included, a validating resolver could
+        treat the response as incoherent, fail to validate it, query
+        other nameservers for the zone, before finally returning SERVFAIL
+        to the querier.
+      </t>
+      <t>
+        NXNAME queries for names that do exist require no special
+        processing. A normal NODATA response is returned, indicating
+        the actual types present at the name in the NSEC record.
       </t>
     </section>
 

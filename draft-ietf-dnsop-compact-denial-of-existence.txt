@@ -5,9 +5,9 @@
 Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Intended status: Standards Track                              C. Elmerot
-Expires: 19 April 2024                                    O. Gudmundsson
+Expires: 20 April 2024                                    O. Gudmundsson
                                                               Cloudflare
-                                                         17 October 2023
+                                                         18 October 2023
 
 
                  Compact Denial of Existence in DNSSEC
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 April 2024.
+   This Internet-Draft will expire on 20 April 2024.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Huque, et al.             Expires 19 April 2024                 [Page 1]
+Huque, et al.             Expires 20 April 2024                 [Page 1]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
@@ -75,15 +75,16 @@ Table of Contents
      3.1.  Responses for Non-Existent Names  . . . . . . . . . . . .   4
      3.2.  Responses for Non-Existent Types  . . . . . . . . . . . .   5
      3.3.  Responses for Wildcard Matches  . . . . . . . . . . . . .   5
-   4.  Operational Implications  . . . . . . . . . . . . . . . . . .   5
+     3.4.  Responses to explicit queries for NXNAME  . . . . . . . .   5
+   4.  Operational Implications  . . . . . . . . . . . . . . . . . .   6
    5.  Response Code Substitution  . . . . . . . . . . . . . . . . .   6
-   6.  Implementation Status . . . . . . . . . . . . . . . . . . . .   6
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   6
+   6.  Implementation Status . . . . . . . . . . . . . . . . . . . .   7
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
    8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   7
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   7
    10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   7
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .   7
-     10.2.  Informative References . . . . . . . . . . . . . . . . .   7
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .   8
+     10.2.  Informative References . . . . . . . . . . . . . . . . .   8
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   8
 
 1.  Introduction and Motivation
@@ -108,8 +109,7 @@ Table of Contents
 
 
 
-
-Huque, et al.             Expires 19 April 2024                 [Page 2]
+Huque, et al.             Expires 20 April 2024                 [Page 2]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
@@ -165,7 +165,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
 
 
-Huque, et al.             Expires 19 April 2024                 [Page 3]
+Huque, et al.             Expires 20 April 2024                 [Page 3]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
@@ -221,7 +221,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
 
 
-Huque, et al.             Expires 19 April 2024                 [Page 4]
+Huque, et al.             Expires 20 April 2024                 [Page 4]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
@@ -263,6 +263,34 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
    query name with a type bitmap representing the list of types
    available at the wildcard.
 
+3.4.  Responses to explicit queries for NXNAME
+
+   NXNAME is a pseudo RR-type which should not appear anywhere in a DNS
+   message apart from the NSEC type bitmap of a Compact Answer response
+   as described previously in this document.  If however a DNS server
+   implementing this specification receives an explicit query for the
+   NXNAME RR type, this section describes what the response should be.
+
+   If an explicit query for the NXNAME RR type is received for a domain
+   name that does not exist, the server MUST omit the NXNAME RR type in
+   the NSEC type bitmaps field and return only the types NSEC and RRSIG.
+
+
+
+Huque, et al.             Expires 20 April 2024                 [Page 5]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
+
+
+   The reason for this is that if the NXNAME type were to be included, a
+   validating resolver could treat the response as incoherent, fail to
+   validate it, query other nameservers for the zone, before finally
+   returning SERVFAIL to the querier.
+
+   NXNAME queries for names that do exist require no special processing.
+   A normal NODATA response is returned, indicating the actual types
+   present at the name in the NSEC record.
+
 4.  Operational Implications
 
    For DNSSEC enabled queries, a signed zone at an authoritative server
@@ -273,14 +301,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
    responses from these servers.  The response code in the DNS header
    cannot be authenticated, so inferring the status of a response from
    signed data in the body of the DNS message is more secure.
-
-
-
-
-Huque, et al.             Expires 19 April 2024                 [Page 5]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
-
 
    Address lookup functions typically invoked by applications will
    continue to work, although extra invocations of these functions (and
@@ -310,6 +330,14 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
    response code likely needs the specification of a new EDNS signal
    ("Compact Answers OK") at additional complexity cost.  Authoritative
    servers receiving queries with such a flag could return a Compact
+
+
+
+Huque, et al.             Expires 20 April 2024                 [Page 6]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
+
+
    DNSSEC Answer with the response code set to NXDOMAIN.  Resolvers
    could likewise return such an answer to their downstream DNSSEC
    enabled queriers that also set this flag.  Validating resolvers would
@@ -330,13 +358,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
    DNS zone to have access to the private signing keys.  Exposing
    signing keys on Internet reachable servers makes them more vulnerable
    to attack.
-
-
-
-Huque, et al.             Expires 19 April 2024                 [Page 6]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
-
 
    Additionally, generating signatures on-demand is more computationally
    intensive than returning pre-computed signatures.  Although the
@@ -365,6 +386,14 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
 
 10.  References
 
+
+
+
+Huque, et al.             Expires 20 April 2024                 [Page 7]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
+
+
 10.1.  Normative References
 
    [RFC4470]  Weiler, S. and J. Ihren, "Minimally Covering NSEC Records
@@ -386,13 +415,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
               Valsorda, F. and O. Gudmundsson, "Compact DNSSEC Denial of
               Existence or Black Lies", <https://tools.ietf.org/html/
               draft-valsorda-dnsop-black-lies>.
-
-
-
-Huque, et al.             Expires 19 April 2024                 [Page 7]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
-
 
    [ENT-SENTINEL]
               Huque, S., "Empty Non-Terminal Sentinel for Black Lies",
@@ -422,6 +444,12 @@ Authors' Addresses
    Email: elmerot@cloudflare.com
 
 
+
+Huque, et al.             Expires 20 April 2024                 [Page 8]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
+
+
    Olafur Gudmundsson
    Cloudflare
    101 Townsend St.
@@ -445,4 +473,32 @@ Authors' Addresses
 
 
 
-Huque, et al.             Expires 19 April 2024                 [Page 8]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Huque, et al.             Expires 20 April 2024                 [Page 9]
