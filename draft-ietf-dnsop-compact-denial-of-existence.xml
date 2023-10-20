@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="19" month="10" year="2023"/>
+    <date day="20" month="10" year="2023"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -370,7 +370,7 @@
     </section>
 
     <section anchor="rcode" numbered="true" toc="default">
-      <name>Response Code Substitution</name>
+      <name>Response Code Restoration</name>
       <t>
         For non-existent names, implementations should try wherever
         possible, to preserve  the response code value of 3 (NXDOMAIN).
@@ -382,18 +382,48 @@
         could modify the response code from NOERROR to NXDOMAIN to
         downstream queriers that do not set the DNSSEC_OK flag.
       </t>
-      <t>
-        TO EXPLORE: For DNSSEC enabled queries, preserving the NXDOMAIN
-        response code likely needs the specification of a new EDNS
-        signal ("Compact Answers OK") at additional complexity cost.
-        Authoritative servers receiving queries with such a flag could
-        return a Compact DNSSEC Answer with the response code set to
-        NXDOMAIN. Resolvers could likewise return such an answer to
-        their downstream DNSSEC enabled queriers that also set this
-        flag. Validating resolvers would check that such responses
-        either contained a traditional signed NXDOMAIN response or a
-        signed NODATA response with the NXNAME signal.
-      </t>
+
+      <section anchor="signaled-rcode" numbered="true" toc="default">
+        <name>Signaled Response Code Restoration</name>
+        <t>
+          This section describes an optional but recommended scheme
+          to permit signaled restoration of the NXDOMAIN RCODE for
+          DNSSEC enabled responses. A new
+          <xref target="RFC6891">EDNS0</xref> header flag is defined
+          in the 2nd most significant bit of the Z flag in the EDNS0
+          OPT header. This flag is referred to as the
+          "Compact Answers OK (CO)" flag.
+        </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+                +0 (MSB)                +1 (LSB)
+         +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+      0: |   EXTENDED-RCODE      |       VERSION         |
+         +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+      2: |DO|CO|                 Z                       |
+         +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        ]]></artwork>
+        <t>
+          When this flag is sent in a query by a resolver, it indicates
+          that the resolver will accept a signed NXNAME enhanced
+          NODATA response for a non-existent name together with the
+          response code field set to NXDOMAIN (3).
+        </t>
+        <t>
+          In responses to such queries, a Compact Denial authoritative
+          implementing this signaling scheme, will set the Compact
+          Answers OK EDNS header flag, and for non-existent names will
+          additionally set the response code field to NXDOMAIN.
+        </t>
+        <t>
+          EDNS is a hop by hop signal, so resolvers will need to
+          record the presence of this flag in associated cache data
+          and respond to downstream DNSSEC enabled queriers
+          appropriately. If the querier does not set the Compact
+          Answers OK flag, the resolver will need to reset the
+          response code back to NOERROR (0) for an NXNAME response.
+        </t>
+      </section>
+
     </section>
 
     <section anchor="implementation" numbered="true" toc="default">
@@ -403,7 +433,8 @@
         Compact Answers scheme. NS1 implements the Empty Non-Terminal
         distinguisher using the private RR type code 65281. Cloudflare
         implements the NXNAME distinguisher using the private RR type
-        code 65283.
+        code 65283. There are no implementations yet of the signaled
+        rcode substitution scheme.
       </t>
     </section>
 
@@ -453,6 +484,11 @@
       <artwork name="" type="" align="left" alt=""><![CDATA[
          NXNAME  [TBD]  NXDOMAIN Distinguisher for Compact Denial of Existence
         ]]></artwork>
+      <t>
+        IANA is additionally requested to allocate the "Compact Answers OK"
+        flag in the EDNS header, as described in
+        <xref target="signaled-rcode"/>
+      </t>
     </section>
 
   </middle>
@@ -466,6 +502,7 @@
       <references>
         <name>Normative References</name>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4470.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6891.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9364.xml"/>
       </references>
