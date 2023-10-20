@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="18" month="10" year="2023"/>
+    <date day="19" month="10" year="2023"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -124,7 +124,7 @@
 
   <middle>
 
-    <section numbered="true" toc="default">
+    <section anchor="intro" numbered="true" toc="default">
       <name>Introduction and Motivation</name>
       <t>
         One of the functions of the Domain Name System Security Extensions
@@ -167,7 +167,7 @@
       </t>
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="distinguish" numbered="true" toc="default">
       <name>Distinguishing NXDOMAIN from Empty Non-Terminal Names</name>
       <t>
         Since NODATA responses are generated for non-existent names, and
@@ -222,7 +222,7 @@
       </t>
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="responses" numbered="true" toc="default">
       <name>Generating Responses</name>
 
     <t>
@@ -233,7 +233,7 @@
     in introducing the additional complexity associated with it.
     </t>
 
-    <section numbered="true" toc="default">
+    <section anchor="response-nxd" numbered="true" toc="default">
       <name>Responses for Non-Existent Names</name>
       <t>
         When the authoritative server receives a query for a non-existent
@@ -262,7 +262,7 @@
       </t>
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="response-nodata" numbered="true" toc="default">
       <name>Responses for Non-Existent Types</name>
       <t>
         When the authoritative server receives a query for a name
@@ -287,7 +287,7 @@
       </t>
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="response-wildcard" numbered="true" toc="default">
       <name>Responses for Wildcard Matches</name>
       <t>
         For wildcard matches, the authoritative server will provide
@@ -310,7 +310,7 @@
       </t>
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="response-nxname" numbered="true" toc="default">
       <name>Responses to explicit queries for NXNAME</name>
       <t>
         NXNAME is a pseudo RR-type which should not appear anywhere in
@@ -339,7 +339,7 @@
 
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="operational" numbered="true" toc="default">
       <name>Operational Implications</name>
       <t>
         For DNSSEC enabled queries, a signed zone at an authoritative
@@ -369,7 +369,7 @@
       </t>
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="rcode" numbered="true" toc="default">
       <name>Response Code Substitution</name>
       <t>
         For non-existent names, implementations should try wherever
@@ -396,7 +396,7 @@
       </t>
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="implementation" numbered="true" toc="default">
       <name>Implementation Status</name>
       <t>
         Cloudflare, NS1, and Amazon Route53 currently implement the base
@@ -407,7 +407,7 @@
       </t>
     </section>
 
-    <section numbered="true" toc="default">
+    <section anchor="security" numbered="true" toc="default">
       <name>Security Considerations</name>
       <t>
         Online signing of DNS records requires authoritative servers
@@ -428,7 +428,7 @@
       </t>
     </section>
 
-    <section anchor="Acknowledgements" numbered="true" toc="default">
+    <section anchor="acks" numbered="true" toc="default">
       <name>Acknowledgements</name>
       <t>
         The Compact Answers technique (then called "Black Lies") was
@@ -443,7 +443,7 @@
       </t>
     </section>
 
-    <section anchor="IANA" numbered="true" toc="default">
+    <section anchor="iana" numbered="true" toc="default">
       <name>IANA Considerations</name>
       <t>
         IANA is requested to allocate a new DNS Resource Record type
