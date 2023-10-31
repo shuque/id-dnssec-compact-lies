@@ -343,8 +343,8 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2023
    This section describes an optional but recommended scheme to permit
    signaled restoration of the NXDOMAIN RCODE for DNSSEC enabled
    responses.  A new EDNS0 [RFC6891] header flag is defined in the 2nd
-   most significant bit of the Z flag in the EDNS0 OPT header.  This
-   flag is referred to as the "Compact Answers OK (CO)" flag.
+   most significant bit of the flags field in the EDNS0 OPT header.
+   This flag is referred to as the "Compact Answers OK (CO)" flag.
 
                    +0 (MSB)                +1 (LSB)
             +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+

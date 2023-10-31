@@ -390,7 +390,7 @@
           to permit signaled restoration of the NXDOMAIN RCODE for
           DNSSEC enabled responses. A new
           <xref target="RFC6891">EDNS0</xref> header flag is defined
-          in the 2nd most significant bit of the Z flag in the EDNS0
+          in the 2nd most significant bit of the flags field in the EDNS0
           OPT header. This flag is referred to as the
           "Compact Answers OK (CO)" flag.
         </t>
