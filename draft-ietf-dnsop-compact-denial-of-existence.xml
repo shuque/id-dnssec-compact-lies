@@ -31,7 +31,7 @@
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
         category="std" consensus="true"
         docName="draft-ietf-dnsop-compact-denial-of-existence-02"
-        ipr="trust200902" updates="" obsoletes=""
+        ipr="trust200902" updates="4034, 4035" obsoletes=""
         submissionType="IETF" xml:lang="en"
         tocInclude="true" tocDepth="4"
         symRefs="true" sortRefs="true" version="3">
@@ -424,6 +424,72 @@
         </t>
       </section>
 
+    </section>
+
+    <section anchor="updates" numbered="true" toc="default">
+      <name>Updates to RFCs</name>
+
+      <section anchor="updates4034" title="Updates to RFC 4034">
+        <t>
+          Section 4.1.2, The Type Bit Maps Field, states the following:
+        </t>
+        <ul>
+        <li>
+          Bits representing pseudo-types MUST be clear, as they do not appear
+          in zone data.  If encountered, they MUST be ignored upon being read.
+        </li>
+        </ul>
+        <t>
+          This paragragh is updated to the following:
+        </t>
+        <ul>
+        <li>
+          Bits representing pseudo-types MUST be clear, as they do not appear
+          in zone data.  If encountered, they MUST be ignored upon being read.
+          There is one exception to this rule for Compact Denial of Existence
+          (RFC TBD), where the NXNAME pseudo-type is allowed to appear in
+          responses to non-existent names.
+        </li>
+        </ul>
+      </section>
+
+      <section anchor="updates4035" title="Updates to RFC 4035">
+        <t>
+          Section 2.3, Including NSEC RRs in a Zone, states the following:
+        </t>
+        <ul>
+        <li>
+          An NSEC record (and its associated RRSIG RRset) MUST NOT be the only
+          RRset at any particular owner name.  That is, the signing process
+          MUST NOT create NSEC or RRSIG RRs for owner name nodes that were not
+          the owner name of any RRset before the zone was signed.  The main
+          reasons for this are a desire for namespace consistency between
+          signed and unsigned versions of the same zone and a desire to reduce
+          the risk of response inconsistency in security oblivious recursive
+          name servers.
+        </li>
+        </ul>
+        <t>
+          This paragragh is updated to the following::
+        </t>
+        <ul>
+        <li>
+          An NSEC record (and its associated RRSIG RRset) MUST NOT be the only
+          RRset at any particular owner name.  That is, the signing process
+          MUST NOT create NSEC or RRSIG RRs for owner name nodes that were not
+          the owner name of any RRset before the zone was signed.  The main
+          reasons for this are a desire for namespace consistency between
+          signed and unsigned versions of the same zone and a desire to reduce
+          the risk of response inconsistency in security oblivious recursive
+          name servers. This concern only applies to implementations of DNSSEC
+          that employ pre-computed signatures. There is an exception to this
+          rule for online signing implementations of DNSSEC (e.g Minimally
+          Covering NSEC, and Compact Denial of Existence (RFC TBD), where
+          dynamically generated NSEC records can be produced for owner names
+          that don't exist or are empty non-terminals.
+        </li>
+        </ul>
+      </section>
     </section>
 
     <section anchor="implementation" numbered="true" toc="default">

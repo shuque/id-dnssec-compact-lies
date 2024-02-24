@@ -4,9 +4,9 @@
 
 Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
-Intended status: Standards Track                              C. Elmerot
-Expires: 26 August 2024                                   O. Gudmundsson
-                                                              Cloudflare
+Updates: 4034, 4035 (if approved)                             C. Elmerot
+Intended status: Standards Track                          O. Gudmundsson
+Expires: 26 August 2024                                       Cloudflare
                                                         23 February 2024
 
 
@@ -79,14 +79,17 @@ Table of Contents
    4.  Operational Implications  . . . . . . . . . . . . . . . . . .   6
    5.  Response Code Restoration . . . . . . . . . . . . . . . . . .   6
      5.1.  Signaled Response Code Restoration  . . . . . . . . . . .   7
-   6.  Implementation Status . . . . . . . . . . . . . . . . . . . .   7
-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .   7
-   8.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   8
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .   8
-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .   8
-     10.1.  Normative References . . . . . . . . . . . . . . . . . .   8
-     10.2.  Informative References . . . . . . . . . . . . . . . . .   9
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   9
+   6.  Updates to RFCs . . . . . . . . . . . . . . . . . . . . . . .   7
+     6.1.  Updates to RFC 4034 . . . . . . . . . . . . . . . . . . .   7
+     6.2.  Updates to RFC 4035 . . . . . . . . . . . . . . . . . . .   8
+   7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   8
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .   8
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   9
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .   9
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .   9
+     11.2.  Informative References . . . . . . . . . . . . . . . . .  10
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  10
 
 1.  Introduction and Motivation
 
@@ -101,9 +104,6 @@ Table of Contents
    around the queried name.  A 'type bitmap' in the data field of the
    NSEC or NSEC3 record asserts which resource record types are present
    at the name.
-
-
-
 
 
 
@@ -369,7 +369,62 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    does not set the Compact Answers OK flag, the resolver will need to
    reset the response code back to NOERROR (0) for an NXNAME response.
 
-6.  Implementation Status
+6.  Updates to RFCs
+
+6.1.  Updates to RFC 4034
+
+   Section 4.1.2, The Type Bit Maps Field, states the following:
+
+   *  Bits representing pseudo-types MUST be clear, as they do not
+      appear in zone data.  If encountered, they MUST be ignored upon
+      being read.
+
+   This paragragh is updated to the following:
+
+   *  Bits representing pseudo-types MUST be clear, as they do not
+      appear in zone data.  If encountered, they MUST be ignored upon
+      being read.  There is one exception to this rule for Compact
+      Denial of Existence (RFC TBD), where the NXNAME pseudo-type is
+      allowed to appear in responses to non-existent names.
+
+
+
+Huque, et al.            Expires 26 August 2024                 [Page 7]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+
+
+6.2.  Updates to RFC 4035
+
+   Section 2.3, Including NSEC RRs in a Zone, states the following:
+
+   *  An NSEC record (and its associated RRSIG RRset) MUST NOT be the
+      only RRset at any particular owner name.  That is, the signing
+      process MUST NOT create NSEC or RRSIG RRs for owner name nodes
+      that were not the owner name of any RRset before the zone was
+      signed.  The main reasons for this are a desire for namespace
+      consistency between signed and unsigned versions of the same zone
+      and a desire to reduce the risk of response inconsistency in
+      security oblivious recursive name servers.
+
+   This paragragh is updated to the following::
+
+   *  An NSEC record (and its associated RRSIG RRset) MUST NOT be the
+      only RRset at any particular owner name.  That is, the signing
+      process MUST NOT create NSEC or RRSIG RRs for owner name nodes
+      that were not the owner name of any RRset before the zone was
+      signed.  The main reasons for this are a desire for namespace
+      consistency between signed and unsigned versions of the same zone
+      and a desire to reduce the risk of response inconsistency in
+      security oblivious recursive name servers.  This concern only
+      applies to implementations of DNSSEC that employ pre-computed
+      signatures.  There is an exception to this rule for online signing
+      implementations of DNSSEC (e.g Minimally Covering NSEC, and
+      Compact Denial of Existence (RFC TBD), where dynamically generated
+      NSEC records can be produced for owner names that don't exist or
+      are empty non-terminals.
+
+7.  Implementation Status
 
    Cloudflare, NS1, and Amazon Route53 currently implement the base
    Compact Answers scheme.  NS1 implements the Empty Non-Terminal
@@ -378,7 +433,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    65283.  There are no implementations yet of the signaled rcode
    substitution scheme.
 
-7.  Security Considerations
+8.  Security Considerations
 
    Online signing of DNS records requires authoritative servers for the
    DNS zone to have access to the private signing keys.  Exposing
@@ -389,7 +444,8 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
 
-Huque, et al.            Expires 26 August 2024                 [Page 7]
+
+Huque, et al.            Expires 26 August 2024                 [Page 8]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
@@ -403,7 +459,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    signature algorithms (like those based on Elliptic Curves) that have
    a comparatively low cost for signing is recommended.
 
-8.  Acknowledgements
+9.  Acknowledgements
 
    The Compact Answers technique (then called "Black Lies") was
    originally proposed in [BLACK-LIES] by F.  Valsorda and O.
@@ -418,7 +474,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    members of the IETF DNS Operations working group for helpful comments
    and discussions.
 
-9.  IANA Considerations
+10.  IANA Considerations
 
    IANA is requested to allocate a new DNS Resource Record type code for
    NXNAME in the DNS parameters registry, from the meta type range.
@@ -428,9 +484,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    IANA is additionally requested to allocate the "Compact Answers OK"
    flag in the EDNS header, as described in Section 5.1
 
-10.  References
+11.  References
 
-10.1.  Normative References
+11.1.  Normative References
 
    [RFC4470]  Weiler, S. and J. Ihren, "Minimally Covering NSEC Records
               and DNSSEC On-line Signing", RFC 4470,
@@ -445,7 +501,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
 
-Huque, et al.            Expires 26 August 2024                 [Page 8]
+Huque, et al.            Expires 26 August 2024                 [Page 9]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
@@ -458,7 +514,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
               RFC 9364, DOI 10.17487/RFC9364, February 2023,
               <https://www.rfc-editor.org/info/rfc9364>.
 
-10.2.  Informative References
+11.2.  Informative References
 
    [BLACK-LIES]
               Valsorda, F. and O. Gudmundsson, "Compact DNSSEC Denial of
@@ -501,7 +557,7 @@ Authors' Addresses
 
 
 
-Huque, et al.            Expires 26 August 2024                 [Page 9]
+Huque, et al.            Expires 26 August 2024                [Page 10]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
@@ -557,4 +613,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
 
-Huque, et al.            Expires 26 August 2024                [Page 10]
+Huque, et al.            Expires 26 August 2024                [Page 11]
