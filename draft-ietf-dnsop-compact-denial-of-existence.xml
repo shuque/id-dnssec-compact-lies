@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 
-<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
+<!DOCTYPE rfc>
 
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <!-- used by XSLT processors -->
@@ -30,7 +30,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
         category="std" consensus="true"
-        docName="draft-ietf-dnsop-compact-denial-of-existence-01"
+        docName="draft-ietf-dnsop-compact-denial-of-existence-02"
         ipr="trust200902" updates="" obsoletes=""
         submissionType="IETF" xml:lang="en"
         tocInclude="true" tocDepth="4"
@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="20" month="10" year="2023"/>
+    <date day="23" month="02" year="2024"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -471,6 +471,13 @@
         The NXNAME type is based on the FDOM type proposed in
         <xref target="NXDOMAIN-TYPE" format="default"/> by O. Gudmundsson
         and F. Valsorda.
+      </t>
+      <t>
+        Especially detailed discussions on the technical details of this
+        document were conducted with Paul Vixie, Jan Vcelak, Viktor Dukhovni,
+        and Ed Lewis. The authors would also like to thank the many other
+        members of the IETF DNS Operations working group for helpful
+        comments and discussions.
       </t>
     </section>
 
