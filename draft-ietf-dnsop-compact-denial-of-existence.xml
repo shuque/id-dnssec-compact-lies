@@ -534,16 +534,16 @@
       <t>
         The Compact Answers technique (then called "Black Lies") was
         originally proposed in
-        <xref target="BLACK-LIES" format="default"/> by F. Valsorda
-        and O. Gudmundsson, and implemented by Cloudflare. The Empty
+        <xref target="BLACK-LIES" format="default"/> by Filippo Valsorda
+        and Olafur Gudmundsson, and implemented by Cloudflare. The Empty
         Non-Terminal distinguisher RR type was originally proposed in
-        <xref target="ENT-SENTINEL" format="default"/> by S. Huque.
+        <xref target="ENT-SENTINEL" format="default"/> by Shumon Huque.
         The NXNAME type is based on the FDOM type proposed in
-        <xref target="NXDOMAIN-TYPE" format="default"/> by O. Gudmundsson
-        and F. Valsorda.
+        <xref target="NXDOMAIN-TYPE" format="default"/> by Gudmundsson
+        and Valsorda.
       </t>
       <t>
-        Especially detailed discussions on the technical details of this
+        Especially detailed discussions on the technical aspects of this
         document were conducted with Paul Vixie, Jan Vcelak, Viktor Dukhovni,
         and Ed Lewis. The authors would also like to thank the many other
         members of the IETF DNS Operations working group for helpful
