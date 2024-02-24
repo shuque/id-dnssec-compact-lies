@@ -426,12 +426,15 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 7.  Implementation Status
 
-   Cloudflare, NS1, and Amazon Route53 currently implement the base
-   Compact Answers scheme.  NS1 implements the Empty Non-Terminal
-   distinguisher using the private RR type code 65281.  Cloudflare
-   implements the NXNAME distinguisher using the private RR type code
-   65283.  There are no implementations yet of the signaled rcode
-   substitution scheme.
+   Cloudflare, NS1, and Amazon Route53 currently implement the Compact
+   Denial of Existence method.  From early 2021 until November 2023, NS1
+   had deployed the Empty Non-Terminal distinguisher using the private
+   RR type code 65281.  At the present time Cloudflare (since July 2023)
+   and NS1 (since November 2023) both implement the NXNAME distinguisher
+   using the private RR type code 65283.  Amazon Route53 is expected to
+   implement NXNAME after the specification is finalized and an official
+   code point is allocated.  There are no implementations yet of the
+   signaled rcode substitution scheme.
 
 8.  Security Considerations
 
@@ -439,9 +442,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    DNS zone to have access to the private signing keys.  Exposing
    signing keys on Internet reachable servers makes them more vulnerable
    to attack.
-
-
-
 
 
 
