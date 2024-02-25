@@ -1,13 +1,45 @@
 ## Test of meta and q-type queries
 
-The table below contains results of queries issues for all the
-RR types in the meta and q-types range (128 .. 255) to various
-resolver implementations.
+The table below contains results of queries issued for all the
+RR types in the meta and q-types range (128 .. 255) as well as
+the oddball meta-type OPT (41) which does not fall into that
+range, to various resolver implementations.
 
-Date of test: 2024-02-24
+Currently, there are 3 defined meta-types: OPT (41), TKEY (249),
+and TSIG (250). There are 5 defined Q-types: ANY (255), MAILA (253),
+MAILB (254), AXFR (252), and IXFR (251).
 
-| Type |    BIND|    Unbound| Pdns    | Knot   |Google  |Cloudflare   |
+We would expect resolvers to process any q-type they have implemented
+support for. For any meta-type they support, they would follow the
+rules for processing that meta-type if they have implemented support
+for it. Notably OPT, and TSIG have no defined usage in a DNS query,
+so an error should be returned.
+
+If a meta or q-type is valid in a query, it should only be locally
+processed by the server, and should not be subject to iterative
+resolution.
+
+All unallocated code points in the rest of the meta and q-types
+range should be responded to with an error. This does not seem to be
+universally true in practice though, and there is some variability
+in the behavior of the resolvers we tested. BIND, Unbound, and
+PowerDNS recursor do in fact return errors, FORMERR in BIND and
+Unbound, and SERVFAIL in PowerDNS Recursor. Knot Resolver, Google,
+and Cloudflare also appear to forward them outbound for iterative
+resolution.
+
+The DNS protocol specification should clarify the correct behavior
+for the processing of queries for meta and q-types (including
+unallocated code points in their range) by DNS servers. Additionally,
+a new range should be reserved from the RR type space designated
+to meta and q-types for private use.
+
+
+Date of test: 2024-02-25
+
+| Type |    BIND|    Unbound| PowerDNS    | Knot   |Google    |Cloudflare   |
 | ---- | ----   | ----      | ----    | -----  | ----   | ----   |
+| 41 | FORMERR | FORMERR | SERVFAIL | SERVFAIL | NOERROR | NOERROR |
 | 128 | FORMERR | FORMERR | SERVFAIL | NOERROR | NOERROR | NOERROR |
 | 129 | FORMERR | FORMERR | SERVFAIL | NOERROR | NOERROR | NOERROR |
 | 130 | FORMERR | FORMERR | SERVFAIL | NOERROR | NOERROR | NOERROR |
