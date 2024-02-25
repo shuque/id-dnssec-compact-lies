@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="23" month="02" year="2024"/>
+    <date day="25" month="02" year="2024"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -180,45 +180,56 @@
         bitmap.
       </t>
       <t>
-        Today, some specific implementations of Compact Answers avoid the
-        NXDOMAIN identification problem by synthesizing the NSEC type
-        bitmap for ENTs to include all record types supported except for
-        the queried type. This has the undesirable effect of no longer
-        being able to reliably determine the existence of ENTs, and of
-        making the Type Bitmaps field potentially larger than it needs to
-        be. It also has the potential to confuse validators and others
-        tools that infer type existence from the NSEC record.
+        Previously, some specific implementations of Compact Answers
+        have tried to avoid the NXDOMAIN identification problem by
+        synthesizing the NSEC type bitmap for ENTs to include all record
+        types supported except for the queried type. This has the
+        undesirable effect of no longer being able to reliably determine
+        the existence of ENTs, and of making the Type Bitmaps field
+        larger than it needs to be. It also has the potential to confuse
+        validators and others tools that infer type existence from the
+        NSEC record.
       </t>
       <t>
         This document defines the use of a synthetic Resource Record
         type to signal the presence of a non-existent name. The
-        mnemonic for this RR type is "NXNAME" and its type code is [TBD].
+        mnemonic for this RR type is "NXNAME", chosen to clearly
+        distinguish it from the response code mnemonic NXDOMAIN.
+      </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+         Type    Value  Meaning
+         NXNAME  [TBD]  NXDOMAIN indicator for Compact Denial of Existence
+        ]]></artwork>
+      <t>
         This RR type is added to the NSEC type bitmap for responses
         to non-existent names (in addition to the required RRSIG and
-        NSEC types). The moniker NXNAME is chosen to clearly
-        distinguish it from the response code NXDOMAIN.
+        NSEC types). It is a "Meta-Type", as defined in
+        <xref target="RFC6895" />, stores no data in a DNS zone, and
+        cannot be usefully queried. <xref target="response-nxname"/>
+        describes what a DNS resolver or authoritative server should
+        do if it receives an explicit query for NXNAME.
       </t>
       <t>
         No special handling of this RR type is required on the part of
-        DNS resolvers. However, a resolver could optionally use the
-        presence of the RR type to modify the response code in the answer
-        it relays back to downstream non-validating clients from NODATA to
-        NXDOMAIN.
+        DNS resolvers. However, resolvers may optionally implement the
+        behavior described in <xref target="signaled-rcode"/> 
+        (Response Code Restoration) to better restore NXDOMAIN visibility
+        to various applications.
       </t>
       <t>
         An alternative way to distinguish NXDOMAIN from ENT is to
         define the synthetic Resource Record type for ENTs instead,
         as specified in <xref target="ENT-SENTINEL" format="default"/>,
-        and this has already been deployed in the field. This typically
-        imposes less work on the server since NXDOMAIN responses are a
-        lot more common than ENTs. And at the time it was deployed it
-        allowed a common bitmap pattern ("NSEC RRSIG") to identify
-        NXDOMAIN across this and other implementations that returned
-        a broad bitmap pattern for Empty Non-Terminals. However, the
-        advantage of the NXNAME RR type is that it explicitly identifies
-        NXDOMAIN responses, and allows them to be distinguished conclusively
-        from potential ENT responses in other online signing NSEC
-        implementations.
+        and this was already successfully deployed in the field for a
+        period of time. This typically imposes less work on the server
+        since NXDOMAIN responses are a lot more common than ENTs. At the
+        time it was deployed, it also allowed a common bitmap pattern
+        ("NSEC RRSIG") to identify NXDOMAIN across this and other
+        implementations that returned a broad bitmap pattern for Empty
+        Non-Terminals. However, the advantage of the NXNAME RR type is
+        that it explicitly identifies NXDOMAIN responses, and allows
+        them to be distinguished conclusively from potential ENT responses
+        in other online signing NSEC implementations.
       </t>
     </section>
 
@@ -313,27 +324,22 @@
     <section anchor="response-nxname" numbered="true" toc="default">
       <name>Responses to explicit queries for NXNAME</name>
       <t>
-        NXNAME is a pseudo RR-type which should not appear anywhere in
-        a DNS message  apart from the NSEC type bitmap of a Compact
-        Answer response as described previously in this document.
-        If however a DNS server implementing this specification
-        receives an explicit query for the NXNAME RR type, this section
-        describes what the response should be.
+        NXNAME is a meta type which should not appear anywhere in
+        a DNS message apart from the NSEC type bitmap of a Compact
+        Answer response for a non-existent name. If however a DNS
+        server implementing this specification receives an explicit
+        query for the NXNAME RR type, this section describes what the
+        response should be.
       </t>
       <t>
-        If an explicit query for the NXNAME RR type is received for
-        a domain name that does not exist, the server MUST omit the
-        NXNAME RR type in the NSEC type bitmaps field and return only
-        the types NSEC and RRSIG. The reason for this is that if the
-        NXNAME type were to be included, a validating resolver could
-        treat the response as incoherent, fail to validate it, query
-        other nameservers for the zone, before finally returning SERVFAIL
-        to the querier.
-      </t>
-      <t>
-        NXNAME queries for names that do exist require no special
-        processing. A normal NODATA response is returned, indicating
-        the actual types present at the name in the NSEC record.
+        If an explicit query for the NXNAME RR type is received, the
+        DNS server MUST return an error, such as FORMERR (response code 1),
+        or REFUSED (response code 5). A resolver should not forward these
+        queries upstream or attempt iterative resolution. Many DNS server
+        implementations already return errors for all types in the meta
+        and q-type range unless they are defined to support queries. This
+        general behavior however is not clearly specified in any existing
+        protocol specification document and should be.
       </t>
     </section>
 
@@ -353,19 +359,16 @@
         more secure.
       </t>
       <t>
-        Address lookup functions typically invoked by applications will
-        continue to work, although extra invocations of these
-        functions (and corresponding extra DNS queries) may be caused.
-        For example, a NODATA response to the lookup of an AAAA record
-        for a non-existent name, can cause an application to issue another
-        query at the same name for an A record. Whereas a NXDOMAIN
-        response to the first query would correctly suppress additional
-        queries for other types at that name. Address lookup functions
-        could be enhanced to examine the NSEC type bitmaps in responses
-        to accurately determine non-existent names, however they would
-        need to issue DNSSEC enabled queries and potentially deal with
-        middleboxes interfering with the delivery of DNSSEC signed
-        responses.
+        Address lookup functions typically invoked by applications
+        may need to do more work when dealing with implementations of
+        Compact Answers. For example, a NODATA response to the lookup
+        of an AAAA record for a non-existent name, can cause such
+        functions to issue another query at the same name for an A record.
+        Whereas an NXDOMAIN response to the first query would suppress
+        additional queries for other types at that name. Address lookup
+        functions could be enhanced to issue DNSSEC enabled queries and
+        to examine the NSEC type bitmaps in responses to accurately
+        determine non-existent names.
       </t>
     </section>
 
@@ -375,12 +378,20 @@
         For non-existent names, implementations should try wherever
         possible, to preserve  the response code value of 3 (NXDOMAIN).
         This is generally possible for non-DNSSEC enabled queries,
-        namely those which do not set the DNSSEC_OK EDNS flag. For
-        such queries, authoritative servers could return a normal
-        NXDOMAIN response. Additionally, a validating resolver that
-        understands the NXNAME signal from an authoritative server
-        could modify the response code from NOERROR to NXDOMAIN to
-        downstream queriers that do not set the DNSSEC_OK flag.
+        namely those which do not set the DNSSEC_OK EDNS flag (DO bit).
+        For such queries, authoritative servers implementing Compact Denial
+        of Existence could return a normal NXDOMAIN response. There may
+        be limited benefit to doing this however, since most modern DNS
+        resolvers are DNSSEC-aware, and by <xref target="RFC3225" />
+        Section 3, DNSSEC-aware recursive servers are required to set
+        the DO bit on outbound queries, regardless of the status of the
+        DO bit on incoming requests.
+      </t>
+      <t>
+        A validating resolver that understands the NXNAME signal from an
+        authoritative server could modify the response code from NOERROR
+        to NXDOMAIN in responses they return to downstream queriers that
+        have not set the DO bit in their requests.
       </t>
 
       <section anchor="signaled-rcode" numbered="true" toc="default">
@@ -431,7 +442,8 @@
 
       <section anchor="updates4034" title="Updates to RFC 4034">
         <t>
-          Section 4.1.2, The Type Bit Maps Field, states the following:
+          <xref target="RFC4034" /> Section 4.1.2, The Type Bit Maps Field,
+          states the following:
         </t>
         <ul>
         <li>
@@ -451,11 +463,18 @@
           responses to non-existent names.
         </li>
         </ul>
+        <t>
+          Note: as a practical matter, no known resolver insists that
+          pseudo-types must be clear in the NSEC type bitmap, so this
+          restriction (prior to its revision) has posed no problem for
+          the deployment of this mechanism.
+        </t>
       </section>
 
       <section anchor="updates4035" title="Updates to RFC 4035">
         <t>
-          Section 2.3, Including NSEC RRs in a Zone, states the following:
+          <xref target="RFC4035" /> Section 2.3, Including NSEC RRs in a Zone,
+           states the following:
         </t>
         <ul>
         <li>
@@ -503,8 +522,9 @@
         November 2023) both implement the NXNAME distinguisher using
         the private RR type code 65283. Amazon Route53 is expected to
         implement NXNAME after the specification is finalized and an
-        official code point is allocated. There are no implementations
-        yet of the signaled rcode substitution scheme.
+        official code point is allocated. At the current time, there
+        are only prototype implementations of the signaled rcode
+        restoration scheme.
       </t>
     </section>
 
@@ -527,6 +547,20 @@
         algorithms (like those based on Elliptic Curves) that have
         a comparatively low cost for signing is recommended.
       </t>
+      <t>
+        Some security tools rely on detection of non-existent
+        domain names by examining the response code field of DNS
+        response messages. A NODATA code in that field rather than
+        NXDOMAIN will impact such tools. Implementation of the
+        optional response code restoration scheme will help recover
+        NXDOMAIN visibility for these tools. Alternatively, the
+        tools could be enhanced to recognize the NXNAME signal.
+        If the motivating aspects of this specification (minimizing
+        response size and computational costs) are not a concern,
+        DNSSEC deployments can opt for a different method (e.g.
+        traditional online signing or pre-computed signatures),
+        and avoid imposing the challenges of NXDOMAIN visibility.
+      </t>
     </section>
 
     <section anchor="acks" numbered="true" toc="default">
@@ -537,13 +571,14 @@
         <xref target="BLACK-LIES" format="default"/> by Filippo Valsorda
         and Olafur Gudmundsson, and implemented by Cloudflare. The Empty
         Non-Terminal distinguisher RR type was originally proposed in
-        <xref target="ENT-SENTINEL" format="default"/> by Shumon Huque.
+        <xref target="ENT-SENTINEL" format="default"/> by Shumon Huque,
+        and deployed by NS1.
         The NXNAME type is based on the FDOM type proposed in
         <xref target="NXDOMAIN-TYPE" format="default"/> by Gudmundsson
         and Valsorda.
       </t>
       <t>
-        Especially detailed discussions on the technical aspects of this
+        Especially detailed discussions on many technical aspects of this
         document were conducted with Paul Vixie, Jan Vcelak, Viktor Dukhovni,
         and Ed Lewis. The authors would also like to thank the many other
         members of the IETF DNS Operations working group for helpful
@@ -556,10 +591,14 @@
       <t>
         IANA is requested to allocate a new DNS Resource Record type
         code for NXNAME in the DNS parameters registry, from the meta type
-        range.
+        range. Specifically, the lowest available number (currently 128)
+        in the meta range is requested to be allocated. A lower number
+        lowers the size of the type bitmap, which reduces the size of the
+        DNS response message.
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
-         NXNAME  [TBD]  NXDOMAIN Distinguisher for Compact Denial of Existence
+         Type    Value  Meaning
+         NXNAME  [TBD]  NXDOMAIN indicator for Compact Denial of Existence
         ]]></artwork>
       <t>
         IANA is additionally requested to allocate the "Compact Answers OK"
@@ -578,9 +617,13 @@
       <name>References</name>
       <references>
         <name>Normative References</name>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3225.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4034.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4470.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6891.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6895.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9364.xml"/>
       </references>
       <references>
