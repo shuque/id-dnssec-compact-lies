@@ -84,7 +84,7 @@ Table of Contents
      6.2.  Updates to RFC 4035 . . . . . . . . . . . . . . . . . . .   8
    7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   9
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
-   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .   9
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  10
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  10
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  10
@@ -306,9 +306,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    response code of NXDOMAIN.  Tools that rely on accurately determining
    non-existent names will need to infer them from the presence of the
    NXNAME RR type in the type bitmap of the NSEC record in NODATA
-   responses from these servers.  The response code in the DNS header
-   cannot be authenticated, so inferring the status of a response from
-   signed data in the body of the DNS message is more secure.
+   responses from these servers.
 
    Address lookup functions typically invoked by applications may need
    to do more work when dealing with implementations of Compact Answers.
@@ -330,6 +328,8 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    return a normal NXDOMAIN response.  There may be limited benefit to
    doing this however, since most modern DNS resolvers are DNSSEC-aware,
    and by [RFC3225] Section 3, DNSSEC-aware recursive servers are
+   required to set the DO bit on outbound queries, regardless of the
+   status of the DO bit on incoming requests.
 
 
 
@@ -337,9 +337,6 @@ Huque, et al.            Expires 28 August 2024                 [Page 6]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
-
-   required to set the DO bit on outbound queries, regardless of the
-   status of the DO bit on incoming requests.
 
    A validating resolver that understands the NXNAME signal from an
    authoritative server could modify the response code from NOERROR to
@@ -384,8 +381,11 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    [RFC4034] Section 4.1.2, The Type Bit Maps Field, states the
    following:
 
+   *  Bits representing pseudo-types MUST be clear, as they do not
+      appear in zone data.  If encountered, they MUST be ignored upon
+      being read.
 
-
+   This paragragh is updated to the following:
 
 
 
@@ -393,12 +393,6 @@ Huque, et al.            Expires 28 August 2024                 [Page 7]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
-
-   *  Bits representing pseudo-types MUST be clear, as they do not
-      appear in zone data.  If encountered, they MUST be ignored upon
-      being read.
-
-   This paragragh is updated to the following:
 
    *  Bits representing pseudo-types MUST be clear, as they do not
       appear in zone data.  If encountered, they MUST be ignored upon
@@ -445,6 +439,12 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
 
+
+
+
+
+
+
 Huque, et al.            Expires 28 August 2024                 [Page 8]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
@@ -482,13 +482,29 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    examining the response code field of DNS response messages.  A NODATA
    code in that field rather than NXDOMAIN will impact such tools.
    Implementation of the optional response code restoration scheme will
-   help recover NXDOMAIN visibility for these tools.  Alternatively, the
-   tools could be enhanced to recognize the NXNAME signal.  If the
-   motivating aspects of this specification (minimizing response size
-   and computational costs) are not a concern, DNSSEC deployments can
-   opt for a different method (e.g.  traditional online signing or pre-
-   computed signatures), and avoid imposing the challenges of NXDOMAIN
-   visibility.
+   help recover NXDOMAIN visibility for these tools.  Note that the DNS
+   header is not cryptographically protected, so the response code field
+   cannot be authenticated.  Thus inferring the status of a response
+   from signed data in the body of the DNS message is actually more
+   secure.  These tools could be enhanced to recognize the (signed)
+   NXNAME signal.
+
+   If the motivating aspects of this specification (minimizing response
+   size and computational costs) are not a concern, DNSSEC deployments
+   can opt for a different method (e.g.  traditional online signing or
+   pre-computed signatures), and avoid imposing the challenges of
+   NXDOMAIN visibility.
+
+
+
+
+
+
+
+Huque, et al.            Expires 28 August 2024                 [Page 9]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+
 
 9.  Acknowledgements
 
@@ -498,13 +514,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    distinguisher RR type was originally proposed in [ENT-SENTINEL] by
    Shumon Huque, and deployed by NS1.  The NXNAME type is based on the
    FDOM type proposed in [NXDOMAIN-TYPE] by Gudmundsson and Valsorda.
-
-
-
-Huque, et al.            Expires 28 August 2024                 [Page 9]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
-
 
    Especially detailed discussions on many technical aspects of this
    document were conducted with Paul Vixie, Jan Vcelak, Viktor Dukhovni,
@@ -545,6 +554,14 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
               Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
               <https://www.rfc-editor.org/info/rfc4035>.
 
+
+
+
+Huque, et al.            Expires 28 August 2024                [Page 10]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+
+
    [RFC4470]  Weiler, S. and J. Ihren, "Minimally Covering NSEC Records
               and DNSSEC On-line Signing", RFC 4470,
               DOI 10.17487/RFC4470, April 2006,
@@ -554,13 +571,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
               for DNS (EDNS(0))", STD 75, RFC 6891,
               DOI 10.17487/RFC6891, April 2013,
               <https://www.rfc-editor.org/info/rfc6891>.
-
-
-
-Huque, et al.            Expires 28 August 2024                [Page 10]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
-
 
    [RFC6895]  Eastlake 3rd, D., "Domain Name System (DNS) IANA
               Considerations", BCP 42, RFC 6895, DOI 10.17487/RFC6895,
@@ -601,6 +611,13 @@ Authors' Addresses
    Email: shuque@gmail.com
 
 
+
+
+Huque, et al.            Expires 28 August 2024                [Page 11]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+
+
    Christian Elmerot
    Cloudflare
    101 Townsend St.
@@ -609,29 +626,12 @@ Authors' Addresses
    Email: elmerot@cloudflare.com
 
 
-
-
-
-
-Huque, et al.            Expires 28 August 2024                [Page 11]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
-
-
    Olafur Gudmundsson
    Cloudflare
    101 Townsend St.
    San Francisco, CA 94107
    United States of America
    Email: olafur@cloudflare.com
-
-
-
-
-
-
-
-
 
 
 
