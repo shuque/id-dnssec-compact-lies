@@ -385,7 +385,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
       appear in zone data.  If encountered, they MUST be ignored upon
       being read.
 
-   This paragragh is updated to the following:
+   This paragraph is updated to the following:
 
 
 
@@ -419,7 +419,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
       and a desire to reduce the risk of response inconsistency in
       security oblivious recursive name servers.
 
-   This paragragh is updated to the following::
+   This paragraph is updated to the following::
 
    *  An NSEC record (and its associated RRSIG RRset) MUST NOT be the
       only RRset at any particular owner name.  That is, the signing
