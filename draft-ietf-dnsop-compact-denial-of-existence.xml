@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="25" month="02" year="2024"/>
+    <date day="28" month="02" year="2024"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -154,11 +154,11 @@
         to generate a signed DNS response on demand for a non-existent
         name by claiming that the name exists but has no resource records
         associated with the queried type, i.e. it returns a NODATA response
-        rather than an NXDOMAIN response. A NODATA response (which has a
-        response code of NOERROR, and an empty ANSWER section) requires
-        only one NSEC record matching the queried name. This has two
-        advantages: the DNS response size is smaller, and it reduces the
-        online cryptographic work involved in generating the response.
+        rather than an NXDOMAIN response. A NODATA response, which has a
+        response code (RCODE) of NOERROR and an empty ANSWER section,
+        requires only one NSEC record matching the queried name. This has
+        two advantages: the DNS response size is smaller, and it reduces
+        the online cryptographic work involved in generating the response.
       </t>
       <t>
         The use of minimally covering NSEC records also prevents
@@ -279,7 +279,7 @@
         When the authoritative server receives a query for a name
         that exists, but has no resource record sets associated with
         the queried type, it generates a NODATA response, with
-        a dynamically constructed signed NSEC record in the Additional
+        a dynamically constructed signed NSEC record in the Authority
         Section. The owner name of the NSEC record matches the queried
         name. The Next Domain Name field is set to the immediate lexicographic
         successor of the QNAME. The Type Bitmaps field lists the available
@@ -315,7 +315,7 @@
         For a Wildcard NODATA match (where the queried name matches
         a wildcard but no data for the queried type exists), a response
         akin to a non-wildcard NODATA is returned. The Answer section
-        is empty, and the Additional section contains a single NSEC
+        is empty, and the Authority section contains a single NSEC
         record that matches the query name with a type bitmap
         representing the list of types available at the wildcard.
       </t>
@@ -333,13 +333,13 @@
       </t>
       <t>
         If an explicit query for the NXNAME RR type is received, the
-        DNS server MUST return an error, such as FORMERR (response code 1),
-        or REFUSED (response code 5). A resolver should not forward these
-        queries upstream or attempt iterative resolution. Many DNS server
-        implementations already return errors for all types in the meta
-        and q-type range unless they are defined to support queries. This
-        general behavior however is not clearly specified in any existing
-        protocol specification document and should be.
+        DNS server MUST return a Format Error (response code FORMERR).
+        A resolver should not forward these queries upstream or attempt
+        iterative resolution. Many DNS server implementations already
+        return errors for all types in the meta and q-type range unless
+        they are defined to support queries. This general behavior however
+        is not clearly specified in any existing protocol specification
+        document and should be.
       </t>
     </section>
 
@@ -547,7 +547,7 @@
       <t>
         Some security tools rely on detection of non-existent
         domain names by examining the response code field of DNS
-        response messages. A NODATA code in that field rather than
+        response messages. A NOERROR code in that field rather than
         NXDOMAIN will impact such tools. Implementation of the
         optional response code restoration scheme will help recover
         NXDOMAIN visibility for these tools. Note that the DNS
