@@ -30,7 +30,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
         category="std" consensus="true"
-        docName="draft-ietf-dnsop-compact-denial-of-existence-02"
+        docName="draft-ietf-dnsop-compact-denial-of-existence-03"
         ipr="trust200902" updates="4034, 4035" obsoletes=""
         submissionType="IETF" xml:lang="en"
         tocInclude="true" tocDepth="4"
@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="28" month="02" year="2024"/>
+    <date day="04" month="03" year="2024"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -345,30 +345,6 @@
 
     </section>
 
-    <section anchor="operational" numbered="true" toc="default">
-      <name>Operational Implications</name>
-      <t>
-        For DNSSEC enabled queries, a signed zone at an authoritative
-        server implementing Compact Answers will never return a response
-        with a response code of NXDOMAIN. Tools that rely on accurately
-        determining non-existent names will need to infer them from the
-        presence of the NXNAME RR type in the type bitmap of the NSEC
-        record in NODATA responses from these servers.
-      </t>
-      <t>
-        Address lookup functions typically invoked by applications
-        may need to do more work when dealing with implementations of
-        Compact Answers. For example, a NODATA response to the lookup
-        of an AAAA record for a non-existent name, can cause such
-        functions to issue another query at the same name for an A record.
-        Whereas an NXDOMAIN response to the first query would suppress
-        additional queries for other types at that name. Address lookup
-        functions could be enhanced to issue DNSSEC enabled queries and
-        to examine the NSEC type bitmaps in responses to accurately
-        determine non-existent names.
-      </t>
-    </section>
-
     <section anchor="rcode" numbered="true" toc="default">
       <name>Response Code Restoration</name>
       <t>
@@ -432,6 +408,34 @@
         </t>
       </section>
 
+    </section>
+
+    <section anchor="operational" numbered="true" toc="default">
+      <name>Operational Implications</name>
+      <t>
+        For DNSSEC enabled queries, a signed zone at an authoritative
+        server implementing Compact Answers will never return a response
+        with a response code of NXDOMAIN, unless they have implemented
+        the optional response code restoration feature described in
+        <xref target="signaled-rcode"/>. Similarly, resolvers not
+        implementing this feature will also not be able to return NXDOMAIN.
+        In the absence of this, tools that rely on accurately determining
+        non-existent names will need to infer them from the presence of
+        the NXNAME RR type in the type bitmap of the NSEC record in NODATA
+        responses from these servers.
+      </t>
+      <t>
+        Address lookup functions typically invoked by applications
+        may need to do more work when dealing with implementations of
+        Compact Answers. For example, a NODATA response to the lookup
+        of an AAAA record for a non-existent name, can cause such
+        functions to issue another query at the same name for an A record.
+        Whereas an NXDOMAIN response to the first query would suppress
+        additional queries for other types at that name. Address lookup
+        functions could be enhanced to issue DNSSEC enabled queries and
+        to examine the NSEC type bitmaps in responses to accurately
+        determine non-existent names.
+      </t>
     </section>
 
     <section anchor="updates" numbered="true" toc="default">

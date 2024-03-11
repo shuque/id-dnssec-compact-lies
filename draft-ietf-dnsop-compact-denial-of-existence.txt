@@ -6,12 +6,12 @@ Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
 Intended status: Standards Track                          O. Gudmundsson
-Expires: 31 August 2024                                       Cloudflare
-                                                        28 February 2024
+Expires: 5 September 2024                                     Cloudflare
+                                                            4 March 2024
 
 
                  Compact Denial of Existence in DNSSEC
-            draft-ietf-dnsop-compact-denial-of-existence-02
+            draft-ietf-dnsop-compact-denial-of-existence-03
 
 Abstract
 
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2024.
+   This Internet-Draft will expire on 5 September 2024.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Huque, et al.            Expires 31 August 2024                 [Page 1]
+Huque, et al.           Expires 5 September 2024                [Page 1]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -76,11 +76,11 @@ Table of Contents
      3.2.  Responses for Non-Existent Types  . . . . . . . . . . . .   5
      3.3.  Responses for Wildcard Matches  . . . . . . . . . . . . .   5
      3.4.  Responses to explicit queries for NXNAME  . . . . . . . .   6
-   4.  Operational Implications  . . . . . . . . . . . . . . . . . .   6
-   5.  Response Code Restoration . . . . . . . . . . . . . . . . . .   6
-     5.1.  Signaled Response Code Restoration  . . . . . . . . . . .   7
-   6.  Updates to RFCs . . . . . . . . . . . . . . . . . . . . . . .   7
-     6.1.  Updates to RFC 4034 . . . . . . . . . . . . . . . . . . .   7
+   4.  Response Code Restoration . . . . . . . . . . . . . . . . . .   6
+     4.1.  Signaled Response Code Restoration  . . . . . . . . . . .   6
+   5.  Operational Implications  . . . . . . . . . . . . . . . . . .   7
+   6.  Updates to RFCs . . . . . . . . . . . . . . . . . . . . . . .   8
+     6.1.  Updates to RFC 4034 . . . . . . . . . . . . . . . . . . .   8
      6.2.  Updates to RFC 4035 . . . . . . . . . . . . . . . . . . .   8
    7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   9
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Huque, et al.            Expires 31 August 2024                 [Page 2]
+Huque, et al.           Expires 5 September 2024                [Page 2]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
 
 
    The response for a non-existent name requires up to 2 signed NSEC
@@ -165,9 +165,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
 
-Huque, et al.            Expires 31 August 2024                 [Page 3]
+Huque, et al.           Expires 5 September 2024                [Page 3]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
 
 
    This RR type is added to the NSEC type bitmap for responses to non-
@@ -179,7 +179,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
    No special handling of this RR type is required on the part of DNS
    resolvers.  However, resolvers may optionally implement the behavior
-   described in Section 5.1 (Response Code Restoration) to better
+   described in Section 4.1 (Response Code Restoration) to better
    restore NXDOMAIN visibility to various applications.
 
    An alternative way to distinguish NXDOMAIN from ENT is to define the
@@ -221,9 +221,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
 
-Huque, et al.            Expires 31 August 2024                 [Page 4]
+Huque, et al.           Expires 5 September 2024                [Page 4]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
 
 
    For example, a request for the non-existing name a.example.com would
@@ -277,9 +277,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
 
-Huque, et al.            Expires 31 August 2024                 [Page 5]
+Huque, et al.           Expires 5 September 2024                [Page 5]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
 
 
 3.4.  Responses to explicit queries for NXNAME
@@ -299,26 +299,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    clearly specified in any existing protocol specification document and
    should be.
 
-4.  Operational Implications
-
-   For DNSSEC enabled queries, a signed zone at an authoritative server
-   implementing Compact Answers will never return a response with a
-   response code of NXDOMAIN.  Tools that rely on accurately determining
-   non-existent names will need to infer them from the presence of the
-   NXNAME RR type in the type bitmap of the NSEC record in NODATA
-   responses from these servers.
-
-   Address lookup functions typically invoked by applications may need
-   to do more work when dealing with implementations of Compact Answers.
-   For example, a NODATA response to the lookup of an AAAA record for a
-   non-existent name, can cause such functions to issue another query at
-   the same name for an A record.  Whereas an NXDOMAIN response to the
-   first query would suppress additional queries for other types at that
-   name.  Address lookup functions could be enhanced to issue DNSSEC
-   enabled queries and to examine the NSEC type bitmaps in responses to
-   accurately determine non-existent names.
-
-5.  Response Code Restoration
+4.  Response Code Restoration
 
    For non-existent names, implementations should try wherever possible,
    to preserve the response code value of 3 (NXDOMAIN).  This is
@@ -331,25 +312,31 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    required to set the DO bit on outbound queries, regardless of the
    status of the DO bit on incoming requests.
 
-
-
-Huque, et al.            Expires 31 August 2024                 [Page 6]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
-
-
    A validating resolver that understands the NXNAME signal from an
    authoritative server could modify the response code from NOERROR to
    NXDOMAIN in responses they return to downstream queriers that have
    not set the DO bit in their requests.
 
-5.1.  Signaled Response Code Restoration
+4.1.  Signaled Response Code Restoration
 
    This section describes an optional but recommended scheme to permit
    signaled restoration of the NXDOMAIN RCODE for DNSSEC enabled
    responses.  A new EDNS0 [RFC6891] header flag is defined in the 2nd
    most significant bit of the flags field in the EDNS0 OPT header.
    This flag is referred to as the "Compact Answers OK (CO)" flag.
+
+
+
+
+
+
+
+
+
+Huque, et al.           Expires 5 September 2024                [Page 6]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
+
 
                    +0 (MSB)                +1 (LSB)
             +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
@@ -374,6 +361,39 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    does not set the Compact Answers OK flag, the resolver will need to
    reset the response code back to NOERROR (0) for an NXNAME response.
 
+5.  Operational Implications
+
+   For DNSSEC enabled queries, a signed zone at an authoritative server
+   implementing Compact Answers will never return a response with a
+   response code of NXDOMAIN, unless they have implemented the optional
+   response code restoration feature described in Section 4.1.
+   Similarly, resolvers not implementing this feature will also not be
+   able to return NXDOMAIN.  In the absence of this, tools that rely on
+   accurately determining non-existent names will need to infer them
+   from the presence of the NXNAME RR type in the type bitmap of the
+   NSEC record in NODATA responses from these servers.
+
+   Address lookup functions typically invoked by applications may need
+   to do more work when dealing with implementations of Compact Answers.
+   For example, a NODATA response to the lookup of an AAAA record for a
+   non-existent name, can cause such functions to issue another query at
+   the same name for an A record.  Whereas an NXDOMAIN response to the
+   first query would suppress additional queries for other types at that
+   name.  Address lookup functions could be enhanced to issue DNSSEC
+   enabled queries and to examine the NSEC type bitmaps in responses to
+   accurately determine non-existent names.
+
+
+
+
+
+
+
+Huque, et al.           Expires 5 September 2024                [Page 7]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
+
+
 6.  Updates to RFCs
 
 6.1.  Updates to RFC 4034
@@ -386,13 +406,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
       being read.
 
    This paragraph is updated to the following:
-
-
-
-Huque, et al.            Expires 31 August 2024                 [Page 7]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
-
 
    *  Bits representing pseudo-types MUST be clear, as they do not
       appear in zone data.  If encountered, they MUST be ignored upon
@@ -429,26 +442,20 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
       consistency between signed and unsigned versions of the same zone
       and a desire to reduce the risk of response inconsistency in
       security oblivious recursive name servers.  This concern only
+
+
+
+Huque, et al.           Expires 5 September 2024                [Page 8]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
+
+
       applies to implementations of DNSSEC that employ pre-computed
       signatures.  There is an exception to this rule for online signing
       implementations of DNSSEC (e.g Minimally Covering NSEC, and
       Compact Denial of Existence (RFC TBD), where dynamically generated
       NSEC records can be produced for owner names that don't exist or
       are empty non-terminals.
-
-
-
-
-
-
-
-
-
-
-Huque, et al.            Expires 31 August 2024                 [Page 8]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
-
 
 7.  Implementation Status
 
@@ -489,22 +496,21 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
    is actually more secure.  These tools could be enhanced to recognize
    the (signed) NXNAME signal.
 
+
+
+
+
+
+Huque, et al.           Expires 5 September 2024                [Page 9]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
+
+
    If the motivating aspects of this specification (minimizing response
    size and computational costs) are not a concern, DNSSEC deployments
    can opt for a different method (e.g.  traditional online signing or
    pre-computed signatures), and avoid imposing the challenges of
    NXDOMAIN visibility.
-
-
-
-
-
-
-
-Huque, et al.            Expires 31 August 2024                 [Page 9]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
-
 
 9.  Acknowledgements
 
@@ -534,7 +540,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
          NXNAME  [TBD]  NXDOMAIN indicator for Compact Denial of Existence
 
    IANA is additionally requested to allocate the "Compact Answers OK"
-   flag in the EDNS header, as described in Section 5.1
+   flag in the EDNS header, as described in Section 4.1
 
 11.  References
 
@@ -549,18 +555,17 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
               RFC 4034, DOI 10.17487/RFC4034, March 2005,
               <https://www.rfc-editor.org/info/rfc4034>.
 
+
+
+Huque, et al.           Expires 5 September 2024               [Page 10]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
+
+
    [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Protocol Modifications for the DNS Security
               Extensions", RFC 4035, DOI 10.17487/RFC4035, March 2005,
               <https://www.rfc-editor.org/info/rfc4035>.
-
-
-
-
-Huque, et al.            Expires 31 August 2024                [Page 10]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
-
 
    [RFC4470]  Weiler, S. and J. Ihren, "Minimally Covering NSEC Records
               and DNSSEC On-line Signing", RFC 4470,
@@ -603,19 +608,22 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 Authors' Addresses
 
+
+
+
+
+
+Huque, et al.           Expires 5 September 2024               [Page 11]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC       March 2024
+
+
    Shumon Huque
    Salesforce
    415 Mission Street, 3rd Floor
    San Francisco, CA 94105
    United States of America
    Email: shuque@gmail.com
-
-
-
-
-Huque, et al.            Expires 31 August 2024                [Page 11]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
    Christian Elmerot
@@ -661,12 +669,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2024
 
 
 
-
-
-
-
-
-
-
-
-Huque, et al.            Expires 31 August 2024                [Page 12]
+Huque, et al.           Expires 5 September 2024               [Page 12]
