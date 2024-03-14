@@ -348,8 +348,9 @@
     <section anchor="rcode" numbered="true" toc="default">
       <name>Response Code Restoration</name>
       <t>
-        For non-existent names, implementations should try wherever
-        possible, to preserve  the response code value of 3 (NXDOMAIN).
+        For non-existent names, implementations SHOULD try, whenever
+        possible, to use response code 3 (NXDOMAIN), as is consistent with
+        client expectations when the NXNAME signal is not understood.
         This is generally possible for non-DNSSEC enabled queries,
         namely those which do not set the DNSSEC_OK EDNS flag (DO bit).
         For such queries, authoritative servers implementing Compact Denial
@@ -453,17 +454,8 @@
         </li>
         </ul>
         <t>
-          This paragraph is updated to the following:
+          This paragraph is removed.
         </t>
-        <ul>
-        <li>
-          Bits representing pseudo-types MUST be clear, as they do not appear
-          in zone data.  If encountered, they MUST be ignored upon being read.
-          There is one exception to this rule for Compact Denial of Existence
-          (RFC TBD), where the NXNAME pseudo-type is allowed to appear in
-          responses to non-existent names.
-        </li>
-        </ul>
         <t>
           Note: as a practical matter, no known resolver insists that
           pseudo-types must be clear in the NSEC type bitmap, so this
@@ -490,13 +482,13 @@
         </li>
         </ul>
         <t>
-          This paragraph is updated to the following::
+          This paragraph is updated to the following:
         </t>
         <ul>
         <li>
-          An NSEC record (and its associated RRSIG RRset) MUST NOT be the only
+          An NSEC record (and its associated RRSIG RRset) SHOULD NOT be the only
           RRset at any particular owner name.  That is, the signing process
-          MUST NOT create NSEC or RRSIG RRs for owner name nodes that were not
+          SHOULD NOT create NSEC or RRSIG RRs for owner name nodes that were not
           the owner name of any RRset before the zone was signed.  The main
           reasons for this are a desire for namespace consistency between
           signed and unsigned versions of the same zone and a desire to reduce
@@ -512,7 +504,7 @@
       </section>
     </section>
 
-    <section anchor="implementation" numbered="true" toc="default">
+    <section anchor="implementation" numbered="true" toc="default" removeInRFC="true">
       <name>Implementation Status</name>
       <t>
         Cloudflare, NS1, and Amazon Route53 currently implement the
