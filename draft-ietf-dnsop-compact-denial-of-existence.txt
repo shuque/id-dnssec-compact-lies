@@ -6,12 +6,12 @@ Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
 Intended status: Standards Track                          O. Gudmundsson
-Expires: 6 January 2025                                       Cloudflare
-                                                             5 July 2024
+Expires: 9 January 2025                                       Cloudflare
+                                                             8 July 2024
 
 
                  Compact Denial of Existence in DNSSEC
-            draft-ietf-dnsop-compact-denial-of-existence-04
+            draft-ietf-dnsop-compact-denial-of-existence-05
 
 Abstract
 
@@ -21,6 +21,8 @@ Abstract
    require only one minimal NSEC record, allow online signing servers to
    minimize signing operations and response sizes, and prevent zone
    content disclosure.
+
+   This document updates RFC 4034 and 4035.
 
 Discussion Venues
 
@@ -44,19 +46,22 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 January 2025.
+   This Internet-Draft will expire on 9 January 2025.
+
+
+
+
+
+
+Huque, et al.            Expires 9 January 2025                 [Page 1]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+
 
 Copyright Notice
 
    Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
-
-
-
-Huque, et al.            Expires 6 January 2025                 [Page 1]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
-
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
@@ -101,18 +106,17 @@ Table of Contents
    names, or cryptographic hashes of them in the zone.  In the online
    signing model, described in NSEC and NSEC3 "White Lies" [RFC4470]
    [RFC7129], they are used to dynamically compute an epsilon function
-   around the queried name.  A 'type bitmap' in the data field of the
-   NSEC or NSEC3 record asserts which resource record types are present
-   at the name.
 
 
 
-
-
-Huque, et al.            Expires 6 January 2025                 [Page 2]
+Huque, et al.            Expires 9 January 2025                 [Page 2]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
+
+   around the queried name.  A 'type bitmap' in the data field of the
+   NSEC or NSEC3 record asserts which resource record types are present
+   at the name.
 
    The response for a non-existent name requires up to 2 signed NSEC
    records or up to 3 signed NSEC3 records (and for online signers, the
@@ -159,16 +163,15 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
    type is "NXNAME", chosen to clearly distinguish it from the response
    code mnemonic NXDOMAIN.
 
-         Type    Value  Meaning
-         NXNAME  [TBD]  NXDOMAIN indicator for Compact Denial of Existence
 
 
-
-
-Huque, et al.            Expires 6 January 2025                 [Page 3]
+Huque, et al.            Expires 9 January 2025                 [Page 3]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
+
+         Type    Value  Meaning
+         NXNAME  [TBD]  NXDOMAIN indicator for Compact Denial of Existence
 
    This RR type is added to the NSEC type bitmap for responses to non-
    existent names (in addition to the required RRSIG and NSEC types).
@@ -218,10 +221,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-
-
-
-Huque, et al.            Expires 6 January 2025                 [Page 4]
+Huque, et al.            Expires 9 January 2025                 [Page 4]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -277,7 +277,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 6 January 2025                 [Page 5]
+Huque, et al.            Expires 9 January 2025                 [Page 5]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -333,7 +333,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 6 January 2025                 [Page 6]
+Huque, et al.            Expires 9 January 2025                 [Page 6]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -389,7 +389,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 6 January 2025                 [Page 7]
+Huque, et al.            Expires 9 January 2025                 [Page 7]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -445,7 +445,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 6 January 2025                 [Page 8]
+Huque, et al.            Expires 9 January 2025                 [Page 8]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -501,7 +501,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 6 January 2025                 [Page 9]
+Huque, et al.            Expires 9 January 2025                 [Page 9]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -557,7 +557,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 6 January 2025                [Page 10]
+Huque, et al.            Expires 9 January 2025                [Page 10]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -613,7 +613,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 6 January 2025                [Page 11]
+Huque, et al.            Expires 9 January 2025                [Page 11]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -669,7 +669,7 @@ Authors' Addresses
 
 
 
-Huque, et al.            Expires 6 January 2025                [Page 12]
+Huque, et al.            Expires 9 January 2025                [Page 12]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
@@ -725,4 +725,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 6 January 2025                [Page 13]
+Huque, et al.            Expires 9 January 2025                [Page 13]
