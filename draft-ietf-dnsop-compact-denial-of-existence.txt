@@ -5,8 +5,9 @@
 Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
-Intended status: Standards Track                          O. Gudmundsson
-Expires: 19 April 2025                                        Cloudflare
+Intended status: Standards Track                              Cloudflare
+Expires: 19 April 2025                                    O. Gudmundsson
+                                                  Retired / Unaffiliated
                                                          16 October 2024
 
 
@@ -47,7 +48,6 @@ Status of This Memo
    material or to cite them other than as "work in progress."
 
    This Internet-Draft will expire on 19 April 2025.
-
 
 
 
@@ -693,11 +693,11 @@ Authors' Addresses
 
 
    Olafur Gudmundsson
-   Cloudflare
-   101 Townsend St.
-   San Francisco, CA 94107
-   United States of America
-   Email: olafur@cloudflare.com
+   Retired / Unaffiliated
+   Email: ogud@ogud.com
+
+
+
 
 
 
