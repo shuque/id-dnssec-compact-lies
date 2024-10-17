@@ -87,7 +87,7 @@
       </address>
     </author>
 
-    <date day="08" month="07" year="2024"/>
+    <date day="16" month="10" year="2024"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -408,7 +408,7 @@
         </t>
         <t>
           In responses to such queries, a Compact Denial authoritative
-          implementing this signaling scheme, will set the Compact
+          server implementing this signaling scheme, will set the Compact
           Answers OK EDNS header flag, and for non-existent names will
           additionally set the response code field to NXDOMAIN.
         </t>
@@ -583,6 +583,20 @@
         of a response from signed data in the body of the DNS message
         is actually more secure. These tools could be enhanced to
         recognize the (signed) NXNAME signal.
+      </t>
+      <t>
+        Because this method does not allow for aggressive negative
+        caching among resolvers, it allows for certain types
+        of denial-of-service attacks to be more effective. This
+        includes so-called Water Torture attacks, where random names
+        are queried, either directly via botnets or across a wide
+        range of public resolver services, in order to intentionally
+        generate non-existence responses from the authoritative
+        servers for a domain. If the resolver cannot synthesize NXDOMAIN
+        responses from NSEC records, it must pass all queries on to the
+        domain's authority servers, making resource exhaustion more likely
+        at those latter servers, if those servers do not have the capacity
+        to absorb those additional queries.
       </t>
       <t>
         If the motivating aspects of this specification (minimizing

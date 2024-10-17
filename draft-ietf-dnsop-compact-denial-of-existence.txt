@@ -6,8 +6,8 @@ Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
 Intended status: Standards Track                          O. Gudmundsson
-Expires: 9 January 2025                                       Cloudflare
-                                                             8 July 2024
+Expires: 19 April 2025                                        Cloudflare
+                                                         16 October 2024
 
 
                  Compact Denial of Existence in DNSSEC
@@ -46,16 +46,16 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 9 January 2025.
+   This Internet-Draft will expire on 19 April 2025.
 
 
 
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 1]
+Huque, et al.             Expires 19 April 2025                 [Page 1]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
 Copyright Notice
@@ -90,11 +90,11 @@ Table of Contents
    7.  Implementation Status . . . . . . . . . . . . . . . . . . . .   9
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .   9
    9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  10
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
    11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  11
      11.2.  Informative References . . . . . . . . . . . . . . . . .  12
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  13
 
 1.  Introduction and Motivation
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 2]
+Huque, et al.             Expires 19 April 2025                 [Page 2]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
    around the queried name.  A 'type bitmap' in the data field of the
@@ -165,9 +165,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 3]
+Huque, et al.             Expires 19 April 2025                 [Page 3]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
          Type    Value  Meaning
@@ -221,9 +221,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 4]
+Huque, et al.             Expires 19 April 2025                 [Page 4]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
    For example, a request for the non-existing name a.example.com would
@@ -277,9 +277,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 5]
+Huque, et al.             Expires 19 April 2025                 [Page 5]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
 3.4.  Responses to explicit queries for NXNAME
@@ -333,9 +333,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 6]
+Huque, et al.             Expires 19 April 2025                 [Page 6]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
 4.1.  Signaled Response Code Restoration
@@ -358,7 +358,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
    a non-existent name together with the response code field set to
    NXDOMAIN (3).
 
-   In responses to such queries, a Compact Denial authoritative
+   In responses to such queries, a Compact Denial authoritative server
    implementing this signaling scheme, will set the Compact Answers OK
    EDNS header flag, and for non-existent names will additionally set
    the response code field to NXDOMAIN.
@@ -389,9 +389,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 7]
+Huque, et al.             Expires 19 April 2025                 [Page 7]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
    first query would suppress additional queries for other types at that
@@ -445,9 +445,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 8]
+Huque, et al.             Expires 19 April 2025                 [Page 8]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
    *  An NSEC record (and its associated RRSIG RRset) MUST NOT be the
@@ -501,9 +501,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-Huque, et al.            Expires 9 January 2025                 [Page 9]
+Huque, et al.             Expires 19 April 2025                 [Page 9]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
    operations compared to previous techniques like White Lies, it still
@@ -523,6 +523,18 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
    is actually more secure.  These tools could be enhanced to recognize
    the (signed) NXNAME signal.
 
+   Because this method does not allow for aggressive negative caching
+   among resolvers, it allows for certain types of denial-of-service
+   attacks to be more effective.  This includes so-called Water Torture
+   attacks, where random names are queried, either directly via botnets
+   or across a wide range of public resolver services, in order to
+   intentionally generate non-existence responses from the authoritative
+   servers for a domain.  If the resolver cannot synthesize NXDOMAIN
+   responses from NSEC records, it must pass all queries on to the
+   domain's authority servers, making resource exhaustion more likely at
+   those latter servers, if those servers do not have the capacity to
+   absorb those additional queries.
+
    If the motivating aspects of this specification (minimizing response
    size and computational costs) are not a concern, DNSSEC deployments
    can opt for a different method (e.g.  traditional online signing or
@@ -537,6 +549,18 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
    distinguisher RR type was originally proposed in [ENT-SENTINEL] by
    Shumon Huque, and deployed by NS1.  The NXNAME type is based on the
    FDOM type proposed in [NXDOMAIN-TYPE] by Gudmundsson and Valsorda.
+
+
+
+
+
+
+
+
+Huque, et al.             Expires 19 April 2025                [Page 10]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
+
 
    Especially detailed discussions on many technical aspects of this
    document were conducted with Paul Vixie, Jan Vcelak, Viktor Dukhovni,
@@ -553,14 +577,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
    lowest available number (currently 128) in the meta range is
    requested to be allocated.  A lower number lowers the size of the
    type bitmap, which reduces the size of the DNS response message.
-
-
-
-
-Huque, et al.            Expires 9 January 2025                [Page 10]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
-
 
          Type    Value  Meaning
          NXNAME  [TBD]  NXDOMAIN indicator for Compact Denial of Existence
@@ -594,6 +610,14 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
               DOI 10.17487/RFC4470, April 2006,
               <https://www.rfc-editor.org/info/rfc4470>.
 
+
+
+
+Huque, et al.             Expires 19 April 2025                [Page 11]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
+
+
    [RFC6891]  Damas, J., Graff, M., and P. Vixie, "Extension Mechanisms
               for DNS (EDNS(0))", STD 75, RFC 6891,
               DOI 10.17487/RFC6891, April 2013,
@@ -606,17 +630,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
    [RFC7129]  Gieben, R. and W. Mekking, "Authenticated Denial of
               Existence in the DNS", RFC 7129, DOI 10.17487/RFC7129,
               February 2014, <https://www.rfc-editor.org/info/rfc7129>.
-
-
-
-
-
-
-
-Huque, et al.            Expires 9 January 2025                [Page 11]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
-
 
    [RFC8914]  Kumari, W., Hunt, E., Arends, R., Hardaker, W., and D.
               Lawrence, "Extended DNS Errors", RFC 8914,
@@ -652,6 +665,15 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
               DNSSEC-Validated Cache", RFC 8198, DOI 10.17487/RFC8198,
               July 2017, <https://www.rfc-editor.org/info/rfc8198>.
 
+
+
+
+
+Huque, et al.             Expires 19 April 2025                [Page 12]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
+
+
 Authors' Addresses
 
    Shumon Huque
@@ -660,18 +682,6 @@ Authors' Addresses
    San Francisco, CA 94105
    United States of America
    Email: shuque@gmail.com
-
-
-
-
-
-
-
-
-
-Huque, et al.            Expires 9 January 2025                [Page 12]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
    Christian Elmerot
@@ -715,14 +725,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC        July 2024
 
 
 
-
-
-
-
-
-
-
-
-
-
-Huque, et al.            Expires 9 January 2025                [Page 13]
+Huque, et al.             Expires 19 April 2025                [Page 13]
