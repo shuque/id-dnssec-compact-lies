@@ -450,7 +450,8 @@
         Compact Denial of Existence. In general, no online signing
         scheme (including this one) that employs minimally covering NSEC
         records permits RFC 8198 style NXDOMAIN synthesis. Additionally,
-        this protocol also precludes RFC 8020 style NXDOMAIN synthesis.
+        this protocol also precludes RFC 8020 style NXDOMAIN synthesis
+        for DNSSEC enabled responses.
       </t>
     </section>
 

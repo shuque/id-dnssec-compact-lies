@@ -405,7 +405,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
    signing scheme (including this one) that employs minimally covering
    NSEC records permits RFC 8198 style NXDOMAIN synthesis.
    Additionally, this protocol also precludes RFC 8020 style NXDOMAIN
-   synthesis.
+   synthesis for DNSSEC enabled responses.
 
 6.  Updates to RFCs
 
