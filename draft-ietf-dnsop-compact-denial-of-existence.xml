@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="16" month="10" year="2024"/>
+    <date day="17" month="10" year="2024"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -194,7 +194,7 @@
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
          Type    Value  Meaning
-         NXNAME  [TBD]  NXDOMAIN indicator for Compact Denial of Existence
+         NXNAME  128    NXDOMAIN indicator for Compact Denial of Existence
         ]]></artwork>
       <t>
         This RR type is added to the NSEC type bitmap for responses
@@ -342,7 +342,7 @@
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
          INFO-CODE  Purpose
-         [TBD]      Invalid Query Type
+         30         Invalid Query Type
         ]]></artwork>
       <t>
         Note that this EDE code is generally applicable to any
@@ -627,10 +627,10 @@
     <section anchor="iana" numbered="true" toc="default">
       <name>IANA Considerations</name>
       <t>
-        IANA is requested to do the following:
+        IANA has done or is requested to do the following:
       </t>
       <t>
-        Allocate a new DNS Resource Record type
+        Done: Allocate a new DNS Resource Record type
         code for NXNAME in the DNS parameters registry, from the meta type
         range. Specifically, the lowest available number (currently 128)
         in the meta range is requested to be allocated. A lower number
@@ -639,16 +639,17 @@
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
          Type    Value  Meaning
-         NXNAME  [TBD]  NXDOMAIN indicator for Compact Denial of Existence
+         NXNAME  128  NXDOMAIN indicator for Compact Denial of Existence
         ]]></artwork>
       <t>
         Allocate the "Compact Answers OK" flag in the EDNS header, as
         described in <xref target="signaled-rcode"/>.
       </t>
       <t>
-        Allocate a code point for the "Invalid Query Type" Extended
+        Done: Allocate a code point for the "Invalid Query Type" Extended
         DNS Error in the DNS parameters registry, as described in
-        <xref target="response-nxname"/>.
+        <xref target="response-nxname"/>. Specifically code point 30 has
+        been allocated.
       </t>
     </section>
 
