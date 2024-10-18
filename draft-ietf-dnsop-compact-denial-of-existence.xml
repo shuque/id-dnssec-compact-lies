@@ -164,7 +164,7 @@
     </section>
 
     <section anchor="distinguish" numbered="true" toc="default">
-      <name>Distinguishing NXDOMAIN from Empty Non-Terminal Names</name>
+      <name>Distinguishing non-existent names</name>
       <t>
         Since NODATA responses are generated for non-existent names, and
         there are no defined record types for the name, the NSEC type
@@ -176,18 +176,7 @@
         bitmap.
       </t>
       <t>
-        Previously, some specific implementations of Compact Answers
-        have tried to avoid the NXDOMAIN identification problem by
-        synthesizing the NSEC type bitmap for ENTs to include all record
-        types supported except for the queried type. This has the
-        undesirable effect of no longer being able to reliably determine
-        the existence of ENTs, and of making the Type Bitmaps field
-        larger than it needs to be. It also has the potential to confuse
-        validators and others tools that infer type existence from the
-        NSEC record.
-      </t>
-      <t>
-        This document defines the use of a synthetic Resource Record
+        This specification defines the use of a synthetic Resource Record
         type to signal the presence of a non-existent name. The
         mnemonic for this RR type is "NXNAME", chosen to clearly
         distinguish it from the response code mnemonic NXDOMAIN.
@@ -211,21 +200,6 @@
         behavior described in <xref target="signaled-rcode"/> 
         (Response Code Restoration) to better restore NXDOMAIN visibility
         to various applications.
-      </t>
-      <t>
-        An alternative way to distinguish NXDOMAIN from ENT is to
-        define the synthetic Resource Record type for ENTs instead,
-        as specified in <xref target="ENT-SENTINEL" format="default"/>,
-        and this was already successfully deployed in the field for a
-        period of time. This typically imposes less work on the server
-        since NXDOMAIN responses are a lot more common than ENTs. At the
-        time it was deployed, it also allowed a common bitmap pattern
-        ("NSEC RRSIG") to identify NXDOMAIN across this and other
-        implementations that returned a broad bitmap pattern for Empty
-        Non-Terminals. However, the advantage of the NXNAME RR type is
-        that it explicitly identifies NXDOMAIN responses, and allows
-        them to be distinguished conclusively from potential ENT responses
-        in other online signing NSEC implementations.
       </t>
     </section>
 
@@ -535,14 +509,15 @@
         Cloudflare, NS1, and Amazon Route53 currently implement the
         Compact Denial of Existence method. From early 2021 until
         November 2023, NS1 had deployed the Empty Non-Terminal
-        distinguisher using the private RR type code 65281. At the
-        present time Cloudflare (since July 2023) and NS1 (since
-        November 2023) both implement the NXNAME distinguisher using
-        the private RR type code 65283. Amazon Route53 is expected to
-        implement NXNAME after the specification is finalized and an
-        official code point is allocated. At the current time, there
-        are only prototype implementations of the signaled rcode
-        restoration scheme.
+        distinguisher <xref target="ENT-SENTINEL" format="default"/>
+        using the private RR type code 65281. A version of the
+        NXNAME distinguisher using the private RR type code 65238
+        was deployed by both Cloudflare (from July 2023) and NS1
+        (from November 2023) until roughly September 2024. Since
+        September 2024 both Cloudflare and NS1 have deployed NXNAME
+        using the officially allocated code point of 128. At the
+        current time, there are only prototype implementations of the
+        signaled rcode restoration scheme.
       </t>
     </section>
 
@@ -705,6 +680,42 @@
       </reference>
       </references>
     </references>
+
+    <section anchor="other-approaches" numbered="true" removeInRFC="false"
+        toc="include" pn="section-appendix.a">
+      <name>Other Approaches</name>
+      <t>
+        In the past, some implementations of Compact Denial of Existence
+        have used other means to differentiate NXDOMAIN from Empty
+        Non-Terminals.
+      </t>
+      <t>
+        One method employed by both Cloudflare and Amazon Route53 for
+        a period of time was the following: for responses to Empty
+        Non-Terminals, they synthesized the NSEC type bitmap to include
+        all record types supported except for the queried type. This
+        method has the undesirable effect of no longer being able to
+        reliably determine the existence of ENTs, and of making the Type
+        Bitmaps field larger than it needs to be. It also has the potential
+        to confuse validators and others tools that infer type existence
+        from the NSEC record.
+      </t>
+      <t>
+        Another way to distinguish NXDOMAIN from ENT is to
+        define the synthetic Resource Record type for ENTs instead,
+        as specified in <xref target="ENT-SENTINEL" format="default"/>.
+        This method was successfully deployed in the field by NS1 for a
+        period of time. This typically imposes less work on the server
+        since NXDOMAIN responses are a lot more common than ENTs. At the
+        time it was deployed, it also allowed a common bitmap pattern
+        ("NSEC RRSIG") to identify NXDOMAIN across this and other
+        implementations that returned a broad bitmap pattern for Empty
+        Non-Terminals. However, the advantage of the NXNAME RR type is
+        that it explicitly identifies NXDOMAIN responses, and allows
+        them to be distinguished conclusively from potential ENT responses
+        in other online signing NSEC implementations.
+      </t>
+    </section>
 
   </back>
 
