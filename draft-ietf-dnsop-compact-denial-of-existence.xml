@@ -227,7 +227,9 @@
         The Next Domain Name field SHOULD be set to the immediate
         lexicographic successor of the QNAME. The Type Bit Maps field
         MUST only have the bits set for the following RR Types: RRSIG,
-        NSEC, and NXNAME.
+        NSEC, and NXNAME. (The immedidate lexicographic successor is
+        the typical case of the "DNS Name Successor" defined in
+        <xref target="RFC4471" />).
       </t>
       <t>
         For example, a request for the non-existing name a.example.com would
@@ -650,6 +652,7 @@
       </references>
       <references>
         <name>Informative References</name>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4471.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8020.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8198.xml"/>
       <reference anchor="BLACK-LIES"

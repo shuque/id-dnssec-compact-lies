@@ -201,7 +201,8 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
    The Next Domain Name field SHOULD be set to the immediate
    lexicographic successor of the QNAME.  The Type Bit Maps field MUST
    only have the bits set for the following RR Types: RRSIG, NSEC, and
-   NXNAME.
+   NXNAME.  (The immedidate lexicographic successor is the typical case
+   of the "DNS Name Successor" defined in [RFC4471]).
 
    For example, a request for the non-existing name a.example.com would
    cause the following NSEC record to be generated (in DNS presentation
@@ -210,7 +211,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
           a.example.com. 3600 IN NSEC \000.a.example.com. RRSIG NSEC NXNAME
 
    The NSEC record MUST have corresponding RRSIGs generated.
-
 
 
 
@@ -635,6 +635,11 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
               owner name nonexistence", <https://tools.ietf.org/html/
               draft-ogud-fake-nxdomain-type/>.
 
+   [RFC4471]  Sisson, G. and B. Laurie, "Derivation of DNS Name
+              Predecessor and Successor", RFC 4471,
+              DOI 10.17487/RFC4471, September 2006,
+              <https://www.rfc-editor.org/info/rfc4471>.
+
    [RFC8020]  Bortzmeyer, S. and S. Huque, "NXDOMAIN: There Really Is
               Nothing Underneath", RFC 8020, DOI 10.17487/RFC8020,
               November 2016, <https://www.rfc-editor.org/info/rfc8020>.
@@ -661,11 +666,6 @@ Appendix A.  Other Approaches
    synthetic Resource Record type for ENTs instead, as specified in
    [ENT-SENTINEL].  This method was successfully deployed in the field
    by NS1 for a period of time.  This typically imposes less work on the
-   server since NXDOMAIN responses are a lot more common than ENTs.  At
-   the time it was deployed, it also allowed a common bitmap pattern
-   ("NSEC RRSIG") to identify NXDOMAIN across this and other
-   implementations that returned a broad bitmap pattern for Empty Non-
-   Terminals.  However, the advantage of the NXNAME RR type is that it
 
 
 
@@ -674,6 +674,11 @@ Huque, et al.             Expires 20 April 2025                [Page 12]
 Internet-Draft    Compact Denial of Existence in DNSSEC     October 2024
 
 
+   server since NXDOMAIN responses are a lot more common than ENTs.  At
+   the time it was deployed, it also allowed a common bitmap pattern
+   ("NSEC RRSIG") to identify NXDOMAIN across this and other
+   implementations that returned a broad bitmap pattern for Empty Non-
+   Terminals.  However, the advantage of the NXNAME RR type is that it
    explicitly identifies NXDOMAIN responses, and allows them to be
    distinguished conclusively from potential ENT responses in other
    online signing NSEC implementations.
@@ -699,11 +704,6 @@ Authors' Addresses
    Olafur Gudmundsson
    Retired / Unaffiliated
    Email: ogud@ogud.com
-
-
-
-
-
 
 
 
