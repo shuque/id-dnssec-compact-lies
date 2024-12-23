@@ -30,7 +30,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
         category="std" consensus="true"
-        docName="draft-ietf-dnsop-compact-denial-of-existence-05"
+        docName="draft-ietf-dnsop-compact-denial-of-existence-06"
         ipr="trust200902" updates="4034, 4035" obsoletes=""
         submissionType="IETF" xml:lang="en"
         tocInclude="true" tocDepth="4"
@@ -43,7 +43,7 @@
     <title abbrev="Compact Denial of Existence in DNSSEC">
        Compact Denial of Existence in DNSSEC
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-dnsop-compact-denial-of-existence-05"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-dnsop-compact-denial-of-existence-06"/>
 
     <author fullname="Shumon Huque" initials="S." surname="Huque">
       <organization>Salesforce</organization>
@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="17" month="10" year="2024"/>
+    <date day="23" month="12" year="2024"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -420,14 +420,14 @@
         determine non-existent names.
       </t>
       <t>
-        Protocol optimizations that permit DNS resolvers to synthesize
-        NXDOMAIN responses, like <xref target="RFC8020" /> and
-        <xref target="RFC8198" />, cannot be realized with zones using
-        Compact Denial of Existence. In general, no online signing
-        scheme (including this one) that employs minimally covering NSEC
-        records permits RFC 8198 style NXDOMAIN synthesis. Additionally,
-        this protocol also precludes RFC 8020 style NXDOMAIN synthesis
-        for DNSSEC enabled responses.
+        Protocol optimizations that enable DNS resolvers to synthesize
+        NXDOMAIN or wildcard responses, like <xref target="RFC8020" /> and
+        <xref target="RFC8198" />, cannot be realized from responses
+        that use Compact Denial of Existence. In general, no online signing
+        scheme that employs minimally covering NSEC records (including this
+        one) permits RFC 8198 style NXDOMAIN or wildcard response
+        synthesis. Additionally, this protocol also precludes RFC 8020
+        style NXDOMAIN synthesis for DNSSEC enabled responses.
       </t>
     </section>
 
