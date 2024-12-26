@@ -323,7 +323,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
    As with other NSEC3 online signing implementations, there is no
    advantage to setting an NSEC3 salt or iterative hashing count.  Thus,
    the recommended NSEC3 parameter configuration is a flags field of 0,
-   an additional hash interation count of 0, and an empty salt.  In DNS
+   an additional hash iteration count of 0, and an empty salt.  In DNS
    presentation format syntax, the Resource Record data is thus "1 0 0
    -".
 
