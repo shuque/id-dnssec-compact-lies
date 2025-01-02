@@ -101,7 +101,7 @@ Table of Contents
 1.  Introduction and Motivation
 
    One of the functions of the Domain Name System Security Extensions
-   (DNSSEC) [RFC9364] is "Authenticated Denial of Existence", i.e.
+   (DNSSEC) [RFC9364] is "Authenticated Denial of Existence", i.e.,
    proving that a DNS name or record type does not exist.  Normally,
    this is done by means of signed NSEC or NSEC3 records.  In the
    precomputed signature model, these records chain together existing
@@ -129,7 +129,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
    This document describes an alternative technique, "Compact Denial of
    Existence" or "Compact Answers", to generate a signed DNS response on
    demand for a non-existent name by claiming that the name exists but
-   has no resource records associated with the queried type, i.e. it
+   has no resource records associated with the queried type, i.e., it
    returns a NODATA response rather than an NXDOMAIN response.  A NODATA
    response, which has a response code (RCODE) of NOERROR and an empty
    ANSWER section, requires only one NSEC or NSEC3 record matching the
@@ -250,7 +250,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
    For wildcard matches, the authoritative server will provide a
    dynamically signed response that claims that the queried name exists
    explicitly.  Specifically, the answer RR set will have an RRSIG
-   record demonstrating an exact match (i.e. the label count in the
+   record demonstrating an exact match (i.e., the label count in the
    RRSIG RDATA will be equal to the number of labels in the query name
    minus the root label).  This obviates the need to include an NSEC
    record in the Authority section of the response that shows that no
@@ -489,7 +489,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
       security oblivious recursive name servers.  This concern only
       applies to implementations of DNSSEC that employ pre-computed
       signatures.  There is an exception to this rule for online signing
-      implementations of DNSSEC (e.g Minimally Covering NSEC, and
+      implementations of DNSSEC (e.g., Minimally Covering NSEC, and
       Compact Denial of Existence (RFC TBD), where dynamically generated
       NSEC records can be produced for owner names that don't exist or
       are empty non-terminals.
@@ -568,7 +568,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
    If the motivating aspects of this specification (minimizing response
    size and computational costs) are not a concern, DNSSEC deployments
-   can opt for a different method (e.g.  traditional online signing or
+   can opt for a different method (e.g., traditional online signing or
    pre-computed signatures), and avoid imposing the challenges of
    NXDOMAIN visibility.
 
