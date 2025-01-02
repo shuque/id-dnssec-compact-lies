@@ -95,7 +95,7 @@ Table of Contents
      11.1.  Normative References . . . . . . . . . . . . . . . . . .  11
      11.2.  Informative References . . . . . . . . . . . . . . . . .  12
    Appendix A.  Other Approaches . . . . . . . . . . . . . . . . . .  13
-   Appendix B.  Historical Implementation Notes  . . . . . . . . . .  13
+   Appendix B.  Historical Implementation Notes  . . . . . . . . . .  14
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction and Motivation
@@ -579,10 +579,10 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 10.  IANA Considerations
 
-   IANA has done or is requested to do the following:
+   IANA is requested to do the following:
 
-   Done: Allocate a new DNS Resource Record type code for NXNAME in the
-   DNS parameters registry, from the meta type range.  Specifically, the
+   Allocate a new DNS Resource Record type code for NXNAME in the DNS
+   parameters registry, from the meta type range.  Specifically, the
    lowest available number (currently 128) in the meta range is
    requested to be allocated.  A lower number lowers the size of the
    Type Bit Maps field, which reduces the overall size of the DNS
@@ -594,9 +594,11 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
    Allocate the "Compact Answers OK" flag in the EDNS header, as
    described in Section 5.1.
 
-   Done: Allocate a code point for the "Invalid Query Type" Extended DNS
-   Error in the DNS parameters registry, as described in Section 3.4.
-   Specifically code point 30 has been allocated.
+   Allocate a code point for the "Invalid Query Type" Extended DNS Error
+   in the DNS parameters registry, as described in Section 3.4.
+
+            INFO-CODE  Purpose
+            30         Invalid Query Type
 
 11.  References
 
@@ -606,10 +608,8 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
               RFC 3225, DOI 10.17487/RFC3225, December 2001,
               <https://www.rfc-editor.org/info/rfc3225>.
 
-   [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
-              Rose, "Resource Records for the DNS Security Extensions",
-              RFC 4034, DOI 10.17487/RFC4034, March 2005,
-              <https://www.rfc-editor.org/info/rfc4034>.
+
+
 
 
 
@@ -617,6 +617,11 @@ Huque, et al.              Expires 6 July 2025                 [Page 11]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
+
+   [RFC4034]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
+              Rose, "Resource Records for the DNS Security Extensions",
+              RFC 4034, DOI 10.17487/RFC4034, March 2005,
+              <https://www.rfc-editor.org/info/rfc4034>.
 
    [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Protocol Modifications for the DNS Security
@@ -662,17 +667,17 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
               <https://www.ietf.org/archive/id/draft-huque-dnsop-
               blacklies-ent-01.html>.
 
-   [NXDOMAIN-TYPE]
-              Gudmundsson, O. and F. Valsorda, "Signaling NSEC record
-              owner name nonexistence", <https://tools.ietf.org/html/
-              draft-ogud-fake-nxdomain-type/>.
-
 
 
 Huque, et al.              Expires 6 July 2025                 [Page 12]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
+
+   [NXDOMAIN-TYPE]
+              Gudmundsson, O. and F. Valsorda, "Signaling NSEC record
+              owner name nonexistence", <https://tools.ietf.org/html/
+              draft-ogud-fake-nxdomain-type/>.
 
    [RFC4471]  Sisson, G. and B. Laurie, "Derivation of DNS Name
               Predecessor and Successor", RFC 4471,
@@ -714,14 +719,9 @@ Appendix A.  Other Approaches
    distinguished conclusively from potential ENT responses in other
    online signing NSEC implementations.
 
-Appendix B.  Historical Implementation Notes
 
-   At the time of publication, the basic Compact Denial of Existence
-   method using NSEC is implemented by Cloudflare, NS1, Amazon Route53,
-   and Knot DNS's optional online signing module.  From early 2021 until
-   November 2023, NS1 had deployed the Empty Non-Terminal distinguisher
-   [ENT-SENTINEL] using the private RR type code 65281.  A version of
-   the NXNAME distinguisher using the private RR type code 65238 was
+
+
 
 
 
@@ -730,6 +730,14 @@ Huque, et al.              Expires 6 July 2025                 [Page 13]
 Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
+Appendix B.  Historical Implementation Notes
+
+   At the time of publication, the basic Compact Denial of Existence
+   method using NSEC is implemented by Cloudflare, NS1, Amazon Route53,
+   and Knot DNS's optional online signing module.  From early 2021 until
+   November 2023, NS1 had deployed the Empty Non-Terminal distinguisher
+   [ENT-SENTINEL] using the private RR type code 65281.  A version of
+   the NXNAME distinguisher using the private RR type code 65238 was
    deployed by both Cloudflare (from July 2023) and NS1 (from November
    2023) until roughly September 2024.  Since September 2024 both
    Cloudflare and NS1 have deployed NXNAME using the officially
@@ -759,14 +767,6 @@ Authors' Addresses
    Olafur Gudmundsson
    Retired / Unaffiliated
    Email: ogud@ogud.com
-
-
-
-
-
-
-
-
 
 
 

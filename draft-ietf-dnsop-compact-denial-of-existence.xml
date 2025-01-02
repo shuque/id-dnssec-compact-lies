@@ -638,10 +638,10 @@
     <section anchor="iana" numbered="true" toc="default">
       <name>IANA Considerations</name>
       <t>
-        IANA has done or is requested to do the following:
+        IANA is requested to do the following:
       </t>
       <t>
-        Done: Allocate a new DNS Resource Record type
+        Allocate a new DNS Resource Record type
         code for NXNAME in the DNS parameters registry, from the meta type
         range. Specifically, the lowest available number (currently 128)
         in the meta range is requested to be allocated. A lower number
@@ -657,11 +657,14 @@
         described in <xref target="signaled-rcode"/>.
       </t>
       <t>
-        Done: Allocate a code point for the "Invalid Query Type" Extended
+        Allocate a code point for the "Invalid Query Type" Extended
         DNS Error in the DNS parameters registry, as described in
-        <xref target="response-nxname"/>. Specifically code point 30 has
-        been allocated.
+        <xref target="response-nxname"/>.
       </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+         INFO-CODE  Purpose
+         30         Invalid Query Type
+        ]]></artwork>
     </section>
 
   </middle>
