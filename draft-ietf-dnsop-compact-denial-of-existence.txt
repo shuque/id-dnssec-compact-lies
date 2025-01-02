@@ -88,14 +88,14 @@ Table of Contents
    7.  Updates to RFCs . . . . . . . . . . . . . . . . . . . . . . .   8
      7.1.  Updates to RFC 4034 . . . . . . . . . . . . . . . . . . .   8
      7.2.  Updates to RFC 4035 . . . . . . . . . . . . . . . . . . .   9
-   8.  Implementation Status . . . . . . . . . . . . . . . . . . . .  10
-   9.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
-   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
-   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
-   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
-     12.1.  Normative References . . . . . . . . . . . . . . . . . .  12
-     12.2.  Informative References . . . . . . . . . . . . . . . . .  12
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
+   9.  Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     11.1.  Normative References . . . . . . . . . . . . . . . . . .  11
+     11.2.  Informative References . . . . . . . . . . . . . . . . .  12
    Appendix A.  Other Approaches . . . . . . . . . . . . . . . . . .  13
+   Appendix B.  Historical Implementation Notes  . . . . . . . . . .  13
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction and Motivation
@@ -506,20 +506,7 @@ Huque, et al.              Expires 6 July 2025                  [Page 9]
 Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
-8.  Implementation Status
-
-   Cloudflare, NS1, and Amazon Route53 currently implement the Compact
-   Denial of Existence method.  From early 2021 until November 2023, NS1
-   had deployed the Empty Non-Terminal distinguisher [ENT-SENTINEL]
-   using the private RR type code 65281.  A version of the NXNAME
-   distinguisher using the private RR type code 65238 was deployed by
-   both Cloudflare (from July 2023) and NS1 (from November 2023) until
-   roughly September 2024.  Since September 2024 both Cloudflare and NS1
-   have deployed NXNAME using the officially allocated code point of
-   128.  At the current time, there are only prototype implementations
-   of the signaled rcode restoration scheme.
-
-9.  Security Considerations
+8.  Security Considerations
 
    Online signing of DNS records requires authoritative servers for the
    DNS zone to have access to the private signing keys.  Exposing
@@ -554,14 +541,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
    intentionally generate non-existence responses from the authoritative
    servers for a domain.  If the resolver cannot synthesize NXDOMAIN
    responses from NSEC records, it must pass all queries on to the
-
-
-
-Huque, et al.              Expires 6 July 2025                 [Page 10]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
-
-
    domain's authority servers, making resource exhaustion more likely at
    those latter servers, if those servers do not have the capacity to
    absorb those additional queries.
@@ -572,7 +551,18 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
    pre-computed signatures), and avoid imposing the challenges of
    NXDOMAIN visibility.
 
-10.  Acknowledgements
+
+
+
+
+
+
+Huque, et al.              Expires 6 July 2025                 [Page 10]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+
+
+9.  Acknowledgements
 
    The Compact Answers technique (then called "Black Lies") was
    originally proposed in [BLACK-LIES] by Filippo Valsorda and Olafur
@@ -587,7 +577,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
    members of the IETF DNS Operations working group for helpful comments
    and discussions.
 
-11.  IANA Considerations
+10.  IANA Considerations
 
    IANA has done or is requested to do the following:
 
@@ -608,17 +598,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
    Error in the DNS parameters registry, as described in Section 3.4.
    Specifically code point 30 has been allocated.
 
-12.  References
+11.  References
 
-
-
-
-Huque, et al.              Expires 6 July 2025                 [Page 11]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
-
-
-12.1.  Normative References
+11.1.  Normative References
 
    [RFC3225]  Conrad, D., "Indicating Resolver Support of DNSSEC",
               RFC 3225, DOI 10.17487/RFC3225, December 2001,
@@ -628,6 +610,13 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
               Rose, "Resource Records for the DNS Security Extensions",
               RFC 4034, DOI 10.17487/RFC4034, March 2005,
               <https://www.rfc-editor.org/info/rfc4034>.
+
+
+
+Huque, et al.              Expires 6 July 2025                 [Page 11]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+
 
    [RFC4035]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
               Rose, "Protocol Modifications for the DNS Security
@@ -661,18 +650,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
               RFC 9364, DOI 10.17487/RFC9364, February 2023,
               <https://www.rfc-editor.org/info/rfc9364>.
 
-12.2.  Informative References
-
-
-
-
-
-
-
-Huque, et al.              Expires 6 July 2025                 [Page 12]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
-
+11.2.  Informative References
 
    [BLACK-LIES]
               Valsorda, F. and O. Gudmundsson, "Compact DNSSEC Denial of
@@ -688,6 +666,13 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
               Gudmundsson, O. and F. Valsorda, "Signaling NSEC record
               owner name nonexistence", <https://tools.ietf.org/html/
               draft-ogud-fake-nxdomain-type/>.
+
+
+
+Huque, et al.              Expires 6 July 2025                 [Page 12]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+
 
    [RFC4471]  Sisson, G. and B. Laurie, "Derivation of DNS Name
               Predecessor and Successor", RFC 4471,
@@ -722,6 +707,21 @@ Appendix A.  Other Approaches
    by NS1 for a period of time.  This typically imposes less work on the
    server since NXDOMAIN responses are a lot more common than ENTs.  At
    the time it was deployed, it also allowed a common bitmap pattern
+   ("NSEC RRSIG") to identify NXDOMAIN across this and other
+   implementations that returned a broad bitmap pattern for Empty Non-
+   Terminals.  However, the advantage of the NXNAME RR type is that it
+   explicitly identifies NXDOMAIN responses, and allows them to be
+   distinguished conclusively from potential ENT responses in other
+   online signing NSEC implementations.
+
+Appendix B.  Historical Implementation Notes
+
+   At the time of publication, the basic Compact Denial of Existence
+   method using NSEC is implemented by Cloudflare, NS1, Amazon Route53,
+   and Knot DNS's optional online signing module.  From early 2021 until
+   November 2023, NS1 had deployed the Empty Non-Terminal distinguisher
+   [ENT-SENTINEL] using the private RR type code 65281.  A version of
+   the NXNAME distinguisher using the private RR type code 65238 was
 
 
 
@@ -730,12 +730,13 @@ Huque, et al.              Expires 6 July 2025                 [Page 13]
 Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
-   ("NSEC RRSIG") to identify NXDOMAIN across this and other
-   implementations that returned a broad bitmap pattern for Empty Non-
-   Terminals.  However, the advantage of the NXNAME RR type is that it
-   explicitly identifies NXDOMAIN responses, and allows them to be
-   distinguished conclusively from potential ENT responses in other
-   online signing NSEC implementations.
+   deployed by both Cloudflare (from July 2023) and NS1 (from November
+   2023) until roughly September 2024.  Since September 2024 both
+   Cloudflare and NS1 have deployed NXNAME using the officially
+   allocated code point of 128.  Oracle Cloud Initiative appears to have
+   implemented Compact Denial of Existence using NSEC3 in October 2024.
+   At the current time, there are only prototype implementations of the
+   signaled rcode restoration scheme.
 
 Authors' Addresses
 
@@ -758,7 +759,6 @@ Authors' Addresses
    Olafur Gudmundsson
    Retired / Unaffiliated
    Email: ogud@ogud.com
-
 
 
 

@@ -557,24 +557,6 @@
       </section>
     </section>
 
-    <section anchor="implementation" numbered="true" toc="default">
-      <name>Implementation Status</name>
-      <t>
-        Cloudflare, NS1, and Amazon Route53 currently implement the
-        Compact Denial of Existence method. From early 2021 until
-        November 2023, NS1 had deployed the Empty Non-Terminal
-        distinguisher <xref target="ENT-SENTINEL" format="default"/>
-        using the private RR type code 65281. A version of the
-        NXNAME distinguisher using the private RR type code 65238
-        was deployed by both Cloudflare (from July 2023) and NS1
-        (from November 2023) until roughly September 2024. Since
-        September 2024 both Cloudflare and NS1 have deployed NXNAME
-        using the officially allocated code point of 128. At the
-        current time, there are only prototype implementations of the
-        signaled rcode restoration scheme.
-      </t>
-    </section>
-
     <section anchor="security" numbered="true" toc="default">
       <name>Security Considerations</name>
       <t>
@@ -769,6 +751,27 @@
         that it explicitly identifies NXDOMAIN responses, and allows
         them to be distinguished conclusively from potential ENT responses
         in other online signing NSEC implementations.
+      </t>
+    </section>
+
+    <section anchor="implementations" numbered="true" removeInRFC="false"
+        toc="include" pn="section-appendix.b">
+      <name>Historical Implementation Notes</name>
+      <t>
+        At the time of publication, the basic Compact Denial of Existence
+        method using NSEC is implemented by Cloudflare, NS1, Amazon Route53,
+        and Knot DNS's optional online signing module. From early 2021 until
+        November 2023, NS1 had deployed the Empty Non-Terminal distinguisher
+        <xref target="ENT-SENTINEL" format="default"/> using the private
+        RR type code 65281. A version of the NXNAME distinguisher using
+        the private RR type code 65238 was deployed by both Cloudflare
+        (from July 2023) and NS1 (from November 2023) until roughly
+        September 2024. Since September 2024 both Cloudflare and NS1 have
+        deployed NXNAME using the officially allocated code point of 128.
+        Oracle Cloud Initiative appears to have implemented Compact Denial
+        of Existence using NSEC3 in October 2024. At the current time,
+        there are only prototype implementations of the signaled rcode
+        restoration scheme.
       </t>
     </section>
 
