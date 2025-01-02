@@ -6,9 +6,9 @@ Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
 Intended status: Standards Track                              Cloudflare
-Expires: 28 June 2025                                     O. Gudmundsson
+Expires: 6 July 2025                                      O. Gudmundsson
                                                   Retired / Unaffiliated
-                                                        25 December 2024
+                                                          2 January 2025
 
 
                  Compact Denial of Existence in DNSSEC
@@ -47,20 +47,20 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 June 2025.
+   This Internet-Draft will expire on 6 July 2025.
 
 
 
 
 
-Huque, et al.             Expires 28 June 2025                  [Page 1]
+Huque, et al.              Expires 6 July 2025                  [Page 1]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Huque, et al.             Expires 28 June 2025                  [Page 2]
+Huque, et al.              Expires 6 July 2025                  [Page 2]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
    signing model, described in NSEC and NSEC3 "White Lies" [RFC4470]
@@ -147,12 +147,11 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
    Since NODATA responses are generated for non-existent names, and
    there are no defined record types for the name, the NSEC Type Bit
    Maps field in the response will only contain "NSEC" and "RRSIG" (and
-   in the case of NSEC3 there will be an empty Type Bit Maps field).
-   Tools that need to accurately identify non-existent names in
-   responses cannot rely on this specific type bitmap because Empty Non-
-   Terminal (ENT) names (which positively exist) also have no record
-   types at the name and will return exactly the same Type Bit Maps
-   field.
+   in the case of NSEC3 the Type Bit Maps field will be empty).  Tools
+   that need to accurately identify non-existent names in responses
+   cannot rely on this specific type bitmap because Empty Non-Terminal
+   (ENT) names (which positively exist) also have no record types at the
+   name and will return exactly the same Type Bit Maps field.
 
    This specification defines the use of a synthetic Resource Record
    type to signal the presence of a non-existent name.  The mnemonic for
@@ -165,9 +164,10 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
 
 
 
-Huque, et al.             Expires 28 June 2025                  [Page 3]
+
+Huque, et al.              Expires 6 July 2025                  [Page 3]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
    This RR type is added to the NSEC Type Bit Maps field for responses
@@ -204,9 +204,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
    NXNAME.  (The immedidate lexicographic successor is the typical case
    of the "DNS Name Successor" defined in [RFC4471]).
 
-   For example, a request for the non-existing name a.example.com would
-   cause the following NSEC record to be generated (in DNS presentation
-   format):
+   For example, a request for the non-existing name "a.example.com."
+   would result in the following NSEC record to be generated (in DNS
+   presentation format):
 
           a.example.com. 3600 IN NSEC \000.a.example.com. RRSIG NSEC NXNAME
 
@@ -221,9 +221,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
 
 
 
-Huque, et al.             Expires 28 June 2025                  [Page 4]
+Huque, et al.              Expires 6 July 2025                  [Page 4]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 3.2.  Responses for Non-Existent Types
@@ -277,9 +277,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
 
 
 
-Huque, et al.             Expires 28 June 2025                  [Page 5]
+Huque, et al.              Expires 6 July 2025                  [Page 5]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
    iterative resolution.  Many DNS server implementations already return
@@ -300,25 +300,19 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
    The NSEC3 protocol uses hashed names to provide zone enumeration
    defense.  This protection is already better provided by minimally
    covering NSEC records.  NSEC3's Opt-Out feature also provides no
-   specific benefit for online signing implementations.  Hence, there
+   specific benefit for online signing implementations (minimally
+   covering NSEC3 records provide no useful Opt-Out span).  Hence, there
    does not appear to be a strong advantage to implementing Compact
-   Denial of Existence with NSEC3.  An existing implementation of
-   traditional online signing with NSEC3 migrating to Compact Denial of
-   Existence may find it simpler to do so than implementing NSEC from
-   scratch.
+   Denial of Existence with NSEC3.  However, an existing implementation
+   of traditional NSEC3 online signing migrating to Compact Denial of
+   Existence may find it simpler to do so with NSEC3 than implementing
+   NSEC from scratch.
 
    The functional details of the protocol remain as described in
    Section 3, with the following changes:
 
    NSEC3 records and their signatures are dynamically generated instead
    of NSEC.
-
-   The Owner Name of the NSEC3 resource record is the NSEC3 hash of the
-   relevant domain name, and the next hashed owner name is the hash of
-   the owner name plus one.  In responses for non-existent names, the
-   Type Bit Maps field will contain only the NXNAME meta-type.  In
-   responses to Empty Non-Terminal names, the Type Bit Maps field will
-   be empty.
 
    As with other NSEC3 online signing implementations, there is no
    advantage to setting an NSEC3 salt or iterative hashing count.  Thus,
@@ -327,16 +321,28 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
    presentation format syntax, the Resource Record data is thus "1 0 0
    -".
 
+   The Owner Name of the NSEC3 resource record is the NSEC3 hash of the
+   relevant domain name, and the next hashed owner name is the hash of
+   the owner name plus one.  In responses for non-existent names, the
+   Type Bit Maps field will contain only the NXNAME meta-type.  In
+   responses to Empty Non-Terminal names, the Type Bit Maps field will
+   be empty.
 
 
 
 
 
 
-Huque, et al.             Expires 28 June 2025                  [Page 6]
+Huque, et al.              Expires 6 July 2025                  [Page 6]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
+
+   For example, a request for the non-existing name "a.example.com."
+   would result in the following NSEC3 record to be generated, assuming
+   NSEC3 parameters "1 0 0 -" (in DNS presentation format):
+
+        H64KFA4P1ACER2EBPS9QSDK6DNP8B3JQ.example.com. IN NSEC3 1 0 0 - H64KFA4P1ACER2EBPS9QSDK6DNP8B3JR NXNAME
 
 5.  Response Code Restoration
 
@@ -381,18 +387,18 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
    EDNS header flag, and for non-existent names will additionally set
    the response code field to NXDOMAIN.
 
+
+
+Huque, et al.              Expires 6 July 2025                  [Page 7]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+
+
    EDNS is a hop by hop signal, so resolvers will need to record the
    presence of this flag in associated cache data and respond to
    downstream DNSSEC enabled queriers appropriately.  If the querier
    does not set the Compact Answers OK flag, the resolver will need to
    reset the response code back to NOERROR (0) for an NXNAME response.
-
-
-
-Huque, et al.             Expires 28 June 2025                  [Page 7]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
-
 
 6.  Operational Implications
 
@@ -436,19 +442,15 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
       appear in zone data.  If encountered, they MUST be ignored upon
       being read.
 
-   This paragraph is updated to the following:
 
 
 
-
-
-
-
-
-Huque, et al.             Expires 28 June 2025                  [Page 8]
+Huque, et al.              Expires 6 July 2025                  [Page 8]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
+
+   This paragraph is updated to the following:
 
    *  Bits representing pseudo-types MUST be clear, as they do not
       appear in zone data.  If encountered, they MUST be ignored upon
@@ -499,11 +501,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
 
 
 
-
-
-Huque, et al.             Expires 28 June 2025                  [Page 9]
+Huque, et al.              Expires 6 July 2025                  [Page 9]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 8.  Implementation Status
@@ -557,9 +557,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
 
 
 
-Huque, et al.             Expires 28 June 2025                 [Page 10]
+Huque, et al.              Expires 6 July 2025                 [Page 10]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
    domain's authority servers, making resource exhaustion more likely at
@@ -613,9 +613,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
 
 
 
-Huque, et al.             Expires 28 June 2025                 [Page 11]
+Huque, et al.              Expires 6 July 2025                 [Page 11]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 12.1.  Normative References
@@ -669,9 +669,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
 
 
 
-Huque, et al.             Expires 28 June 2025                 [Page 12]
+Huque, et al.              Expires 6 July 2025                 [Page 12]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
    [BLACK-LIES]
@@ -725,9 +725,9 @@ Appendix A.  Other Approaches
 
 
 
-Huque, et al.             Expires 28 June 2025                 [Page 13]
+Huque, et al.              Expires 6 July 2025                 [Page 13]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC    December 2024
+Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
    ("NSEC RRSIG") to identify NXDOMAIN across this and other
@@ -781,4 +781,4 @@ Authors' Addresses
 
 
 
-Huque, et al.             Expires 28 June 2025                 [Page 14]
+Huque, et al.              Expires 6 July 2025                 [Page 14]

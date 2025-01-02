@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="25" month="12" year="2024"/>
+    <date day="02" month="01" year="2025"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -171,7 +171,7 @@
         Since NODATA responses are generated for non-existent names, and
         there are no defined record types for the name, the NSEC Type
         Bit Maps field in the response will only contain "NSEC" and "RRSIG"
-        (and in the case of NSEC3 there will be an empty Type Bit Maps field).
+        (and in the case of NSEC3 the Type Bit Maps field will be empty).
         Tools that need to accurately identify non-existent names in
         responses cannot rely on this specific type bitmap because Empty
         Non-Terminal (ENT) names (which positively exist) also have no
@@ -236,9 +236,9 @@
         <xref target="RFC4471" />).
       </t>
       <t>
-        For example, a request for the non-existing name a.example.com would
-        cause the following NSEC record to be generated (in DNS presentation
-        format):
+        For example, a request for the non-existing name "a.example.com."
+        would result in the following NSEC record to be generated (in DNS
+        presentation format):
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
           a.example.com. 3600 IN NSEC \000.a.example.com. RRSIG NSEC NXNAME
@@ -338,12 +338,13 @@
         The NSEC3 protocol uses hashed names to provide zone enumeration
         defense. This protection is already better provided by minimally
         covering NSEC records. NSEC3's Opt-Out feature also provides
-        no specific benefit for online signing implementations. Hence,
+        no specific benefit for online signing implementations (minimally
+        covering NSEC3 records provide no useful Opt-Out span). Hence,
         there does not appear to be a strong advantage to implementing
-        Compact Denial of Existence with NSEC3. An existing implementation
-        of traditional online signing with NSEC3 migrating to Compact
-        Denial of Existence may find it simpler to do so than implementing
-        NSEC from scratch.
+        Compact Denial of Existence with NSEC3. However, an existing
+        implementation of traditional NSEC3 online signing migrating to
+        Compact Denial of Existence may find it simpler to do so with
+        NSEC3 than implementing NSEC from scratch.
       </t>
       <t>
         The functional details of the protocol remain as described
@@ -354,6 +355,14 @@
         instead of NSEC.
       </t>
       <t>
+        As with other NSEC3 online signing implementations, there is no
+        advantage to setting an NSEC3 salt or iterative hashing count.
+        Thus, the recommended NSEC3 parameter configuration is a flags
+        field of 0, an additional hash iteration count of 0, and an
+        empty salt. In DNS presentation format syntax, the Resource
+        Record data is thus "1 0 0 -".
+      </t>
+      <t>
         The Owner Name of the NSEC3 resource record is the NSEC3 hash
         of the relevant domain name, and the next hashed owner name is
         the hash of the owner name plus one. In responses for non-existent
@@ -362,13 +371,13 @@
         Bit Maps field will be empty.
       </t>
       <t>
-        As with other NSEC3 online signing implementations, there is no
-        advantage to setting an NSEC3 salt or iterative hashing count.
-        Thus, the recommended NSEC3 parameter configuration is a flags
-        field of 0, an additional hash iteration count of 0, and an
-        empty salt. In DNS presentation format syntax, the Resource
-        Record data is thus "1 0 0 -".
+        For example, a request for the non-existing name "a.example.com."
+        would result in the following NSEC3 record to be generated,
+        assuming NSEC3 parameters "1 0 0 -" (in DNS presentation format):
       </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+        H64KFA4P1ACER2EBPS9QSDK6DNP8B3JQ.example.com. IN NSEC3 1 0 0 - H64KFA4P1ACER2EBPS9QSDK6DNP8B3JR NXNAME
+        ]]></artwork>
     </section>
 
     <section anchor="rcode" numbered="true" toc="default">
