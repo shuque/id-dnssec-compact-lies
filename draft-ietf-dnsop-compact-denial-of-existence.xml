@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="02" month="01" year="2025"/>
+    <date day="07" month="01" year="2025"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -297,6 +297,32 @@
       </t>
     </section>
 
+    <section anchor="response-referral" numbered="true" toc="default">
+      <name>Responses for Unsigned Referrals</name>
+      <t>
+        Per the DNSSEC protocol, a referral to an unsigned subzone
+        includes an NSEC record whose Owner Name matches the subzone,
+        and whose Type Bitmaps field proves the delegation is unsigned
+        by the absense of the DS bit.
+      </t>
+      <t>
+        With Compact Denial of Existence, the Next Domain Name field
+        for this NSEC record is computed with a slightly different
+        epsilon function than the immediate lexicographic successor of
+        the Owner Name, as that name would then fall under the delegated
+        subzone. Instead, the Next Domain Name field is formed by appending
+        a zero octet to the first label of the Owner Name.
+      </t>
+      <t>
+        For example, a referral response for the subzone sub.example.com
+        would include an NSEC record like the following:
+      </t>
+      <artwork name="" type="" align="left" alt=""><![CDATA[
+          sub.example.com. 3600 IN NSEC sub\000.example.com. NS RRSIG NSEC
+        ]]></artwork>
+
+    </section>
+
     <section anchor="response-nxname" numbered="true" toc="default">
       <name>Responses to explicit queries for NXNAME</name>
       <t>
@@ -335,49 +361,57 @@
     <section anchor="nsec3" numbered="true" toc="default">
       <name>Generating Responses with NSEC3</name>
       <t>
-        The NSEC3 protocol uses hashed names to provide zone enumeration
-        defense. This protection is already better provided by minimally
-        covering NSEC records. NSEC3's Opt-Out feature also provides
-        no specific benefit for online signing implementations (minimally
-        covering NSEC3 records provide no useful Opt-Out span). Hence,
-        there does not appear to be a strong advantage to implementing
-        Compact Denial of Existence with NSEC3. However, an existing
-        implementation of traditional NSEC3 online signing migrating to
-        Compact Denial of Existence may find it simpler to do so with
-        NSEC3 than implementing NSEC from scratch.
+        The NSEC3 protocol <xref target="RFC5155" /> uses hashed names to
+        provide zone enumeration defense. This protection is already better
+        provided by minimally covering NSEC records. NSEC3's Opt-Out feature
+        also provides no specific benefit for online signing implementations
+        (minimally covering NSEC3 records provide no useful Opt-Out span).
+        Hence, there is no known advantage to implementing Compact Denial
+        of Existence with NSEC3. However, an existing implementation of
+        traditional NSEC3 online signing migrating to Compact Denial of
+        Existence may find it simpler to do so with NSEC3 than implementing
+        NSEC from scratch.
       </t>
       <t>
-        The functional details of the protocol remain as described
-        in <xref target="responses"/>, with the following changes:
+        For NSEC3, the functional details of the protocol remain as
+        described in <xref target="responses"/>, with the following
+        changes:
       </t>
       <t>
         NSEC3 records and their signatures are dynamically generated
         instead of NSEC.
       </t>
       <t>
-        As with other NSEC3 online signing implementations, there is no
-        advantage to setting an NSEC3 salt or iterative hashing count.
-        Thus, the recommended NSEC3 parameter configuration is a flags
-        field of 0, an additional hash iteration count of 0, and an
-        empty salt. In DNS presentation format syntax, the Resource
-        Record data is thus "1 0 0 -".
+        The NSEC3 parameters should be set to algorithm 1, a flags field
+        of 0, an additional hash iteration count of 0, and an empty salt.
+        In DNS presentation format, this is "1 0 0 -".
       </t>
       <t>
-        The Owner Name of the NSEC3 resource record is the NSEC3 hash
-        of the relevant domain name, and the next hashed owner name is
-        the hash of the owner name plus one. In responses for non-existent
-        names, the Type Bit Maps field will contain only the NXNAME
-        meta-type. In responses to Empty Non-Terminal names, the Type
-        Bit Maps field will be empty.
+        The Owner Name of the NSEC3 resource record is the base32 encoding
+        of the NSEC3 hash of the relevant domain name, prepended as a
+        single label to the name of the zone. The Next Hashed Owner Name
+        is the immediate name successor of the unencoded binary form of
+        the previous hash, which can be computed by adding one to the
+        binary hash value.
       </t>
       <t>
-        For example, a request for the non-existing name "a.example.com."
-        would result in the following NSEC3 record to be generated,
-        assuming NSEC3 parameters "1 0 0 -" (in DNS presentation format):
+        In responses for non-existent names, the Type Bit Maps field will
+        contain only the NXNAME meta-type. In responses to Empty Non-Terminal
+        names, the Type Bit Maps field will be empty.
+      </t>
+      <t>
+        For example, a request for the non-existent name "a.example.com."
+        would result in the following NSEC3 record to be generated:
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
         H64KFA4P1ACER2EBPS9QSDK6DNP8B3JQ.example.com. IN NSEC3 1 0 0 - H64KFA4P1ACER2EBPS9QSDK6DNP8B3JR NXNAME
         ]]></artwork>
+      <t>
+        Unlike Compact Denial of Existence with NSEC, no special form of
+        the next name field for unsigned referrals is needed. The Hashed
+        Next Owner Name field remains the NSEC3 hash of original owner
+        name plus one.
+      </t>
     </section>
 
     <section anchor="rcode" numbered="true" toc="default">
@@ -629,9 +663,9 @@
       <t>
         Especially detailed discussions on many technical aspects of this
         document were conducted with Paul Vixie, Jan Vcelak, Viktor Dukhovni,
-        and Ed Lewis. The authors would also like to thank the many other
-        members of the IETF DNS Operations working group for helpful
-        comments and discussions.
+        Ed Lewis, and John Levine. The authors would also like to thank
+        the many other members of the IETF DNS Operations working group
+        for helpful comments and discussions.
       </t>
     </section>
 
@@ -681,6 +715,7 @@
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4034.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4470.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5155.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6891.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6895.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"/>
@@ -771,10 +806,8 @@
         (from July 2023) and NS1 (from November 2023) until roughly
         September 2024. Since September 2024 both Cloudflare and NS1 have
         deployed NXNAME using the officially allocated code point of 128.
-        Oracle Cloud Initiative appears to have implemented Compact Denial
-        of Existence using NSEC3 in October 2024. At the current time,
-        there are only prototype implementations of the signaled rcode
-        restoration scheme.
+        Oracle Cloud Initiative implemented Compact Denial of Existence
+        using NSEC3 in October 2024.
       </t>
     </section>
 
