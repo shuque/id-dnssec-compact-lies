@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="07" month="01" year="2025"/>
+    <date day="03" month="02" year="2025"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -583,7 +583,7 @@
           name servers. This concern only applies to implementations of DNSSEC
           that employ pre-computed signatures. There is an exception to this
           rule for online signing implementations of DNSSEC (e.g., Minimally
-          Covering NSEC, and Compact Denial of Existence (RFC TBD), where
+          Covering NSEC, and Compact Denial of Existence), where
           dynamically generated NSEC records can be produced for owner names
           that don't exist or are empty non-terminals.
         </li>

@@ -6,9 +6,9 @@ Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
 Intended status: Standards Track                              Cloudflare
-Expires: 11 July 2025                                     O. Gudmundsson
+Expires: 7 August 2025                                    O. Gudmundsson
                                                   Retired / Unaffiliated
-                                                          7 January 2025
+                                                         3 February 2025
 
 
                  Compact Denial of Existence in DNSSEC
@@ -47,15 +47,15 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 11 July 2025.
+   This Internet-Draft will expire on 7 August 2025.
 
 
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 1]
+Huque, et al.             Expires 7 August 2025                 [Page 1]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 Copyright Notice
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 2]
+Huque, et al.             Expires 7 August 2025                 [Page 2]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 1.  Introduction and Motivation
@@ -165,9 +165,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 3]
+Huque, et al.             Expires 7 August 2025                 [Page 3]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    This specification defines the use of a synthetic Resource Record
@@ -221,9 +221,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 4]
+Huque, et al.             Expires 7 August 2025                 [Page 4]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    The NSEC record MUST have corresponding RRSIGs generated.
@@ -277,9 +277,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 5]
+Huque, et al.             Expires 7 August 2025                 [Page 5]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    With Compact Denial of Existence, the Next Domain Name field for this
@@ -333,9 +333,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 6]
+Huque, et al.             Expires 7 August 2025                 [Page 6]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    For NSEC3, the functional details of the protocol remain as described
@@ -389,9 +389,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 7]
+Huque, et al.             Expires 7 August 2025                 [Page 7]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 5.1.  Signaled Response Code Restoration
@@ -445,9 +445,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 8]
+Huque, et al.             Expires 7 August 2025                 [Page 8]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    first query would suppress additional queries for other types at that
@@ -501,9 +501,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                  [Page 9]
+Huque, et al.             Expires 7 August 2025                 [Page 9]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
       consistency between signed and unsigned versions of the same zone
@@ -523,9 +523,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
       applies to implementations of DNSSEC that employ pre-computed
       signatures.  There is an exception to this rule for online signing
       implementations of DNSSEC (e.g., Minimally Covering NSEC, and
-      Compact Denial of Existence (RFC TBD), where dynamically generated
-      NSEC records can be produced for owner names that don't exist or
-      are empty non-terminals.
+      Compact Denial of Existence), where dynamically generated NSEC
+      records can be produced for owner names that don't exist or are
+      empty non-terminals.
 
 8.  Security Considerations
 
@@ -557,9 +557,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                 [Page 10]
+Huque, et al.             Expires 7 August 2025                [Page 10]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    Because this method does not allow for aggressive negative caching
@@ -613,9 +613,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                 [Page 11]
+Huque, et al.             Expires 7 August 2025                [Page 11]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    Allocate the "Compact Answers OK" flag in the EDNS header, as
@@ -669,9 +669,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                 [Page 12]
+Huque, et al.             Expires 7 August 2025                [Page 12]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    [RFC7129]  Gieben, R. and W. Mekking, "Authenticated Denial of
@@ -725,9 +725,9 @@ Appendix A.  Other Approaches
 
 
 
-Huque, et al.             Expires 11 July 2025                 [Page 13]
+Huque, et al.             Expires 7 August 2025                [Page 13]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    One method employed by both Cloudflare and Amazon Route53 for a
@@ -781,9 +781,9 @@ Authors' Addresses
 
 
 
-Huque, et al.             Expires 11 July 2025                 [Page 14]
+Huque, et al.             Expires 7 August 2025                [Page 14]
 
-Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
    Christian Elmerot
@@ -837,4 +837,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC     January 2025
 
 
 
-Huque, et al.             Expires 11 July 2025                 [Page 15]
+Huque, et al.             Expires 7 August 2025                [Page 15]
