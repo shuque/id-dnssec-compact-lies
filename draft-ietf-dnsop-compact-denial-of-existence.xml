@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="03" month="02" year="2025"/>
+    <date day="10" month="02" year="2025"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -404,7 +404,8 @@
         would result in the following NSEC3 record to be generated:
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
-        H64KFA4P1ACER2EBPS9QSDK6DNP8B3JQ.example.com. IN NSEC3 1 0 0 - H64KFA4P1ACER2EBPS9QSDK6DNP8B3JR NXNAME
+      H64KFA4P1ACER2EBPS9QSDK6DNP8B3JQ.example.com. IN NSEC3 1 0 0 - (
+                        H64KFA4P1ACER2EBPS9QSDK6DNP8B3JR NXNAME )
         ]]></artwork>
       <t>
         Unlike Compact Denial of Existence with NSEC, no special form of

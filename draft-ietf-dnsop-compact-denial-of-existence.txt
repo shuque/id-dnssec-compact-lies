@@ -6,9 +6,9 @@ Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
 Intended status: Standards Track                              Cloudflare
-Expires: 7 August 2025                                    O. Gudmundsson
+Expires: 14 August 2025                                   O. Gudmundsson
                                                   Retired / Unaffiliated
-                                                         3 February 2025
+                                                        10 February 2025
 
 
                  Compact Denial of Existence in DNSSEC
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 7 August 2025.
+   This Internet-Draft will expire on 14 August 2025.
 
 
 
 
 
-Huque, et al.             Expires 7 August 2025                 [Page 1]
+Huque, et al.            Expires 14 August 2025                 [Page 1]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Huque, et al.             Expires 7 August 2025                 [Page 2]
+Huque, et al.            Expires 14 August 2025                 [Page 2]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -165,7 +165,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                 [Page 3]
+Huque, et al.            Expires 14 August 2025                 [Page 3]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -221,7 +221,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                 [Page 4]
+Huque, et al.            Expires 14 August 2025                 [Page 4]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -277,7 +277,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                 [Page 5]
+Huque, et al.            Expires 14 August 2025                 [Page 5]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -333,7 +333,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                 [Page 6]
+Huque, et al.            Expires 14 August 2025                 [Page 6]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -361,7 +361,8 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
    For example, a request for the non-existent name "a.example.com."
    would result in the following NSEC3 record to be generated:
 
-        H64KFA4P1ACER2EBPS9QSDK6DNP8B3JQ.example.com. IN NSEC3 1 0 0 - H64KFA4P1ACER2EBPS9QSDK6DNP8B3JR NXNAME
+        H64KFA4P1ACER2EBPS9QSDK6DNP8B3JQ.example.com. IN NSEC3 1 0 0 - (
+                          H64KFA4P1ACER2EBPS9QSDK6DNP8B3JR NXNAME )
 
    Unlike Compact Denial of Existence with NSEC, no special form of the
    next name field for unsigned referrals is needed.  The Hashed Next
@@ -388,8 +389,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-
-Huque, et al.             Expires 7 August 2025                 [Page 7]
+Huque, et al.            Expires 14 August 2025                 [Page 7]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -445,7 +445,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                 [Page 8]
+Huque, et al.            Expires 14 August 2025                 [Page 8]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -501,7 +501,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                 [Page 9]
+Huque, et al.            Expires 14 August 2025                 [Page 9]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -557,7 +557,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                [Page 10]
+Huque, et al.            Expires 14 August 2025                [Page 10]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -613,7 +613,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                [Page 11]
+Huque, et al.            Expires 14 August 2025                [Page 11]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -669,7 +669,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                [Page 12]
+Huque, et al.            Expires 14 August 2025                [Page 12]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -725,7 +725,7 @@ Appendix A.  Other Approaches
 
 
 
-Huque, et al.             Expires 7 August 2025                [Page 13]
+Huque, et al.            Expires 14 August 2025                [Page 13]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -781,7 +781,7 @@ Authors' Addresses
 
 
 
-Huque, et al.             Expires 7 August 2025                [Page 14]
+Huque, et al.            Expires 14 August 2025                [Page 14]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -837,4 +837,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.             Expires 7 August 2025                [Page 15]
+Huque, et al.            Expires 14 August 2025                [Page 15]
