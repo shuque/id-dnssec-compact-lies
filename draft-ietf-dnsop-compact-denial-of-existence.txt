@@ -150,6 +150,10 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
    walking the NSEC chain, or by performing an offline dictionary attack
    on the hashes in the NSEC3 chain.
 
+   This document assumes a reasonable level of familiarity with DNS
+   operations and protocol terms.  Much of the terminology is explained
+   in further detail in "DNS Terminology" [RFC8499].
+
 1.1.  Requirements Language
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -157,10 +161,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
    "OPTIONAL" in this document are to be interpreted as described in BCP
    14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
-
-
-
-
 
 
 
@@ -753,6 +753,10 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
               DNSSEC-Validated Cache", RFC 8198, DOI 10.17487/RFC8198,
               July 2017, <https://www.rfc-editor.org/info/rfc8198>.
 
+   [RFC8499]  Hoffman, P., Sullivan, A., and K. Fujiwara, "DNS
+              Terminology", RFC 8499, DOI 10.17487/RFC8499, January
+              2019, <https://www.rfc-editor.org/info/rfc8499>.
+
 Appendix A.  Other Approaches
 
    In the past, some implementations of Compact Denial of Existence have
@@ -767,17 +771,13 @@ Appendix A.  Other Approaches
    than it needs to be.  It also has the potential to confuse validators
    and others tools that infer type existence from the NSEC record.
 
-
-
-
-
-
-
-
-
-
-
-
+   Another way to distinguish NXDOMAIN from ENT is to define the
+   synthetic Resource Record type for ENTs instead, as specified in
+   [ENT-SENTINEL].  This method was successfully deployed in the field
+   by NS1 for a period of time.  This typically imposes less work on the
+   server since NXDOMAIN responses are a lot more common than ENTs.  At
+   the time it was deployed, it also allowed a common bitmap pattern
+   ("NSEC RRSIG") to identify NXDOMAIN across this and other
 
 
 
@@ -786,13 +786,6 @@ Huque, et al.            Expires 17 August 2025                [Page 14]
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
-   Another way to distinguish NXDOMAIN from ENT is to define the
-   synthetic Resource Record type for ENTs instead, as specified in
-   [ENT-SENTINEL].  This method was successfully deployed in the field
-   by NS1 for a period of time.  This typically imposes less work on the
-   server since NXDOMAIN responses are a lot more common than ENTs.  At
-   the time it was deployed, it also allowed a common bitmap pattern
-   ("NSEC RRSIG") to identify NXDOMAIN across this and other
    implementations that returned a broad bitmap pattern for Empty Non-
    Terminals.  However, the advantage of the NXNAME RR type is that it
    explicitly identifies NXDOMAIN responses, and allows them to be
@@ -834,6 +827,13 @@ Authors' Addresses
    Olafur Gudmundsson
    Retired / Unaffiliated
    Email: ogud@ogud.com
+
+
+
+
+
+
+
 
 
 
