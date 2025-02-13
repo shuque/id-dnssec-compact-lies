@@ -698,10 +698,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
               Considerations", BCP 42, RFC 6895, DOI 10.17487/RFC6895,
               April 2013, <https://www.rfc-editor.org/info/rfc6895>.
 
-   [RFC7129]  Gieben, R. and W. Mekking, "Authenticated Denial of
-              Existence in the DNS", RFC 7129, DOI 10.17487/RFC7129,
-              February 2014, <https://www.rfc-editor.org/info/rfc7129>.
-
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
@@ -722,6 +718,10 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
               Existence or Black Lies", <https://tools.ietf.org/html/
               draft-valsorda-dnsop-black-lies>.
 
+   [ENT-SENTINEL]
+              Huque, S., "Empty Non-Terminal Sentinel for Black Lies",
+              <https://www.ietf.org/archive/id/draft-huque-dnsop-
+              blacklies-ent-01.html>.
 
 
 
@@ -729,11 +729,6 @@ Huque, et al.            Expires 17 August 2025                [Page 13]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
-
-   [ENT-SENTINEL]
-              Huque, S., "Empty Non-Terminal Sentinel for Black Lies",
-              <https://www.ietf.org/archive/id/draft-huque-dnsop-
-              blacklies-ent-01.html>.
 
    [NXDOMAIN-TYPE]
               Gudmundsson, O. and F. Valsorda, "Signaling NSEC record
@@ -744,6 +739,10 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
               Predecessor and Successor", RFC 4471,
               DOI 10.17487/RFC4471, September 2006,
               <https://www.rfc-editor.org/info/rfc4471>.
+
+   [RFC7129]  Gieben, R. and W. Mekking, "Authenticated Denial of
+              Existence in the DNS", RFC 7129, DOI 10.17487/RFC7129,
+              February 2014, <https://www.rfc-editor.org/info/rfc7129>.
 
    [RFC8020]  Bortzmeyer, S. and S. Huque, "NXDOMAIN: There Really Is
               Nothing Underneath", RFC 8020, DOI 10.17487/RFC8020,
@@ -778,6 +777,7 @@ Appendix A.  Other Approaches
    server since NXDOMAIN responses are a lot more common than ENTs.  At
    the time it was deployed, it also allowed a common bitmap pattern
    ("NSEC RRSIG") to identify NXDOMAIN across this and other
+   implementations that returned a broad bitmap pattern for Empty Non-
 
 
 
@@ -786,7 +786,6 @@ Huque, et al.            Expires 17 August 2025                [Page 14]
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
-   implementations that returned a broad bitmap pattern for Empty Non-
    Terminals.  However, the advantage of the NXNAME RR type is that it
    explicitly identifies NXDOMAIN responses, and allows them to be
    distinguished conclusively from potential ENT responses in other
@@ -827,6 +826,7 @@ Authors' Addresses
    Olafur Gudmundsson
    Retired / Unaffiliated
    Email: ogud@ogud.com
+
 
 
 
