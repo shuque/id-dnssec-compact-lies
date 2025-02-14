@@ -6,9 +6,9 @@ Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
 Intended status: Standards Track                              Cloudflare
-Expires: 17 August 2025                                   O. Gudmundsson
+Expires: 18 August 2025                                   O. Gudmundsson
                                                   Retired / Unaffiliated
-                                                        13 February 2025
+                                                        14 February 2025
 
 
                  Compact Denial of Existence in DNSSEC
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 August 2025.
+   This Internet-Draft will expire on 18 August 2025.
 
 
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 1]
+Huque, et al.            Expires 18 August 2025                 [Page 1]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 2]
+Huque, et al.            Expires 18 August 2025                 [Page 2]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -165,7 +165,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 3]
+Huque, et al.            Expires 18 August 2025                 [Page 3]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -221,7 +221,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 4]
+Huque, et al.            Expires 18 August 2025                 [Page 4]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -277,7 +277,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 5]
+Huque, et al.            Expires 18 August 2025                 [Page 5]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -333,7 +333,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 6]
+Huque, et al.            Expires 18 August 2025                 [Page 6]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -389,7 +389,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 7]
+Huque, et al.            Expires 18 August 2025                 [Page 7]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -445,7 +445,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 8]
+Huque, et al.            Expires 18 August 2025                 [Page 8]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -501,7 +501,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                 [Page 9]
+Huque, et al.            Expires 18 August 2025                 [Page 9]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -557,7 +557,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                [Page 10]
+Huque, et al.            Expires 18 August 2025                [Page 10]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -584,15 +584,15 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
    Because this method does not allow for aggressive negative caching
    among resolvers, it allows for certain types of denial-of-service
-   attacks to be more effective.  This includes so-called Water Torture
-   attacks, where random names are queried, either directly via botnets
-   or across a wide range of public resolver services, in order to
-   intentionally generate non-existence responses from the authoritative
-   servers for a domain.  If the resolver cannot synthesize NXDOMAIN
-   responses from NSEC records, it must pass all queries on to the
-   domain's authority servers, making resource exhaustion more likely at
-   those latter servers, if those servers do not have the capacity to
-   absorb those additional queries.
+   attacks to be more effective.  This includes so-called Pseudorandom
+   Subdomain Attacks [PRSD-ATTACK], where random names are queried,
+   either directly via botnets or across a wide range of public resolver
+   services, in order to intentionally generate non-existence responses
+   from the authoritative servers for a domain.  If the resolver cannot
+   synthesize NXDOMAIN responses from NSEC records, it must pass all
+   queries on to the domain's authority servers, making resource
+   exhaustion more likely at those latter servers, if those servers do
+   not have the capacity to absorb those additional queries.
 
    If the motivating aspects of this specification (minimizing response
    size and computational costs) are not a concern, DNSSEC deployments
@@ -613,7 +613,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                [Page 11]
+Huque, et al.            Expires 18 August 2025                [Page 11]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -669,7 +669,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                [Page 12]
+Huque, et al.            Expires 18 August 2025                [Page 12]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -725,7 +725,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 17 August 2025                [Page 13]
+Huque, et al.            Expires 18 August 2025                [Page 13]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -734,6 +734,11 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
               Gudmundsson, O. and F. Valsorda, "Signaling NSEC record
               owner name nonexistence", <https://tools.ietf.org/html/
               draft-ogud-fake-nxdomain-type/>.
+
+   [PRSD-ATTACK]
+              Nishida, K., "Water Torture: A Slow Drip DNS DDoS Attack
+              on QTNet", <https://conference.apnic.net/data/39/
+              dnswatertortureonqtnet_1425130417_1425507043.pptx>.
 
    [RFC4471]  Sisson, G. and B. Laurie, "Derivation of DNS Name
               Predecessor and Successor", RFC 4471,
@@ -773,19 +778,19 @@ Appendix A.  Other Approaches
    Another way to distinguish NXDOMAIN from ENT is to define the
    synthetic Resource Record type for ENTs instead, as specified in
    [ENT-SENTINEL].  This method was successfully deployed in the field
+
+
+
+Huque, et al.            Expires 18 August 2025                [Page 14]
+
+Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
+
+
    by NS1 for a period of time.  This typically imposes less work on the
    server since NXDOMAIN responses are a lot more common than ENTs.  At
    the time it was deployed, it also allowed a common bitmap pattern
    ("NSEC RRSIG") to identify NXDOMAIN across this and other
    implementations that returned a broad bitmap pattern for Empty Non-
-
-
-
-Huque, et al.            Expires 17 August 2025                [Page 14]
-
-Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
-
-
    Terminals.  However, the advantage of the NXNAME RR type is that it
    explicitly identifies NXDOMAIN responses, and allows them to be
    distinguished conclusively from potential ENT responses in other
@@ -832,9 +837,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-Huque, et al.            Expires 17 August 2025                [Page 15]
+Huque, et al.            Expires 18 August 2025                [Page 15]

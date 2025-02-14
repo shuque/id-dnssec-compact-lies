@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="13" month="02" year="2025"/>
+    <date day="14" month="02" year="2025"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -641,7 +641,8 @@
         Because this method does not allow for aggressive negative
         caching among resolvers, it allows for certain types
         of denial-of-service attacks to be more effective. This
-        includes so-called Water Torture attacks, where random names
+        includes so-called Pseudorandom Subdomain Attacks
+        <xref target="PRSD-ATTACK" format="default"/>, where random names
         are queried, either directly via botnets or across a wide
         range of public resolver services, in order to intentionally
         generate non-existence responses from the authoritative
@@ -767,6 +768,14 @@
           <title>Signaling NSEC record owner name nonexistence</title>
           <author fullname="Olafur Gudmundsson" initials="O" surname="Gudmundsson" />
           <author fullname="Filippo Valsorda" initials="F" surname="Valsorda" />
+          <date />
+        </front>
+      </reference>
+      <reference anchor="PRSD-ATTACK"
+                 target="https://conference.apnic.net/data/39/dnswatertortureonqtnet_1425130417_1425507043.pptx">
+        <front>
+          <title>Water Torture: A Slow Drip DNS DDoS Attack on QTNet</title>
+          <author fullname="Kei Nishida" initials="K" surname="Nishida" />
           <date />
         </front>
       </reference>
