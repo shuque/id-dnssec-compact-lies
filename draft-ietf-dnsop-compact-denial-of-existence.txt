@@ -152,7 +152,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
    This document assumes a reasonable level of familiarity with DNS
    operations and protocol terms.  Much of the terminology is explained
-   in further detail in "DNS Terminology" [RFC8499].
+   in further detail in "DNS Terminology" [RFC9499].
 
 1.1.  Requirements Language
 
@@ -752,9 +752,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
               DNSSEC-Validated Cache", RFC 8198, DOI 10.17487/RFC8198,
               July 2017, <https://www.rfc-editor.org/info/rfc8198>.
 
-   [RFC8499]  Hoffman, P., Sullivan, A., and K. Fujiwara, "DNS
-              Terminology", RFC 8499, DOI 10.17487/RFC8499, January
-              2019, <https://www.rfc-editor.org/info/rfc8499>.
+   [RFC9499]  Hoffman, P. and K. Fujiwara, "DNS Terminology", BCP 219,
+              RFC 9499, DOI 10.17487/RFC9499, March 2024,
+              <https://www.rfc-editor.org/info/rfc9499>.
 
 Appendix A.  Other Approaches
 

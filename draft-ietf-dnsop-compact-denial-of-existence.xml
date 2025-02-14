@@ -166,7 +166,7 @@
       <t>
         This document assumes a reasonable level of familiarity with DNS
         operations and protocol terms.  Much of the terminology is explained
-        in further detail in "DNS Terminology" <xref target="RFC8499" />.
+        in further detail in "DNS Terminology" <xref target="RFC9499" />.
       </t>
 
       <section anchor="reserved-words"><name>Requirements Language</name>
@@ -743,7 +743,7 @@
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8020.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8198.xml"/>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8499.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9499.xml"/>
       <reference anchor="BLACK-LIES"
                  target="https://tools.ietf.org/html/draft-valsorda-dnsop-black-lies">
         <front>
