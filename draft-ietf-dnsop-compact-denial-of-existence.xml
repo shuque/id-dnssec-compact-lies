@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="14" month="02" year="2025"/>
+    <date day="23" month="02" year="2025"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -356,7 +356,7 @@
       </t>
       <t>
         Optionally, a DNS server MAY also include the following
-        <xref target="RFC8914" /> Extended DNS Error Code in the
+        <xref target="RFC8914" /> Extended DNS Error (EDE) Code in the
         response:
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
@@ -400,8 +400,9 @@
         In DNS presentation format, this is "1 0 0 -".
       </t>
       <t>
-        The Owner Name of the NSEC3 resource record is the base32 encoding
-        of the NSEC3 hash of the relevant domain name, prepended as a
+        The Owner Name of the NSEC3 resource record is the NSEC3 hash of
+        the relevant domain name, encoded in Base32 with Extended Hex
+        Alphabet (<xref target="RFC4648"/>, Section 7), prepended as a
         single label to the name of the zone. The Next Hashed Owner Name
         is the immediate name successor of the unencoded binary form of
         the previous hash, which can be computed by adding one to the
@@ -513,11 +514,14 @@
         Compact Answers. For example, a NODATA response to the lookup
         of an AAAA record for a non-existent name, can cause such
         functions to issue another query at the same name for an A record.
-        Whereas an NXDOMAIN response to the first query would suppress
+        Whereas an NXDOMAIN response to the first query could suppress
         additional queries for other types at that name. Address lookup
         functions could be enhanced to issue DNSSEC enabled queries and
         to examine the NSEC Type Bit Maps field in responses to accurately
-        determine non-existent names.
+        determine non-existent names. Note that this is less of a concern
+        with Happy Eyeballs <xref target="RFC8305" /> style of connection
+        functions that typically issue back to back DNS queries without
+        waiting for individual responses.
       </t>
       <t>
         Protocol optimizations that enable DNS resolvers to synthesize
@@ -731,6 +735,7 @@
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4034.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4035.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4470.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4648.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5155.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6891.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6895.xml"/>
@@ -744,6 +749,7 @@
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8020.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8198.xml"/>
+        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8305.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9499.xml"/>
       <reference anchor="BLACK-LIES"
                  target="https://tools.ietf.org/html/draft-valsorda-dnsop-black-lies">
