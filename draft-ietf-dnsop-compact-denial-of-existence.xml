@@ -133,7 +133,7 @@
         the online signing model, described in NSEC and NSEC3 "White Lies"
         <xref target="RFC4470" /> <xref target="RFC7129" />,
         they are used to dynamically compute an epsilon
-        function around the queried name. A 'Type Bit Maps' field in the data
+        function around the queried name. A "Type Bit Maps" field in the data
         of the NSEC or NSEC3 record asserts which resource record types are
         present at the name.
       </t>
@@ -241,10 +241,10 @@
         name (QNAME) placed in the Authority section.
       </t>
       <t>
-        The Next Domain Name field SHOULD be set to the immediate
+        The Next Domain Name field MUST be set to the immediate
         lexicographic successor of the QNAME. The Type Bit Maps field
         MUST only have the bits set for the following RR Types: RRSIG,
-        NSEC, and NXNAME. (The immedidate lexicographic successor is
+        NSEC, and NXNAME. (The immediate lexicographic successor is
         the typical case of the "DNS Name Successor" defined in
         <xref target="RFC4471" />).
       </t>
