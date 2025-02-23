@@ -694,24 +694,28 @@
         IANA is requested to do the following:
       </t>
       <t>
-        Allocate a new DNS Resource Record type
-        code for NXNAME in the DNS parameters registry, from the meta type
-        range. Specifically, the lowest available number (currently 128)
-        in the meta range is requested to be allocated. A lower number
-        lowers the size of the Type Bit Maps field, which reduces the
-        overall size of the DNS response message.
+        Allocate a new DNS Resource Record type code for NXNAME from
+        the "Resource Record (RR) Types" registry in the "DNS parameters"
+        registry group, from the meta type range. Specifically, the lowest
+        available number (currently 128) in the meta types range is
+        requested to be allocated. A lower number lowers the size of the
+        Type Bit Maps field, which reduces the overall size of the DNS
+        response message.
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
          Type    Value  Meaning
          NXNAME  128  NXDOMAIN indicator for Compact Denial of Existence
         ]]></artwork>
       <t>
-        Allocate the "Compact Answers OK" flag in the EDNS header, as
-        described in <xref target="signaled-rcode"/>.
+        Allocate the "Compact Answers OK" flag in the "EDNS Header Flags
+        (16 bits)" registry in the "Domain Name System (DNS) Parameters"
+        registry group. Set the Flag field to "CO", as described in
+        <xref target="signaled-rcode"/>.
       </t>
       <t>
-        Allocate a code point for the "Invalid Query Type" Extended
-        DNS Error in the DNS parameters registry, as described in
+        Allocate a code point for "Invalid Query Type" in the
+        "Extended DNS Error Codes" registry in the "Domain Name System
+        (DNS) Parameters" registry group, as described in
         <xref target="response-nxname"/>.
       </t>
       <artwork name="" type="" align="left" alt=""><![CDATA[
