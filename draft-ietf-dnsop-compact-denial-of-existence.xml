@@ -181,9 +181,10 @@
     <section anchor="distinguish" numbered="true" toc="default">
       <name>Distinguishing non-existent names</name>
       <t>
-        Since NODATA responses are generated for non-existent names, and
-        there are no defined record types for the name, the NSEC Type
-        Bit Maps field in the response will only contain "NSEC" and "RRSIG"
+        This method generates NODATA responses for non-existent names
+        that don't match a DNS wildcard. Since there are clearly no
+        record types for such names, the NSEC Type Bit Maps field in
+        the response will only contain the "NSEC" and "RRSIG" types
         (and in the case of NSEC3 the Type Bit Maps field will be empty).
         Tools that need to accurately identify non-existent names in
         responses cannot rely on this specific type bitmap because Empty
@@ -315,8 +316,8 @@
       <t>
         Per the DNSSEC protocol, a referral to an unsigned subzone
         includes an NSEC record whose Owner Name matches the subzone,
-        and whose Type Bitmaps field proves the delegation is unsigned
-        by the absense of the DS bit.
+        and which proves the delegation is unsigned by the absence of
+        the DS RRtype bit in the Type Bit Maps field.
       </t>
       <t>
         With Compact Denial of Existence, the Next Domain Name field

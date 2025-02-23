@@ -172,14 +172,15 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 2.  Distinguishing non-existent names
 
-   Since NODATA responses are generated for non-existent names, and
-   there are no defined record types for the name, the NSEC Type Bit
-   Maps field in the response will only contain "NSEC" and "RRSIG" (and
-   in the case of NSEC3 the Type Bit Maps field will be empty).  Tools
-   that need to accurately identify non-existent names in responses
-   cannot rely on this specific type bitmap because Empty Non-Terminal
-   (ENT) names (which positively exist) also have no record types at the
-   name and will return exactly the same Type Bit Maps field.
+   This method generates NODATA responses for non-existent names that
+   don't match a DNS wildcard.  Since there are clearly no record types
+   for such names, the NSEC Type Bit Maps field in the response will
+   only contain the "NSEC" and "RRSIG" types (and in the case of NSEC3
+   the Type Bit Maps field will be empty).  Tools that need to
+   accurately identify non-existent names in responses cannot rely on
+   this specific type bitmap because Empty Non-Terminal (ENT) names
+   (which positively exist) also have no record types at the name and
+   will return exactly the same Type Bit Maps field.
 
    This specification defines the use of a synthetic Resource Record
    type to signal the presence of a non-existent name.  The mnemonic for
@@ -216,7 +217,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
    NOERROR, empty Answer section) is generated with a dynamically
    constructed NSEC record with the owner name matching the queried name
    (QNAME) placed in the Authority section.
-
 
 
 
@@ -292,9 +292,9 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 3.4.  Responses for Unsigned Referrals
 
    Per the DNSSEC protocol, a referral to an unsigned subzone includes
-   an NSEC record whose Owner Name matches the subzone, and whose Type
-   Bitmaps field proves the delegation is unsigned by the absense of the
-   DS bit.
+   an NSEC record whose Owner Name matches the subzone, and which proves
+   the delegation is unsigned by the absence of the DS RRtype bit in the
+   Type Bit Maps field.
 
    With Compact Denial of Existence, the Next Domain Name field for this
    NSEC record is computed with a slightly different epsilon function
