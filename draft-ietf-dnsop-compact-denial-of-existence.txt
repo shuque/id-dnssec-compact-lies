@@ -6,13 +6,13 @@ Internet Engineering Task Force                                 S. Huque
 Internet-Draft                                                Salesforce
 Updates: 4034, 4035 (if approved)                             C. Elmerot
 Intended status: Standards Track                              Cloudflare
-Expires: 27 August 2025                                   O. Gudmundsson
+Expires: 31 August 2025                                   O. Gudmundsson
                                                   Retired / Unaffiliated
-                                                        23 February 2025
+                                                        27 February 2025
 
 
                  Compact Denial of Existence in DNSSEC
-            draft-ietf-dnsop-compact-denial-of-existence-06
+            draft-ietf-dnsop-compact-denial-of-existence-07
 
 Abstract
 
@@ -47,13 +47,13 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 August 2025.
+   This Internet-Draft will expire on 31 August 2025.
 
 
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 1]
+Huque, et al.            Expires 31 August 2025                 [Page 1]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 2]
+Huque, et al.            Expires 31 August 2025                 [Page 2]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -165,7 +165,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 3]
+Huque, et al.            Expires 31 August 2025                 [Page 3]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -221,16 +221,16 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 4]
+Huque, et al.            Expires 31 August 2025                 [Page 4]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
-   The Next Domain Name field MUST be set to the immediate lexicographic
-   successor of the QNAME.  The Type Bit Maps field MUST only have the
-   bits set for the following RR Types: RRSIG, NSEC, and NXNAME.  (The
-   immediate lexicographic successor is the typical case of the "DNS
-   Name Successor" defined in [RFC4471]).
+   The Next Domain Name field SHOULD be set to the immediate
+   lexicographic successor of the QNAME.  This is accomplished by adding
+   a leading label with a single null (zero-value) octet.  The Type Bit
+   Maps field MUST only have the bits set for the following RR Types:
+   RRSIG, NSEC, and NXNAME.
 
    For example, a request for the non-existing name "a.example.com."
    would result in the following NSEC record to be generated (in DNS
@@ -277,7 +277,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 5]
+Huque, et al.            Expires 31 August 2025                 [Page 5]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -333,7 +333,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 6]
+Huque, et al.            Expires 31 August 2025                 [Page 6]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -389,7 +389,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 7]
+Huque, et al.            Expires 31 August 2025                 [Page 7]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -445,7 +445,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 8]
+Huque, et al.            Expires 31 August 2025                 [Page 8]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -501,7 +501,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                 [Page 9]
+Huque, et al.            Expires 31 August 2025                 [Page 9]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -557,7 +557,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                [Page 10]
+Huque, et al.            Expires 31 August 2025                [Page 10]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -613,7 +613,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                [Page 11]
+Huque, et al.            Expires 31 August 2025                [Page 11]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -669,7 +669,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                [Page 12]
+Huque, et al.            Expires 31 August 2025                [Page 12]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -725,7 +725,7 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                [Page 13]
+Huque, et al.            Expires 31 August 2025                [Page 13]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -744,11 +744,6 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
               Nishida, K., "Water Torture: A Slow Drip DNS DDoS Attack
               on QTNet", <https://conference.apnic.net/data/39/
               dnswatertortureonqtnet_1425130417_1425507043.pptx>.
-
-   [RFC4471]  Sisson, G. and B. Laurie, "Derivation of DNS Name
-              Predecessor and Successor", RFC 4471,
-              DOI 10.17487/RFC4471, September 2006,
-              <https://www.rfc-editor.org/info/rfc4471>.
 
    [RFC7129]  Gieben, R. and W. Mekking, "Authenticated Denial of
               Existence in the DNS", RFC 7129, DOI 10.17487/RFC7129,
@@ -781,7 +776,12 @@ Appendix A.  Other Approaches
 
 
 
-Huque, et al.            Expires 27 August 2025                [Page 14]
+
+
+
+
+
+Huque, et al.            Expires 31 August 2025                [Page 14]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -837,7 +837,7 @@ Authors' Addresses
 
 
 
-Huque, et al.            Expires 27 August 2025                [Page 15]
+Huque, et al.            Expires 31 August 2025                [Page 15]
 
 Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
@@ -893,4 +893,4 @@ Internet-Draft    Compact Denial of Existence in DNSSEC    February 2025
 
 
 
-Huque, et al.            Expires 27 August 2025                [Page 16]
+Huque, et al.            Expires 31 August 2025                [Page 16]

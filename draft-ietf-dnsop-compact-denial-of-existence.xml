@@ -30,7 +30,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
         category="std" consensus="true"
-        docName="draft-ietf-dnsop-compact-denial-of-existence-06"
+        docName="draft-ietf-dnsop-compact-denial-of-existence-07"
         ipr="trust200902" updates="4034, 4035" obsoletes=""
         submissionType="IETF" xml:lang="en"
         tocInclude="true" tocDepth="4"
@@ -43,7 +43,7 @@
     <title abbrev="Compact Denial of Existence in DNSSEC">
        Compact Denial of Existence in DNSSEC
     </title>
-    <seriesInfo name="Internet-Draft" value="draft-ietf-dnsop-compact-denial-of-existence-06"/>
+    <seriesInfo name="Internet-Draft" value="draft-ietf-dnsop-compact-denial-of-existence-07"/>
 
     <author fullname="Shumon Huque" initials="S." surname="Huque">
       <organization>Salesforce</organization>
@@ -80,7 +80,7 @@
       </address>
     </author>
 
-    <date day="23" month="02" year="2025"/>
+    <date day="27" month="02" year="2025"/>
     <!-- Meta-data Declarations -->
 
     <area>General</area>
@@ -242,12 +242,11 @@
         name (QNAME) placed in the Authority section.
       </t>
       <t>
-        The Next Domain Name field MUST be set to the immediate
-        lexicographic successor of the QNAME. The Type Bit Maps field
-        MUST only have the bits set for the following RR Types: RRSIG,
-        NSEC, and NXNAME. (The immediate lexicographic successor is
-        the typical case of the "DNS Name Successor" defined in
-        <xref target="RFC4471" />).
+        The Next Domain Name field SHOULD be set to the immediate
+        lexicographic successor of the QNAME. This is accomplished by
+        adding a leading label with a single null (zero-value) octet.
+        The Type Bit Maps field MUST only have the bits set for the
+        following RR Types: RRSIG, NSEC, and NXNAME.
       </t>
       <t>
         For example, a request for the non-existing name "a.example.com."
@@ -750,7 +749,6 @@
       </references>
       <references>
         <name>Informative References</name>
-        <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4471.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8020.xml"/>
         <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8198.xml"/>
